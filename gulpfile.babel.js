@@ -16,7 +16,6 @@ gulp.task('index.js', () => {
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(gulp.dest('./dist'))
         .pipe(gulp.dest('../runtime-packer/common/adapter/dom'));
 });
