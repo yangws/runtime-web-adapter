@@ -16,7 +16,6 @@ gulp.task('index.js', () => {
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
-        .pipe(gulp.dest('./dist'))
         .pipe(gulp.dest('../runtime-packer/common/adapter/dom'));
 });
 
@@ -33,7 +32,6 @@ gulp.task('index.min.js', () => {
         .pipe(uglify())
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./dist'))
         .pipe(gulp.dest('../runtime-packer/common/adapter/dom'));
 });
 
