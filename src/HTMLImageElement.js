@@ -19,7 +19,7 @@ export default class HTMLImageElement extends HTMLElement {
         if (!isCalledFromImage) {
             throw new TypeError("Illegal constructor, use 'new Image(w, h); instead!'");
         }
-        super('img');
+        super('IMG');
         this.complete = false;
         this.crossOrigin = null;
         this.naturalWidth = 0;
@@ -70,7 +70,7 @@ export default class HTMLImageElement extends HTMLElement {
             this._data = null;
             this._imageMeta = null;
             this.complete = true;
-            this._glFormat = this._glInternalFormat = gl.RGBA;
+            this._glFormat = this._glInternalFormat = 0x1908;
             this.crossOrigin = null;
             return;
         }

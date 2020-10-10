@@ -9,7 +9,7 @@ let _createCanvas = jsb.createCanvas;
 
 export default class HTMLCanvasElement extends HTMLElement {
     constructor(width, height) {
-        super('canvas');
+        super('CANVAS');
 
         this.id = 'glcanvas';
         this.type = 'canvas';

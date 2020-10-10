@@ -1,15 +1,16 @@
-const _events = new WeakMap();
+import TouchEvent from "./TouchEvent"
+import _weakMap from "./util/WeakMap"
 
 export default class EventTarget {
     constructor() {
-        _events.set(this, {})
+        _weakMap.set(this, {})
     }
 
     addEventListener(type, listener, options = {}) {
-        let events = _events.get(this);
+        let events = _weakMap.get(this);
 
         if (!events) {
-            _events.set(this, events = {})
+            _weakMap.set(this, events = {})
         }
         if (!events[type]) {
             events[type] = []
@@ -28,7 +29,7 @@ export default class EventTarget {
     }
 
     removeEventListener(type, listener) {
-        const events = _events.get(this);
+        const events = _weakMap.get(this);
 
         if (events) {
             const listeners = events[type];
@@ -46,13 +47,30 @@ export default class EventTarget {
 
     dispatchEvent(event = {}) {
         event._target = event._currentTarget = this;
-        const listeners = _events.get(this)[event.type];
+        let events = _weakMap.get(this);
+        if (!events) {
+            return true;
+        }
+
+        if (event instanceof TouchEvent) {
+            let toucheArray = event.touches;
+            let length = toucheArray.length;
+            for (let index = 0; index < length; ++index) {
+                toucheArray[index].target = this;
+            }
+            toucheArray = event.changedTouches;
+            length = toucheArray.length;
+            for (let index = 0; index < length; ++index) {
+                toucheArray[index].target = this;
+            }
+        }
 
         let callback = this["on" + event.type];
         if (typeof callback === "function") {
             callback(event);
         }
 
+        const listeners = events[event.type];
         if (listeners) {
             for (let i = 0; i < listeners.length; i++) {
                 listeners[i](event)

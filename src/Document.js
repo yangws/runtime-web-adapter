@@ -1,3 +1,4 @@
+import Audio from './Audio'
 import Node from './Node'
 import NodeList from './NodeList'
 import HTMLElement from './HTMLElement'
@@ -11,10 +12,12 @@ import HTMLScriptElement from './HTMLScriptElement'
 let _html = new HTMLHtmlElement();
 
 export default class Document extends Node {
+    head = new HTMLHeadElement(_html);
+    body = new HTMLBodyElement(_html);
     cookie = "";
+    documentElement = _html;
     readyState = "complete";
     visibilityState = "visible";
-    documentElement = _html;
     hidden = false;
     style = {};
     location = window.location;
@@ -22,8 +25,9 @@ export default class Document extends Node {
     ontouchmove = null;
     ontouchend = null;
 
-    head = new HTMLHeadElement(_html);
-    body = new HTMLBodyElement(_html);
+    get characterSet() {
+        return "UTF-8";
+    }
 
     constructor() {
         super();
@@ -33,18 +37,23 @@ export default class Document extends Node {
     }
 
     createElement(tagName) {
-        if (tagName === 'canvas') {
-            return new HTMLCanvasElement()
-        } else if (tagName === 'img') {
-            return new Image()
-        } else if (tagName === 'video') {
-            return new HTMLVideoElement();
-        } else if (tagName === 'script') {
-            return new HTMLScriptElement();
-        } else if (tagName === "input") {
-            return new HTMLInputElement();
+        if (typeof tagName !== "string") {
+            return null;
         }
-
+        tagName = tagName.toUpperCase();
+        if (tagName === 'CANVAS') {
+            return new HTMLCanvasElement()
+        } else if (tagName === 'IMG') {
+            return new Image()
+        } else if (tagName === 'VIDEO') {
+            return new HTMLVideoElement();
+        } else if (tagName === 'SCRIPT') {
+            return new HTMLScriptElement();
+        } else if (tagName === "INPUT") {
+            return new HTMLInputElement();
+        } else if (tagName === "AUDIO") {
+            return new Audio();
+        }
         return new HTMLElement(tagName)
     }
 
@@ -116,15 +125,82 @@ export default class Document extends Node {
                 result.push(document.body);
                 break;
             }
-            case "CANVAS": {
-                result.push(window.__canvas);
-                break;
-            }
             default: {
                 result = result.concat(rootElement.getElementsByTagName(tagName));
             }
         }
         return result;
+    }
+
+    querySelector(selectors) {
+        if (!arguments.length) {
+            throw "Uncaught TypeError: Failed to execute 'querySelectorAll' on 'Document': 1 argument required, but only 0 present.";
+        }
+        let nodeList = new NodeList();
+
+        switch (selectors) {
+            case null:
+            case undefined:
+            case NaN:
+            case true:
+            case false:
+            case "":
+                return null;
+        }
+
+        if (typeof selectors !== "string" && selectors instanceof String) {
+            throw "Uncaught DOMException: Failed to execute 'querySelectorAll' on 'Document': '" + selectors + "' is not a valid selector."
+        }
+
+        // Type selector
+        let reg = /^[A-Za-z]+$/;
+        let result = selectors.match(reg);
+        if (result) {
+            return this.getElementsByTagName(selectors);
+        }
+
+        // Class selector
+        reg = /^\.[A-Za-z$_][A-Za-z$_0-9\- ]*$/;
+        result = selectors.match(reg);
+        if (result) {
+            let selectorArr = selectors.split(" ");
+            let selector = selectorArr.shift();
+            nodeList = this.getElementsByClassName(selector.substr(1));
+            let length = selectorArr.length;
+
+            if (length) {
+                selectors = selectorArr.join(" ");
+                length = nodeList.length;
+                for (let index = 0; index < length; index++) {
+                    let subNodeList = nodeList[index].querySelector(selectors);
+                    if (subNodeList.length) {
+                        return subNodeList[0];
+                    }
+                }
+            }
+
+            return nodeList[0];
+        }
+
+        // ID selector
+        reg = /^#[A-Za-z$_][A-Za-z$_0-9\-]*$/;
+        result = selectors.match(reg);
+        if (result) {
+            let element = this.getElementById(selectors.substr(1));
+            if (element) {
+                nodeList.push(element);
+            }
+        }
+
+        // Universal selector
+        if (selectors === "*") {
+            return this.getElementsByTagName(selectors);
+        }
+
+        // Attribute selector
+        // TODO
+
+        return nodeList[0];
     }
 
     /**
@@ -160,7 +236,7 @@ export default class Document extends Node {
         }
 
         // Class selector
-        reg = /^.[A-Za-z$_][A-Za-z$_0-9\-]*$/;
+        reg = /^\.[A-Za-z$_][A-Za-z$_0-9\-]*$/;
         result = selectors.match(reg);
         if (result) {
             return this.getElementsByClassName(selectors.substr(1));

@@ -4,7 +4,7 @@ export default class HTMLHeadElement extends HTMLElement {
     parentNode = null;
 
     constructor(parentNode) {
-        super("head");
+        super("HEAD");
         this.parentNode = parentNode;
     }
 }

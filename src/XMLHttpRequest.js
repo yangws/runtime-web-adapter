@@ -1,5 +1,6 @@
-import XMLHttpRequestEventTarget from "./XMLHttpRequestEventTarget"
 import Event from "./Event"
+import FILE_CACHE from "./util/FileCache"
+import XMLHttpRequestEventTarget from "./XMLHttpRequestEventTarget"
 
 const _XMLHttpRequest = window.XMLHttpRequest;
 window.jsb = window.jsb || {};
@@ -150,10 +151,12 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                     self._status = 200;
                     self._readyState = 4;
                     self._response = self._responseText = res.data;
-
+                    if (isBinary) {
+                        FILE_CACHE.setCache(self._url, res.data);
+                    }
                     let eventProgressStart = new Event("progress");
                     eventProgressStart.loaded = 0;
-                    eventProgressStart.total = isBinary ? res.data.length() : res.data.length;
+                    eventProgressStart.total = isBinary ? res.data.byteLength : res.data.length;
 
                     let eventProgressEnd = new Event("progress");
                     eventProgressEnd.loaded = eventProgressStart.total;

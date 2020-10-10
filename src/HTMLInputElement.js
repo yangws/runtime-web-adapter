@@ -3,6 +3,10 @@ import HTMLElement from "./HTMLElement"
 window.jsb = window.jsb || {};
 
 export default class HTMLInputElement extends HTMLElement {
+    constructor() {
+        super("INPUT");
+    }
+
     focus() {
         super.focus();
         debugger;
