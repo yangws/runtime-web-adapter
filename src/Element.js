@@ -1,6 +1,6 @@
 import Node from './Node'
 import NodeList from './NodeList'
-import DomTokenList from "./DOMToken\u200BList"
+import DomTokenList from "./DOMToken​List"
 
 export default class Element extends Node {
     className = '';
@@ -13,8 +13,8 @@ export default class Element extends Node {
     clientLeft = 0;
     clientTop = 0;
 
-    constructor() {
-        super()
+    constructor(tagName) {
+        super(tagName);
     }
 
     getElementsByTagName(tagName) {
@@ -82,7 +82,7 @@ export default class Element extends Node {
             case true:
             case false:
             case "":
-                return nodeList;
+                return null;
         }
 
         if (typeof selectors !== "string" && selectors instanceof String) {
@@ -137,7 +137,7 @@ export default class Element extends Node {
         // Attribute selector
         // TODO
 
-        return nodeList;
+        return nodeList[0];
     }
 
     add() {
@@ -219,5 +219,11 @@ export default class Element extends Node {
     get clientHeight() {
         let style = this.style || {};
         return parseInt(style.fontSize || "0");
+    }
+
+    get tagName() {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName
+        // Element	The value of Element.tagName
+        return this.nodeName;
     }
 }

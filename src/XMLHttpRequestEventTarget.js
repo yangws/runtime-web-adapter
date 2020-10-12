@@ -1,5 +1,6 @@
 import EventTarget from "./EventTarget"
 import Event from "./Event"
+import FILE_CACHE from "./util/FileCache"
 
 export default class XMLHttpRequestEventTarget extends EventTarget {
     _xhr;
@@ -17,6 +18,9 @@ export default class XMLHttpRequestEventTarget extends EventTarget {
             this.dispatchEvent(Object.assign(event, e));
         }.bind(this);
         xhr.onload = function (e) {
+            if (this.response instanceof ArrayBuffer) {
+                FILE_CACHE.setItem(this.response, this._url);
+            }
             let event = new Event("load");
             this.dispatchEvent(Object.assign(event, e));
         }.bind(this);

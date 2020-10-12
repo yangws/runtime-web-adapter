@@ -1,5 +1,5 @@
 import Document from "./Document"
-import TouchEvent from "./TouchEvent"
+import Event from "./Event"
 import EventTarget from "./EventTarget"
 import HTMLCanvasElement from "./HTMLCanvasElement"
 import HTMLImageElement from "./HTMLImageElement"
@@ -7,6 +7,7 @@ import Image from "./Image"
 import Location from "./Location"
 import Navigator from "./Navigator"
 import Screen from "./Screen"
+import TouchEvent from "./TouchEvent"
 import XMLHttpRequest from "./XMLHttpRequest"
 
 window.jsb = window.jsb || {};
@@ -24,14 +25,6 @@ window.length = 0;
 window.location = new Location();
 window.name = "runtime";
 window.navigator = new Navigator(jsb.platform, jsb.language);
-window.optConfig = {
-    disableBatchGLCommandsToNative() {
-        console.warn("window.optConfig.disableBatchGLCommandsToNative is not support!");
-    },
-    enableGLParameterCheck() {
-        console.warn("window.optConfig.enableGLParameterCheck is not support!");
-    }
-};
 window.outerHeight = jsb.height;
 window.outerWidth = jsb.width;
 window.pageXOffset = 0;
@@ -95,10 +88,8 @@ window.getComputedStyle = function () {
         paddingLeft: 0
     };
 };
-window.resize = function (width, height) {
-    window.__canvas._width = window.innerWidth;
-    window.__canvas._height = window.innerHeight;
 
+jsb.onWindowResize(function (width, height) {
     window.innerWidth = width;
     window.innerHeight = height;
     window.outerWidth = window.innerWidth;
@@ -107,9 +98,10 @@ window.resize = function (width, height) {
     window.screen.availHeight = window.innerHeight;
     window.screen.width = window.innerWidth;
     window.screen.height = window.innerHeight;
-};
-jsb.onWindowResize(function (size) {
-    window.resize(size.width, size.height);
+
+    // 派发 resize 事件.
+    let event = new Event("resize");
+    window.dispatchEvent(event);
 });
 
 // class
@@ -121,43 +113,3 @@ const {Blob, URL} = require('./Blob.js');
 window.Blob = Blob;
 window.URL = URL;
 window.DOMParser = require('./xmldom/dom-parser.js').DOMParser;
-
-// extensions
-window.__canvas = new HTMLCanvasElement();
-window.document.body.appendChild(window.__canvas);
-
-window.saveImageData = function () {
-    console.warn("window.saveImageData() is deprecated!");
-};
-
-window.__cleanScript = function () {
-    console.warn("window.__cleanScript() deprecated!");
-};
-
-window.__getCurrentLanguage = function () {
-    return jsb.language;
-};
-
-window.__getOS = function () {
-    return jsb.platform;
-};
-
-window.__getOSVersion = function () {
-    return jsb.system;
-};
-
-window.__getPlatform = function () {
-    return 3;
-};
-
-window.__getVersion = function () {
-    console.warn("window.__getVersion() deprecated!");
-};
-
-window.__isObjectValid = function () {
-    console.warn("window.__isObjectValid() deprecated!");
-};
-
-window.__restartVM = function () {
-    console.warn("window.__restartVM() is deprecated!");
-};

@@ -1,8 +1,8 @@
-let _map = new WeakMap();
+import _weakMap from "./util/WeakMap"
 
 export default class NodeList {
     constructor() {
-        _map.set(this, {
+        _weakMap.set(this, {
             array: []
         });
 
@@ -13,7 +13,7 @@ export default class NodeList {
                 }
 
                 if(/^[0-9]*$/.test(key)) {
-                    return _map.get(target).array[key];
+                    return _weakMap.get(target).array[key];
                 }
 
                 let result = target[key];
@@ -27,19 +27,19 @@ export default class NodeList {
     }
 
     push(element) {
-        _map.get(this).array.push(element);
+        _weakMap.get(this).array.push(element);
     }
 
     item(index) {
-        return _map.get(this).array[index];
+        return _weakMap.get(this).array[index];
     }
 
     get length() {
-        return _map.get(this).array.length;
+        return _weakMap.get(this).array.length;
     }
 
     concat() {
-        let array = _map.get(this).array;
+        let array = _weakMap.get(this).array;
         return array.concat.apply(array, arguments);
     }
 }

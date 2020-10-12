@@ -5,7 +5,7 @@ export default class HTMLBodyElement extends HTMLElement {
     parentNode = null;
 
     constructor(parentNode) {
-        super("body");
+        super("BODY");
         this.parentNode = parentNode;
     }
 }
