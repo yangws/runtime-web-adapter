@@ -1,5 +1,9 @@
+import AudioContext from "./audioContext/AudioContext"
+import DeviceMotionEvent from "./DeviceMotionEvent"
 import Document from "./Document"
 import Event from "./Event"
+import FontFace from "./FontFace"
+import FontFaceSet from "./FontFaceSet"
 import EventTarget from "./EventTarget"
 import HTMLCanvasElement from "./HTMLCanvasElement"
 import HTMLImageElement from "./HTMLImageElement"
@@ -79,6 +83,11 @@ jsb.onTouchEnd(function (e) {
     let event = new TouchEvent("touchend");
     window.dispatchEvent(Object.assign(event, e));
 });
+jsb.onAccelerometerChange(function (e) {
+    let event = new DeviceMotionEvent(e);
+    window.dispatchEvent(event);
+});
+
 window.getComputedStyle = function () {
     return {
         position: 'absolute',
@@ -103,13 +112,24 @@ jsb.onWindowResize(function (width, height) {
     let event = new Event("resize");
     window.dispatchEvent(event);
 });
+window.stop = function() {
+    console.warn("window.stop() not implemented");
+};
 
 // class
+window.AudioContext = AudioContext;
+window.DeviceMotionEvent = DeviceMotionEvent;
+window.FontFace = FontFace;
+window.FontFaceSet = FontFaceSet;
 window.HTMLCanvasElement = HTMLCanvasElement;
 window.HTMLImageElement = HTMLImageElement;
 window.Image = Image;
 window.XMLHttpRequest = XMLHttpRequest;
-const {Blob, URL} = require('./Blob.js');
-window.Blob = Blob;
-window.URL = URL;
-window.DOMParser = require('./xmldom/dom-parser.js').DOMParser;
+if (!window.Blob || !window.URL) {
+    const {Blob, URL} = require('./Blob.js');
+    window.Blob = Blob;
+    window.URL = URL;
+}
+if (!window.DOMParser) {
+    window.DOMParser = require('./xmldom/dom-parser.js').DOMParser;
+}

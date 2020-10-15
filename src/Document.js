@@ -1,6 +1,8 @@
 import Audio from './Audio'
+import FontFaceSet from './FontFaceSet'
 import Node from './Node'
 import NodeList from './NodeList'
+import HTMLAnchorElement from './HTMLAnchorElement'
 import HTMLElement from './HTMLElement'
 import HTMLHtmlElement from './HTMLHtmlElement'
 import HTMLBodyElement from './HTMLBodyElement'
@@ -8,12 +10,14 @@ import HTMLHeadElement from './HTMLHeadElement'
 import HTMLCanvasElement from './HTMLCanvasElement'
 import HTMLVideoElement from './HTMLVideoElement'
 import HTMLScriptElement from './HTMLScriptElement'
+import HTMLStyleElement from './HTMLStyleElement'
 
 let _html = new HTMLHtmlElement();
 
 export default class Document extends Node {
     head = new HTMLHeadElement(_html);
     body = new HTMLBodyElement(_html);
+    fonts = new FontFaceSet();
     cookie = "";
     documentElement = _html;
     readyState = "complete";
@@ -53,6 +57,10 @@ export default class Document extends Node {
             return new HTMLInputElement();
         } else if (tagName === "AUDIO") {
             return new Audio();
+        } else if (tagName === "STYLE") {
+            return new HTMLStyleElement();
+        } else if (tagName === "A") {
+            return new HTMLAnchorElement();
         }
         return new HTMLElement(tagName)
     }
