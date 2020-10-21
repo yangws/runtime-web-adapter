@@ -14,7 +14,6 @@ export default class HTMLMediaElement extends HTMLElement {
     controller = null;
     controls = false;
     crossOrigin = null;
-    currentTime = 0;
     defaultMuted = false;
     defaultPlaybackRate = 1.0;
     mediaGroup = undefined;
@@ -24,7 +23,6 @@ export default class HTMLMediaElement extends HTMLElement {
     networkState = 0;
     playbackRate = 1;
     preload = "auto";
-    volume = 1.0;
     loop = false;
 
     constructor(url, type) {
@@ -39,7 +37,36 @@ export default class HTMLMediaElement extends HTMLElement {
             initialTime: 0,
             paused: true,
             readyState: HAVE_NOTHING,
+            value: 1.0,
+            currentTime: 0
         });
+
+        this.addEventListener("ended", function () {
+            _weakMap.get(this).ended = true;
+        });
+        this.addEventListener("play", function () {
+            _weakMap.get(this).ended = false;
+            _weakMap.get(this).error = null;
+            _weakMap.get(this).paused = false;
+        });
+        this.addEventListener("error", function () {
+            _weakMap.get(this).error = true;
+            _weakMap.get(this).ended = true;
+            _weakMap.get(this).paused = false;
+        });
+        this.addEventListener("canplay", function () {
+            if (this.autoplay) {
+                this.play();
+            }
+        });
+    }
+
+    get currentTime() {
+        return _weakMap.get(this).currentTime;
+    }
+
+    set currentTime(value) {
+        _weakMap.get(this).currentTime = value;
     }
 
     get src() {
@@ -79,6 +106,14 @@ export default class HTMLMediaElement extends HTMLElement {
 
     get paused() {
         return _weakMap.get(this).paused;
+    }
+
+    get volume() {
+        return _weakMap.get(this).volume;
+    }
+
+    set volume(value) {
+        _weakMap.get(this).volume = value;
     }
 
     canPlayType(mediaType) {

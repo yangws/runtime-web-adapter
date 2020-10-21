@@ -23,7 +23,7 @@ class AudioBufferSourceNode extends AudioNode {
         this.loopEnd = 0; // 可选的 一个浮点数，表示AudioBuffer停止和循环回放到指示时间的时间（以秒为单位）loopStart，如果loop是true。默认值为0。
         this._playbackRate = new AudioParam({value: 1.0}); // 的一个速率 AudioParam限定的速度因子在该音频资产将播放，其中值1.0是声音的自然采样率。由于没有对输出应用音调校正，因此可以使用它来改变样本的音高。该值与复合detune以确定最终回放速率。
 
-        this.audioEngine = loadRuntime().AudioEngine;
+        this.audioEngine = jsb.AudioEngine;
         this.audioID = -1;
     }
 

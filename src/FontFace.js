@@ -13,7 +13,13 @@ class FontFace {
             _status: "unloaded",
             load () {
                 this.status = "loading";
-                let family = jsb.loadFont(self.family, self.source);
+                let source;
+                if (self.source.match(/url\(\s*'\s*(.*?)\s*'\s*\)/)) {
+                    source = self.source;
+                } else {
+                    source = "url('"+ self.source +"')"
+                }
+                let family = jsb.loadFont(self.family, source);
                 if (family) {
                     this._status = "loaded";
                 } else {

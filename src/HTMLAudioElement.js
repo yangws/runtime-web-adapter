@@ -84,12 +84,15 @@ export default class HTMLAudioElement extends HTMLMediaElement {
     load() {
         if (this.src !== "") {
             this.dispatchEvent({type: "loadstart"});
+            let self = this;
             jsb.AudioEngine.preload(this.src, function () {
-                this.dispatchEvent(new Event("loadedmetadata"));
-                this.dispatchEvent(new Event("loadeddata"));
-                this.dispatchEvent(new Event("canplay"));
-                this.dispatchEvent(new Event("canplaythrough"));
-            }.bind(this));
+                setTimeout(function () {
+                    self.dispatchEvent(new Event("loadedmetadata"));
+                    self.dispatchEvent(new Event("loadeddata"));
+                    self.dispatchEvent(new Event("canplay"));
+                    self.dispatchEvent(new Event("canplaythrough"));
+                });
+            });
         }
     }
 
@@ -122,7 +125,7 @@ export default class HTMLAudioElement extends HTMLMediaElement {
             this.dispatchEvent(new Event("playing"));
         } else {
             let self = this;
-            audioID = AudioEngine.play(path, this.loop, this.volume);
+            audioID = jsb.AudioEngine.play(this.src, this.loop, this.volume);
             jsb.AudioEngine.setCurrentTime(audioID, this.currentTime);
 
             this.dispatchEvent(new Event("play"));
