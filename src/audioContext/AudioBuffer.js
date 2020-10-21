@@ -1,5 +1,5 @@
 import fileCache from "../util/FileCache";
-let ae = loadRuntime().AudioEngine;
+let ae = jsb.AudioEngine;
 
 class AudioBuffer {
     constructor(context, buffer) {

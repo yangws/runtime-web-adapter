@@ -5,6 +5,7 @@ import Event from "./Event"
 import FontFace from "./FontFace"
 import FontFaceSet from "./FontFaceSet"
 import EventTarget from "./EventTarget"
+import HTMLAudioElement from "./HTMLAudioElement"
 import HTMLCanvasElement from "./HTMLCanvasElement"
 import HTMLImageElement from "./HTMLImageElement"
 import Image from "./Image"
@@ -112,7 +113,7 @@ jsb.onWindowResize(function (width, height) {
     let event = new Event("resize");
     window.dispatchEvent(event);
 });
-window.stop = function() {
+window.stop = function () {
     console.warn("window.stop() not implemented");
 };
 
@@ -121,6 +122,7 @@ window.AudioContext = AudioContext;
 window.DeviceMotionEvent = DeviceMotionEvent;
 window.FontFace = FontFace;
 window.FontFaceSet = FontFaceSet;
+window.HTMLAudioElement = HTMLAudioElement;
 window.HTMLCanvasElement = HTMLCanvasElement;
 window.HTMLImageElement = HTMLImageElement;
 window.Image = Image;

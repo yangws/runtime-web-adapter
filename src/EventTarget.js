@@ -67,13 +67,13 @@ export default class EventTarget {
 
         let callback = this["on" + event.type];
         if (typeof callback === "function") {
-            callback(event);
+            callback.call(this, event);
         }
 
         const listeners = events[event.type];
         if (listeners) {
             for (let i = 0; i < listeners.length; i++) {
-                listeners[i](event)
+                listeners[i].call(this, event)
             }
         }
         event._target = event._currentTarget = null;
