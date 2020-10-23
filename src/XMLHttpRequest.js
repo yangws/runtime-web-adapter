@@ -168,7 +168,7 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                     self.dispatchEvent(new Event("load"));
                 },
                 fail: function (res) {
-                    if (res.errMsg.indexOf("no such") !== -1) {
+                    if (res.errCode === 1) {
                         self._status = 404;
                         self._readyState = 4;
                         self.dispatchEvent(new Event("loadstart"));
