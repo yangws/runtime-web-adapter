@@ -126,14 +126,20 @@ export default class HTMLAudioElement extends HTMLMediaElement {
         } else {
             let self = this;
             audioID = jsb.AudioEngine.play(this.src, this.loop, this.volume);
+            if (audioID === -1) {
+                this.dispatchEvent(new Event("error"));
+                return;
+            }
             jsb.AudioEngine.setCurrentTime(audioID, this.currentTime);
 
             this.dispatchEvent(new Event("play"));
             jsb.AudioEngine.setFinishCallback(audioID, function () {
+                _weakMap.get(self).audioID = null;
                 self.dispatchEvent(new Event("ended"));
             });
             if (typeof jsb.AudioEngine.setErrorCallback !== "undefined") {
                 jsb.AudioEngine.setErrorCallback(audioID, function () {
+                    _weakMap.get(self).audioID = null;
                     self.dispatchEvent(new Event("error"));
                 });
             }
