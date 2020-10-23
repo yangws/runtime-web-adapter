@@ -167,8 +167,15 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                     self.dispatchEvent(eventProgressEnd);
                     self.dispatchEvent(new Event("load"));
                 },
-                fail: function () {
-                    this.dispatchEvent(new Event("error"));
+                fail: function (res) {
+                    if (res.errMsg.indexOf("no such") !== -1) {
+                        self._status = 404;
+                        self._readyState = 4;
+                        self.dispatchEvent(new Event("loadstart"));
+                        self.dispatchEvent(new Event("load"));
+                    } else {
+                        this.dispatchEvent(new Event("error"));
+                    }
                 }.bind(this),
                 complete: function () {
                     this.dispatchEvent(new Event("loadend"));
