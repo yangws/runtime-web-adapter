@@ -102,6 +102,6 @@ try {
     fileMgr.rmdirSync(cacheDir, true);
 } catch (e) {
 }
-
+fileMgr.mkdirSync(cacheDir, true);
 
 export default new FileCache();

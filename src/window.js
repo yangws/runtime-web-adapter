@@ -1,3 +1,4 @@
+import Audio from "./Audio"
 import AudioContext from "./audioContext/AudioContext"
 import DeviceMotionEvent from "./DeviceMotionEvent"
 import Document from "./Document"
@@ -118,6 +119,7 @@ window.stop = function () {
 };
 
 // class
+window.Audio = Audio;
 window.AudioContext = AudioContext;
 window.DeviceMotionEvent = DeviceMotionEvent;
 window.FontFace = FontFace;
