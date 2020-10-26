@@ -15,7 +15,14 @@ export default class EventTarget {
         if (!events[type]) {
             events[type] = []
         }
-        events[type].push(listener);
+        let listenerArray = events[type];
+        let length = listenerArray;
+        for (let index = 0; index < length; ++length) {
+            if (listenerArray[index] === listener) {
+                return;
+            }
+        }
+        listenerArray.push(listener);
 
         if (options.capture) {
             // console.warn('EventTarget.addEventListener: options.capture is not implemented.')
