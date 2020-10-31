@@ -1,5 +1,5 @@
 import HTMLImageElement from './HTMLImageElement'
-
+let _Image = window.Image;
 export default class Image extends HTMLImageElement {
     constructor(width, height) {
         super(width, height, true);
@@ -8,5 +8,5 @@ export default class Image extends HTMLImageElement {
 
 let _creteImage = jsb.createImage;
 if (_creteImage) {
-    _creteImage().__proto__.__proto__ = Image.prototype;
+    _Image.prototype.__proto__ = Image.prototype;
 }
