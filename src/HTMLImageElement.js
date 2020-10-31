@@ -125,7 +125,3 @@ export default class HTMLImageElement extends HTMLElement {
         return this.height;
     }
 }
-
-if (_creteImage) {
-    _image.__proto__.__proto__ = HTMLImageElement.prototype;
-}

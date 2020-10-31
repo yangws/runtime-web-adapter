@@ -5,3 +5,8 @@ export default class Image extends HTMLImageElement {
         super(width, height, true);
     }
 }
+
+let _creteImage = jsb.createImage;
+if (_creteImage) {
+    _creteImage().__proto__.__proto__ = Image.prototype;
+}
