@@ -21,7 +21,7 @@ window.jsb = window.jsb || {};
 // properties
 window.clientTop = 0;
 window.clientLeft = 0;
-window.devicePixelRatio = 1;
+window.devicePixelRatio = jsb.pixelRatio;
 window.document = new Document();
 window.frameElement = null;
 window.fullScreen = true;
