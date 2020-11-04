@@ -69,26 +69,6 @@ window.dispatchEvent = function (event) {
     }
     return false;
 };
-jsb.onTouchStart(function (e) {
-    let event = new TouchEvent("touchstart");
-    window.dispatchEvent(Object.assign(event, e));
-});
-jsb.onTouchMove(function (e) {
-    let event = new TouchEvent("touchmove");
-    window.dispatchEvent(Object.assign(event, e));
-});
-jsb.onTouchCancel(function (e) {
-    let event = new TouchEvent("touchcancel");
-    window.dispatchEvent(Object.assign(event, e));
-});
-jsb.onTouchEnd(function (e) {
-    let event = new TouchEvent("touchend");
-    window.dispatchEvent(Object.assign(event, e));
-});
-jsb.onAccelerometerChange(function (e) {
-    let event = new DeviceMotionEvent(e);
-    window.dispatchEvent(event);
-});
 
 window.getComputedStyle = function () {
     return {

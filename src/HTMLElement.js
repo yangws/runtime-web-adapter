@@ -1,7 +1,5 @@
 import Element from './Element'
 
-window.jsb = window.jsb || {};
-
 export default class HTMLElement extends Element {
     className = '';
     childern = [];
@@ -37,14 +35,5 @@ export default class HTMLElement extends Element {
         const ret = parseInt(this.style.fontSize, 10);
 
         return Number.isNaN(ret) ? 0 : ret
-    }
-
-    getBoundingClientRect() {
-        return {
-            top: 0,
-            left: 0,
-            width: jsb.width,
-            height: jsb.height
-        }
     }
 }

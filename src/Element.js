@@ -17,6 +17,19 @@ export default class Element extends Node {
         super(tagName);
     }
 
+    getBoundingClientRect() {
+        return {
+            x: 0,
+            y: 0,
+            width: jsb.width,
+            height: jsb.height,
+            top: 0,
+            left: 0,
+            bottom: jsb.height,
+            right: jsb.width
+        }
+    }
+
     getElementsByTagName(tagName) {
         tagName = tagName.toUpperCase();
         let result = new NodeList();

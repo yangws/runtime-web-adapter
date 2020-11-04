@@ -63,10 +63,6 @@ export default class HTMLCanvasElement extends HTMLElement {
         return null;
     }
 
-    getBoundingClientRect() {
-        return new DOMRect(0, 0, this.width, this.height);
-    }
-
     get _data() {
         if (this._context2D === null) {
             return null;
