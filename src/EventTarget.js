@@ -3,35 +3,21 @@ import _weakMap from "./util/WeakMap"
 import DeviceMotionEvent from "./DeviceMotionEvent";
 
 let _listenerStat = {};
-let _dispatchTouchEvent = function(type, e) {
-    e.touches.forEach(function (touch) {
-        touch.clientX /= window.devicePixelRatio;
-        touch.clientY /= window.devicePixelRatio;
-        touch.pageX /= window.devicePixelRatio;
-        touch.pageY /= window.devicePixelRatio;
-    });
-    if (type === "touchcancel" || type === "touchend") {
-        e.changedTouches.forEach(function (touch) {
-            touch.clientX /= window.devicePixelRatio;
-            touch.clientY /= window.devicePixelRatio;
-            touch.pageX /= window.devicePixelRatio;
-            touch.pageY /= window.devicePixelRatio;
-        });
-    }
-    let event = new TouchEvent(type);
+let _onTouchStart = function (e) {
+    let event = new TouchEvent("touchstart");
     window.dispatchEvent(Object.assign(event, e));
 };
-let _onTouchStart = function (e) {
-    _dispatchTouchEvent("touchstart", e);
-};
 let _onTouchMove = function (e) {
-    _dispatchTouchEvent("touchmove", e);
+    let event = new TouchEvent("touchmove");
+    window.dispatchEvent(Object.assign(event, e));
 };
 let _onTouchCancel = function (e) {
-    _dispatchTouchEvent("touchcancel", e);
+    let event = new TouchEvent("touchcancel");
+    window.dispatchEvent(Object.assign(event, e));
 };
 let _onTouchEnd = function (e) {
-    _dispatchTouchEvent("touchend", e);
+    let event = new TouchEvent("touchend");
+    window.dispatchEvent(Object.assign(event, e));
 };
 let _onAccelerometerChange = function (e) {
     let event = new DeviceMotionEvent(e);
