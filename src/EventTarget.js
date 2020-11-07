@@ -1,5 +1,28 @@
 import TouchEvent from "./TouchEvent"
 import _weakMap from "./util/WeakMap"
+import DeviceMotionEvent from "./DeviceMotionEvent";
+
+let _listenerStat = {};
+let _onTouchStart = function (e) {
+    let event = new TouchEvent("touchstart");
+    window.dispatchEvent(Object.assign(event, e));
+};
+let _onTouchMove = function (e) {
+    let event = new TouchEvent("touchmove");
+    window.dispatchEvent(Object.assign(event, e));
+};
+let _onTouchCancel = function (e) {
+    let event = new TouchEvent("touchcancel");
+    window.dispatchEvent(Object.assign(event, e));
+};
+let _onTouchEnd = function (e) {
+    let event = new TouchEvent("touchend");
+    window.dispatchEvent(Object.assign(event, e));
+};
+let _onAccelerometerChange = function (e) {
+    let event = new DeviceMotionEvent(e);
+    window.dispatchEvent(event);
+};
 
 export default class EventTarget {
     constructor() {
@@ -23,6 +46,34 @@ export default class EventTarget {
             }
         }
         listenerArray.push(listener);
+        if (_listenerStat[type]) {
+            ++_listenerStat[type];
+        } else {
+            _listenerStat[type] = 1;
+            switch (type) {
+                case "touchstart": {
+                    jsb.onTouchStart(_onTouchStart);
+                    break;
+                }
+                case "touchmove": {
+                    jsb.onTouchMove(_onTouchMove);
+                    break;
+                }
+                case "touchcancel": {
+                    jsb.onTouchCancel(_onTouchCancel);
+                    break;
+                }
+                case "touchend": {
+                    jsb.onTouchEnd(_onTouchEnd);
+                    break;
+                }
+                case "devicemotion": {
+                    jsb.onAccelerometerChange(_onAccelerometerChange);
+                    jsb.device.setMotionEnabled(true);
+                    break;
+                }
+            }
+        }
 
         if (options.capture) {
             // console.warn('EventTarget.addEventListener: options.capture is not implemented.')
@@ -45,6 +96,31 @@ export default class EventTarget {
                 for (let i = listeners.length; i--; i > 0) {
                     if (listeners[i] === listener) {
                         listeners.splice(i, 1);
+                        if (--_listenerStat[type] === 0) {
+                            switch (type) {
+                                case "touchstart": {
+                                    jsb.offTouchStart(_onTouchStart);
+                                    break;
+                                }
+                                case "touchmove": {
+                                    jsb.offTouchMove(_onTouchMove);
+                                    break;
+                                }
+                                case "touchcancel": {
+                                    jsb.offTouchCancel(_onTouchCancel);
+                                    break;
+                                }
+                                case "touchend": {
+                                    jsb.offTouchEnd(_onTouchEnd);
+                                    break;
+                                }
+                                case "devicemotion": {
+                                    jsb.offAccelerometerChange(_onAccelerometerChange);
+                                    jsb.device.setMotionEnabled(false);
+                                    break;
+                                }
+                            }
+                        }
                         break
                     }
                 }
