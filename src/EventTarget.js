@@ -69,6 +69,7 @@ export default class EventTarget {
                 }
                 case "devicemotion": {
                     jsb.onAccelerometerChange(_onAccelerometerChange);
+                    jsb.device.setMotionEnabled(true);
                     break;
                 }
             }
@@ -115,6 +116,7 @@ export default class EventTarget {
                                 }
                                 case "devicemotion": {
                                     jsb.offAccelerometerChange(_onAccelerometerChange);
+                                    jsb.device.setMotionEnabled(false);
                                     break;
                                 }
                             }
