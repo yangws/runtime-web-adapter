@@ -2,6 +2,7 @@ import Event from "./Event"
 import FILE_CACHE from "./util/FileCache"
 import XMLHttpRequestEventTarget from "./XMLHttpRequestEventTarget"
 
+const fsm = jsb.getFileSystemManager();
 const _XMLHttpRequest = window.XMLHttpRequest;
 window.jsb = window.jsb || {};
 
@@ -143,7 +144,7 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
         if (this._isLocal) {
             let self = this;
             let isBinary = this._xhr.responseType === "arraybuffer";
-            jsb.readFile({
+            fsm.readFile({
                 filePath: this._url,
                 encoding: isBinary ? "binary" : "utf8",
 
