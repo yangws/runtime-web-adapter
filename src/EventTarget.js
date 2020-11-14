@@ -130,11 +130,6 @@ export default class EventTarget {
 
     dispatchEvent(event = {}) {
         event._target = event._currentTarget = this;
-        let events = _weakMap.get(this);
-        if (!events) {
-            return true;
-        }
-
         if (event instanceof TouchEvent) {
             let toucheArray = event.touches;
             let length = toucheArray.length;
@@ -147,16 +142,17 @@ export default class EventTarget {
                 toucheArray[index].target = this;
             }
         }
-
         let callback = this["on" + event.type];
         if (typeof callback === "function") {
             callback.call(this, event);
         }
-
-        const listeners = events[event.type];
-        if (listeners) {
-            for (let i = 0; i < listeners.length; i++) {
-                listeners[i].call(this, event)
+        let events = _weakMap.get(this);
+        if (events) {
+            const listeners = events[event.type];
+            if (listeners) {
+                for (let i = 0; i < listeners.length; i++) {
+                    listeners[i].call(this, event)
+                }
             }
         }
         event._target = event._currentTarget = null;
