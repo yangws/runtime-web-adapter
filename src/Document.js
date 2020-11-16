@@ -11,6 +11,7 @@ import HTMLCanvasElement from './HTMLCanvasElement'
 import HTMLVideoElement from './HTMLVideoElement'
 import HTMLScriptElement from './HTMLScriptElement'
 import HTMLStyleElement from './HTMLStyleElement'
+import _weakMap from "./util/WeakMap"
 
 let _html = new HTMLHtmlElement();
 
@@ -33,11 +34,16 @@ export default class Document extends Node {
         return "UTF-8";
     }
 
+    get scripts() {
+        return _weakMap.get(this).scripts.slice(0);
+    }
+
     constructor() {
         super();
 
         _html.appendChild(this.head);
         _html.appendChild(this.body);
+        _weakMap.get(this).scripts = [];
     }
 
     createElement(tagName) {
@@ -74,6 +80,28 @@ export default class Document extends Node {
             return super.dispatchEvent(...arguments);
         }
         return false;
+    }
+
+    appendChild(node) {
+        let nodeName = node.nodeName;
+        if (nodeName === "SCRIPT") {
+            _weakMap.get(this).scripts.push(node);
+        }
+        return super.appendChild(node);
+    }
+
+    removeChild(node) {
+        let nodeName = node.nodeName;
+        if (nodeName === "SCRIPT") {
+            let scripts = _weakMap.get(this).scripts;
+            for (let index = 0, length = scripts.length; index < length; ++index) {
+                if (node === scripts[index]) {
+                    scripts.slice(index, 1);
+                    break;
+                }
+            }
+        }
+        return super.removeChild(node);
     }
 
     getElementById(id) {
