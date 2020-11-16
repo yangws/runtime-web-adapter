@@ -102,12 +102,14 @@ window.stop = function () {
 window.Audio = Audio;
 window.AudioContext = AudioContext;
 window.DeviceMotionEvent = DeviceMotionEvent;
+window.Event = Event;
 window.FontFace = FontFace;
 window.FontFaceSet = FontFaceSet;
 window.HTMLAudioElement = HTMLAudioElement;
 window.HTMLCanvasElement = HTMLCanvasElement;
 window.HTMLImageElement = HTMLImageElement;
 window.Image = Image;
+window.TouchEvent = TouchEvent;
 window.XMLHttpRequest = XMLHttpRequest;
 if (!window.Blob || !window.URL) {
     const {Blob, URL} = require('./Blob.js');

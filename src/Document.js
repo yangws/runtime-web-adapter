@@ -75,6 +75,17 @@ export default class Document extends Node {
         return this.createElement(qualifiedName);
     }
 
+    createEvent(type) {
+        if (window[type]) {
+            return new window[type];
+        }
+        return null;
+    }
+
+    createTextNode() {
+        console.warn("document.createTextNode() is not support!");
+    }
+
     dispatchEvent() {
         if (_html.dispatchEvent(...arguments)) {
             return super.dispatchEvent(...arguments);
@@ -164,6 +175,23 @@ export default class Document extends Node {
             default: {
                 result = result.concat(rootElement.getElementsByTagName(tagName));
             }
+        }
+        return result;
+    }
+
+    getElementsByName(name) {
+        if (!arguments.length) {
+            throw "Uncaught TypeError: Failed to execute 'getElementsByName' on 'Document': 1 argument required, but only 0 present.";
+        }
+
+        let elementArr = [].concat(this.childNodes);
+        let result = new NodeList();
+        let element;
+        while ((element = elementArr.pop())) {
+            if (element.name === name) {
+                result.push(element);
+            }
+            elementArr = elementArr.concat(element.childNodes);
         }
         return result;
     }
