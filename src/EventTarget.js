@@ -30,17 +30,22 @@ export default class EventTarget {
     }
 
     addEventListener(type, listener, options = {}) {
-        let events = _weakMap.get(this);
-
-        if (!events) {
-            _weakMap.set(this, events = {})
+        let privateThis = _weakMap.get(this);
+        if (!privateThis) {
+            _weakMap.set(this, privateThis = {})
         }
+
+        let events = _weakMap.get(privateThis);
+        if (!events) {
+            _weakMap.set(privateThis, events = {})
+        }
+
         if (!events[type]) {
             events[type] = []
         }
         let listenerArray = events[type];
-        let length = listenerArray;
-        for (let index = 0; index < length; ++length) {
+        let length = listenerArray.length;
+        for (let index = 0; index < length; ++index) {
             if (listenerArray[index] === listener) {
                 return;
             }
@@ -87,7 +92,11 @@ export default class EventTarget {
     }
 
     removeEventListener(type, listener) {
-        const events = _weakMap.get(this);
+        const privateThis = _weakMap.get(this);
+        let events;
+        if (privateThis) {
+            events = _weakMap.get(privateThis);
+        }
 
         if (events) {
             const listeners = events[type];
@@ -146,7 +155,12 @@ export default class EventTarget {
         if (typeof callback === "function") {
             callback.call(this, event);
         }
-        let events = _weakMap.get(this);
+        let privateThis = _weakMap.get(this);
+        let events;
+        if (privateThis) {
+            events = _weakMap.get(privateThis);
+        }
+
         if (events) {
             const listeners = events[event.type];
             if (listeners) {
