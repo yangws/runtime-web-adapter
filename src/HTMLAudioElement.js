@@ -2,6 +2,8 @@ import HTMLMediaElement from './HTMLMediaElement';
 import Event from './Event';
 import _weakMap from "./util/WeakMap"
 
+const _ERROR = -1;
+const _INITIALIZING = 0;
 const _PLAYING = 1;
 const _PAUSE = 2;
 
@@ -112,48 +114,65 @@ export default class HTMLAudioElement extends HTMLMediaElement {
 
     play() {
         if (this.src === "") {
-            this.dispatchEvent({ type: "emptied" });
+            this.dispatchEvent({type: "emptied"});
             console.error("Audio play: please define src before play");
             return;
         }
 
         let audioID = _weakMap.get(this).audioID;
-        if (audioID !== undefined && jsb.AudioEngine.getState(audioID) === _PAUSE) {
-            jsb.AudioEngine.resume(audioID);
+        if (audioID !== undefined) {
+            let state = jsb.AudioEngine.getState(audioID);
+            switch (state) {
+                case _PAUSE: {
+                    jsb.AudioEngine.resume(audioID);
 
-            this.dispatchEvent(new Event("play"));
-            this.dispatchEvent(new Event("playing"));
-        } else {
-            let self = this;
-            audioID = jsb.AudioEngine.play(this.src, this.loop, this.volume);
-            if (audioID === -1) {
-                this.dispatchEvent(new Event("error"));
-                return;
+                    this.dispatchEvent(new Event("play"));
+                    this.dispatchEvent(new Event("playing"));
+                    return;
+                }
+                case _PLAYING: {
+                    this.currentTime = 0;
+                    return;
+                }
+                case _INITIALIZING: {
+                    return;
+                }
+                case _ERROR:
+                default: {
+                    // do nothing
+                }
             }
-            jsb.AudioEngine.setCurrentTime(audioID, this.currentTime);
-
-            this.dispatchEvent(new Event("play"));
-            jsb.AudioEngine.setFinishCallback(audioID, function () {
-                _weakMap.get(self).audioID = null;
-                self.dispatchEvent(new Event("ended"));
-            });
-            if (typeof jsb.AudioEngine.setErrorCallback !== "undefined") {
-                jsb.AudioEngine.setErrorCallback(audioID, function () {
-                    _weakMap.get(self).audioID = null;
-                    self.dispatchEvent(new Event("error"));
-                });
-            }
-            if (typeof jsb.AudioEngine.setWaitingCallback !== "undefined") {
-                jsb.AudioEngine.setWaitingCallback(audioID, function () {
-                    self.dispatchEvent(new Event("waiting"));
-                });
-            }
-            if (typeof jsb.AudioEngine.setCanPlayCallback === "function") {
-                jsb.AudioEngine.setCanPlayCallback(audioID, function () {
-                    self.dispatchEvent(new Event("canplay"));
-                });
-            }
-            _weakMap.get(this).audioID = audioID;
         }
+        // need call play function
+        let self = this;
+        audioID = jsb.AudioEngine.play(this.src, this.loop, this.volume);
+        if (audioID === -1) {
+            this.dispatchEvent(new Event("error"));
+            return;
+        }
+        jsb.AudioEngine.setCurrentTime(audioID, this.currentTime);
+
+        this.dispatchEvent(new Event("play"));
+        jsb.AudioEngine.setFinishCallback(audioID, function () {
+            _weakMap.get(self).audioID = null;
+            self.dispatchEvent(new Event("ended"));
+        });
+        if (typeof jsb.AudioEngine.setErrorCallback !== "undefined") {
+            jsb.AudioEngine.setErrorCallback(audioID, function () {
+                _weakMap.get(self).audioID = null;
+                self.dispatchEvent(new Event("error"));
+            });
+        }
+        if (typeof jsb.AudioEngine.setWaitingCallback !== "undefined") {
+            jsb.AudioEngine.setWaitingCallback(audioID, function () {
+                self.dispatchEvent(new Event("waiting"));
+            });
+        }
+        if (typeof jsb.AudioEngine.setCanPlayCallback === "function") {
+            jsb.AudioEngine.setCanPlayCallback(audioID, function () {
+                self.dispatchEvent(new Event("canplay"));
+            });
+        }
+        _weakMap.get(this).audioID = audioID;
     }
 }
