@@ -2,13 +2,40 @@ import HTMLElement from './HTMLElement'
 import MediaError from './MediaError'
 import _weakMap from "./util/WeakMap"
 
-const HAVE_NOTHING = 0;
-const HAVE_METADATA = 1;
-const HAVE_CURRENT_DATA = 2;
-const HAVE_FUTURE_DATA = 3;
-const HAVE_ENOUGH_DATA = 4;
-
 export default class HTMLMediaElement extends HTMLElement {
+    static get NETWORK_EMPTY() {
+        return 0;
+    }
+    static get NETWORK_IDLE() {
+        return 1;
+    }
+    static get NETWORK_LOADING() {
+        return 2;
+    }
+    static get NETWORK_NO_SOURCE() {
+        return 3;
+    };
+
+    static get HAVE_NOTHING() {
+        return 0;
+    }
+
+    static get HAVE_METADATA() {
+        return 1;
+    }
+
+    static get HAVE_CURRENT_DATA() {
+        return 2;
+    }
+
+    static get HAVE_FUTURE_DATA() {
+        return 3;
+    }
+
+    static get HAVE_ENOUGH_DATA() {
+        return 4;
+    }
+
     audioTracks = undefined;
     autoplay = false;
     controller = null;
@@ -20,7 +47,7 @@ export default class HTMLMediaElement extends HTMLElement {
     mediaKeys = null;
     mozAudioChannelType = undefined;
     muted = false;
-    networkState = 0;
+    networkState = HTMLMediaElement.NETWORK_EMPTY;
     playbackRate = 1;
     preload = "auto";
     loop = false;
@@ -36,7 +63,7 @@ export default class HTMLMediaElement extends HTMLElement {
             error: null,
             initialTime: 0,
             paused: true,
-            readyState: HAVE_NOTHING,
+            readyState: HTMLMediaElement.HAVE_NOTHING,
             value: 1.0,
             currentTime: 0
         });
@@ -54,11 +81,6 @@ export default class HTMLMediaElement extends HTMLElement {
             _weakMap.get(this).ended = true;
             _weakMap.get(this).paused = false;
         });
-        this.addEventListener("canplay", function () {
-            if (this.autoplay) {
-                this.play();
-            }
-        });
     }
 
     get currentTime() {
@@ -75,9 +97,6 @@ export default class HTMLMediaElement extends HTMLElement {
 
     set src(value) {
         _weakMap.get(this).currentSrc = value;
-        if (this.preload === "auto") {
-            this.load();
-        }
     }
 
     get buffered() {
