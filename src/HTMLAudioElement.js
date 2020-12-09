@@ -109,7 +109,9 @@ export default class HTMLAudioElement extends HTMLMediaElement {
                 this.load();
             }
         } else {
-            console.error("invalid src: ", value);
+            if (value !== "") {
+                console.error("invalid src: ", value);
+            }
             this.dispatchEvent(new Event("error"));
         }
     }
@@ -143,7 +145,9 @@ export default class HTMLAudioElement extends HTMLMediaElement {
                 });
             });
         } else {
-            console.error("invalid src: ", src);
+            if (src !== "") {
+                console.error("invalid src: ", src);
+            }
             this.dispatchEvent(new Event("error"));
         }
     }
@@ -151,14 +155,11 @@ export default class HTMLAudioElement extends HTMLMediaElement {
     pause() {
         let audioID = _weakMap.get(this).audioID;
         if (_audio_valid_id(audioID)) {
-            if (jsb.AudioEngine.getState(audioID) !== _PAUSE) {
+            let state = jsb.AudioEngine.getState(audioID);
+            if (state === _INITIALIZING || state === _PLAYING) {
                 jsb.AudioEngine.pause(audioID);
                 this.dispatchEvent(new Event("pause"));
-            } else {
-                console.warn("Audio pause: music has been paused.");
             }
-        } else {
-            console.warn("Audio pause: no music is playing.");
         }
     }
 
@@ -197,7 +198,10 @@ export default class HTMLAudioElement extends HTMLMediaElement {
         let self = this;
         audioID = jsb.AudioEngine.play(this.src, this.loop, this.volume);
         if (audioID === -1) {
-            this.dispatchEvent(new Event("error"));
+            setTimeout(function () {
+                self.dispatchEvent(new Event("error"));
+                self.dispatchEvent(new Event("ended"));
+            });
             return;
         }
         let currentTime = this.currentTime;
