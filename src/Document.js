@@ -11,6 +11,7 @@ import HTMLCanvasElement from './HTMLCanvasElement'
 import HTMLVideoElement from './HTMLVideoElement'
 import HTMLScriptElement from './HTMLScriptElement'
 import HTMLStyleElement from './HTMLStyleElement'
+import HTMLInputElement from './HTMLInputElement'
 import _weakMap from "./util/WeakMap"
 
 let _html = new HTMLHtmlElement();
