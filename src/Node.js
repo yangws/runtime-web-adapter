@@ -39,6 +39,10 @@ export default class Node extends EventTarget {
         return null
     }
 
+    contains(node) {
+        return this.childNodes.indexOf(node) > -1;
+    }
+
     dispatchEvent() {
         let result = true;
         let length = this.childNodes.length;
