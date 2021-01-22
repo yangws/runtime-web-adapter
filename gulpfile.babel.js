@@ -6,33 +6,67 @@ const source = require("vinyl-source-stream");
 const uglify = require('gulp-uglify');
 const buffer = require('vinyl-buffer');
 
-gulp.task('index.js', () => {
-    return browserify('./src/window.js')
+gulp.task("web.js", () => {
+    return browserify('./web/window.js')
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
             comments: false
         })
         .bundle()
-        .pipe(source('index.js'))
-        .pipe(buffer())
-        .pipe(gulp.dest('../runtime-packer/common/adapter/dom'));
-});
-
-gulp.task('index.min.js', () => {
-    return browserify('./src/window.js')
-        .transform(babelify, {
-            presets: ["@babel/preset-env"],
-            plugins: ["@babel/plugin-proposal-class-properties"],
-            comments: false
-        })
-        .bundle()
-        .pipe(source('index.min.js'))
+        .pipe(source('web.js'))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('../runtime-packer/common/adapter/dom'));
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('default', gulp.series(["index.js", "index.min.js"]));
+gulp.task("web.min.js", () => {
+    return browserify('./web/window.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('web.min.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task("cocos-runtime.js", () => {
+    return browserify('./ral/cocos-runtime/index.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('cocos-runtime.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task("cocos-runtime.min.js", () => {
+    return browserify('./ral/cocos-runtime/index.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('cocos-runtime.min.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task("web", gulp.series(["web.js", "web.min.js"]));
+gulp.task("cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
+gulp.task("ral", gulp.series(["cocos-runtime"]));
+gulp.task('default', gulp.series(["web", "ral"]));
