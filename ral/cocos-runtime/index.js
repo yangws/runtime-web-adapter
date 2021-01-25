@@ -3,23 +3,25 @@ if (!window.jsb) {
 }
 
 // base
-import "./base/lifecycle";
-import "./base/subpackage";
-import "./base/system-info";
-import "./base/touch-event";
+require("./base/lifecycle");
+require("./base/subpackage");
+require("./base/system-info");
+require("./base/touch-event");
 // device
-import "./device/accelerometer";
-import "./device/battery";
+require("./device/accelerometer");
+require("./device/battery");
 // file
-import "./file/file-system-manager";
+require("./file/file-system-manager");
 // interface
-import "./interface/keyboard";
-import "./interface/window";
+require("./interface/keyboard");
+require("./interface/window");
 // media
-import "./media/audio";
-import "./media/video";
+require("./media/audio");
+require("./media/video");
+// network
+require("./network/download");
 // rendering
-import "./rendering/canvas";
-import "./rendering/font";
-import "./rendering/frame";
-import "./rendering/image";
+require("./rendering/canvas");
+require("./rendering/font");
+require("./rendering/frame");
+require("./rendering/image");
