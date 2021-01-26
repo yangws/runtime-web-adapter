@@ -1,3 +1,4 @@
+import UTIL from "./util/util"
 import HTMLElement from './HTMLElement.js'
 import DOMRect from './DOMRect.js'
 
@@ -6,6 +7,7 @@ const CANVAS_DEFAULT_HEIGHT = 150;
 
 window.jsb = window.jsb || {};
 let _createCanvas = jsb.createCanvas;
+let systemInfo = jsb.getSystemInfoSync();
 
 export default class HTMLCanvasElement extends HTMLElement {
     constructor(width, height) {
@@ -17,7 +19,7 @@ export default class HTMLCanvasElement extends HTMLElement {
         this.top = 0;
         this.left = 0;
 
-        if (_createCanvas) {
+        if (UTIL.compareVersion(systemInfo.coreVersion, "2.0.0") >= 0) {
             // since runtime 2.0.0
             let canvas = _createCanvas();
             canvas.__proto__.__proto__ = HTMLCanvasElement.prototype;
@@ -48,10 +50,7 @@ export default class HTMLCanvasElement extends HTMLElement {
         let self = this;
         // console.log(`==> Canvas getContext(${name})`);
         if (name === 'webgl' || name === 'experimental-webgl') {
-            if (this === window.__canvas)
-                return window.__gl;
-            else
-                return null;
+            return window.__gl;
         } else if (name === '2d') {
             if (!this._context2D) {
                 this._context2D = new CanvasRenderingContext2D(this.width, this.height);
