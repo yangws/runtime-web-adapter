@@ -12,7 +12,7 @@ export default {
             return;
         }
         let fromProperty = from[name];
-        if (fromProperty) {
+        if (typeof fromProperty !== "undefined") {
             if (typeof fromProperty === "function") {
                 to[name] = fromProperty.bind(from);
             } else {

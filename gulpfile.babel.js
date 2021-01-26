@@ -14,12 +14,12 @@ gulp.task("web.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source('web.js'))
+        .pipe(source('web-adapter.js'))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./dist/common'));
 });
 
 gulp.task("web.min.js", () => {
@@ -30,10 +30,10 @@ gulp.task("web.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source('web.min.js'))
+        .pipe(source('web-adapter.min.js'))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./dist/common'));
 });
 
 gulp.task("cocos-runtime.js", () => {
@@ -44,12 +44,12 @@ gulp.task("cocos-runtime.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source('cocos-runtime.js'))
+        .pipe(source('jsb.js'))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./dist/platforms/cocos-runtime/'));
 });
 
 gulp.task("cocos-runtime.min.js", () => {
@@ -60,13 +60,44 @@ gulp.task("cocos-runtime.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source('cocos-runtime.min.js'))
+        .pipe(source('jsb.min.js'))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./dist/platforms/cocos-runtime/'));
+});
+
+gulp.task("cocos-play.js", () => {
+    return browserify('./ral/cocos-play/index.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('jsb.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./dist/platforms/cocos-play/'));
+});
+
+gulp.task("cocos-play.min.js", () => {
+    return browserify('./ral/cocos-play/index.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('jsb.min.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist/platforms/cocos-play/'));
 });
 
 gulp.task("web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
-gulp.task("ral", gulp.series(["cocos-runtime"]));
+gulp.task("cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
+gulp.task("ral", gulp.series(["cocos-runtime", "cocos-play"]));
 gulp.task('default', gulp.series(["web", "ral"]));
