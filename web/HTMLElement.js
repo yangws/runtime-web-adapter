@@ -4,8 +4,8 @@ export default class HTMLElement extends Element {
     className = '';
     childern = [];
     style = {
-        width: `${jsb.width}px`,
-        height: `${jsb.height}px`
+        width: `${window.innerWidth}px`,
+        height: `${window.innerHeight}px`
     };
 
     insertBefore = function () {
