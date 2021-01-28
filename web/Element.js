@@ -21,12 +21,12 @@ export default class Element extends Node {
         return {
             x: 0,
             y: 0,
-            width: jsb.width,
-            height: jsb.height,
+            width: window.innerWidth,
+            height: window.innerHeight,
             top: 0,
             left: 0,
-            bottom: jsb.height,
-            right: jsb.width
+            bottom: window.innerHeight,
+            right: window.innerWidth
         }
     }
 

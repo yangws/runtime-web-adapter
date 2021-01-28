@@ -19,21 +19,23 @@ import XMLHttpRequest from "./XMLHttpRequest"
 
 window.jsb = window.jsb || {};
 
+let _systemInfo = window.jsb.getSystemInfoSync();
+
 // properties
 window.clientTop = 0;
 window.clientLeft = 0;
-window.devicePixelRatio = jsb.pixelRatio;
+window.devicePixelRatio = _systemInfo.pixelRatio;
 window.document = new Document();
 window.frameElement = null;
 window.fullScreen = true;
-window.innerHeight = jsb.height;
-window.innerWidth = jsb.width;
+window.innerHeight = _systemInfo.screenHeight;
+window.innerWidth = _systemInfo.screenWidth;
 window.length = 0;
 window.location = new Location();
 window.name = "runtime";
-window.navigator = new Navigator(jsb.platform, jsb.language);
-window.outerHeight = jsb.height;
-window.outerWidth = jsb.width;
+window.navigator = new Navigator(_systemInfo.platform, _systemInfo.language);
+window.outerHeight = _systemInfo.screenHeight;
+window.outerWidth = _systemInfo.screenWidth;
 window.pageXOffset = 0;
 window.pageYOffset = 0;
 window.parent = window;
