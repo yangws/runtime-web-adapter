@@ -15,6 +15,7 @@ export default {
         if (typeof fromProperty !== "undefined") {
             if (typeof fromProperty === "function") {
                 to[name] = fromProperty.bind(from);
+                Object.assign(to[name], fromProperty);
             } else {
                 to[name] = fromProperty;
             }

@@ -64,7 +64,7 @@ export default class HTMLMediaElement extends HTMLElement {
             initialTime: 0,
             paused: true,
             readyState: HTMLMediaElement.HAVE_NOTHING,
-            value: 1.0,
+            volume: 1.0,
             currentTime: 0
         });
 
