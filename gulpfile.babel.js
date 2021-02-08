@@ -126,9 +126,40 @@ gulp.task("cocos-laya.min.js", () => {
         .pipe(gulp.dest('./dist/'));
 });
 
+gulp.task("oppo-runtime.js", () => {
+    return browserify('./ral/oppo-runtime/index.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('jsb.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./dist/platforms/oppo-runtime/'));
+});
+
+gulp.task("oppo-runtime.min.js", () => {
+    return browserify('./ral/oppo-runtime/index.js')
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source('jsb.min.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist/platforms/oppo-runtime/'));
+});
+
 gulp.task("web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
 gulp.task("ral", gulp.series(["cocos-runtime", "cocos-play"]));
 gulp.task('default', gulp.series(["web", "ral"]));
 gulp.task('cocos-laya', gulp.series(["cocos-laya.js", "cocos-laya.min.js"]));
+gulp.task("oppo-runtime", gulp.series(["oppo-runtime.js", "oppo-runtime.min.js"]));

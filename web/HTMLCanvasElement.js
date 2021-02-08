@@ -1,6 +1,7 @@
 import UTIL from "./util/util"
 import HTMLElement from './HTMLElement.js'
 import DOMRect from './DOMRect.js'
+import ImageData from './ImageData.js'
 
 const CANVAS_DEFAULT_WIDTH = 300;
 const CANVAS_DEFAULT_HEIGHT = 150;
