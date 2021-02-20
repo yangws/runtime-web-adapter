@@ -16,7 +16,6 @@ import Navigator from "./Navigator"
 import Screen from "./Screen"
 import TouchEvent from "./TouchEvent"
 import XMLHttpRequest from "./XMLHttpRequest"
-import ImageData from "./ImageData"
 
 window.jsb = window.jsb || {};
 
@@ -114,9 +113,6 @@ window.HTMLAudioElement = HTMLAudioElement;
 window.HTMLCanvasElement = HTMLCanvasElement;
 window.HTMLImageElement = HTMLImageElement;
 window.Image = Image;
-if (!window.ImageData) {
-    window.ImageData = ImageData;
-}
 window.TouchEvent = TouchEvent;
 window.XMLHttpRequest = XMLHttpRequest;
 if (!window.Blob || !window.URL) {

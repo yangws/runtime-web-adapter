@@ -63,6 +63,7 @@ export default class HTMLCanvasElement extends HTMLElement {
     }
 
     get _data() {
+        console.warn("HTMLCanvasElement _data() may not work");
         if (this._context2D === null) {
             return null;
         }

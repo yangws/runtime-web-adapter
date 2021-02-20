@@ -1,3 +1,5 @@
+import ImageData from './ImageData.js'
+
 if (window.__gl) {
     let gl = window.__gl;
     let _glTexImage2D = gl.texImage2D;
@@ -9,13 +11,32 @@ if (window.__gl) {
             format = width;
 
             if (image instanceof HTMLImageElement) {
-                _glTexImage2D(target, level, image._glInternalFormat, image.width, image.height, 0, image._glFormat, image._glType, image._data);
-            } else if (image instanceof HTMLCanvasElement) {
-                var data = null;
-                if (image._data) {
-                    data = image._data._data;
+                if (gl.texImage2D_image) {
+                    let error = console.error;
+                    console.error = function () { };
+                    _glTexImage2D(...arguments);
+                    console.error = error;
+                    gl.texImage2D_image(target, level, image._imageMeta);
+                } else {
+                    _glTexImage2D(target, level, image._glInternalFormat, image.width, image.height, 0, image._glFormat, image._glType, image._data);
                 }
-            } else if (image instanceof ImageData) {
+            } else if (image instanceof HTMLCanvasElement) {
+                var imageData = null;
+                if (gl.texImage2D_canvas) {
+                    let error = console.error;
+                    console.error = function () { };
+                    _glTexImage2D(...arguments);
+                    console.error = error;
+                    let context2D = image.getContext('2d');
+                    gl.texImage2D_canvas(target, level, internalformat, format, type, context2D);
+                } else if (image._context2D && image._context2D._getData) {
+                    var data = image._context2D._getData();
+                    imageData = new ImageData(data, image.width, image.height);
+                    _glTexImage2D(target, level, internalformat, image.width, image.height, 0, format, type, imageData._data);
+                } else {
+                    console.error("Invalid image argument gl.texImage2D!");
+                }
+            } else if (image.height && image.width && image.data) {
                 let error = console.error;
                 console.error = function () { };
                 _glTexImage2D(target, level, internalformat, image.width, image.height, 0, format, type, image.data);
@@ -43,23 +64,42 @@ if (window.__gl) {
             format = width;
 
             if (image instanceof HTMLImageElement) {
-                _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, image._glFormat, image._glType, image._data);
+                if (gl.texSubImage2D_image) {
+                    let error = console.error;
+                    console.error = function () { };
+                    _glTexSubImage2D(...arguments);
+                    console.error = error;
+                    gl.texSubImage2D_image(target, level, xoffset, yoffset, image._imageMeta);
+                } else {
+                    _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, image._glFormat, image._glType, image._data);
+                }
             }
             else if (image instanceof HTMLCanvasElement) {
-                var data = null;
-                if (image._data) {
-                    data = image._data._data;
+                var imageData = null;
+                if (gl.texSubImage2D_canvas) {
+                    let error = console.error;
+                    console.error = function () { };
+                    _glTexSubImage2D(...arguments);
+                    console.error = error;
+                    let context2D = image.getContext('2d');
+                    gl.texSubImage2D_canvas(target, level, xoffset, yoffset, format, type, context2D);
+                } else if (image._context2D && image._context2D._getData) {
+                    var data = image._context2D._getData();
+                    imageData = new ImageData(data, image.width, image.height);
+                    _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, imageData._data);
                 }
-                _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, data);
+                else {
+                    console.error("Invalid image argument gl.texSubImage2D!");
+                }
             }
-            else if (image instanceof ImageData) {
+            else if (image.height && image.width && image.data) {
                 let error = console.error;
                 console.error = function () { };
                 _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, image.data);
                 console.error = error;
             }
             else {
-                console.error("Invalid pixel argument passed to gl.texImage2D!");
+                console.error("Invalid pixel argument passed to gl.texSubImage2D!");
             }
         }
         else if (argc === 9) {
