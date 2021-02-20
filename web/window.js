@@ -16,6 +16,7 @@ import Navigator from "./Navigator"
 import Screen from "./Screen"
 import TouchEvent from "./TouchEvent"
 import XMLHttpRequest from "./XMLHttpRequest"
+import ImageData from "./ImageData"
 
 window.jsb = window.jsb || {};
 
@@ -52,7 +53,7 @@ window.window = window;
 
 // methods
 window.alert = window.console.error;
-const {btoa, atob} = require('../lib/base64.min.js');
+const { btoa, atob } = require('../lib/base64.min.js');
 window.atob = atob;
 window.btoa = btoa;
 window.close = function () {
@@ -113,10 +114,13 @@ window.HTMLAudioElement = HTMLAudioElement;
 window.HTMLCanvasElement = HTMLCanvasElement;
 window.HTMLImageElement = HTMLImageElement;
 window.Image = Image;
+if (!window.ImageData) {
+    window.ImageData = ImageData;
+}
 window.TouchEvent = TouchEvent;
 window.XMLHttpRequest = XMLHttpRequest;
 if (!window.Blob || !window.URL) {
-    const {Blob, URL} = require('./Blob.js');
+    const { Blob, URL } = require('./Blob.js');
     window.Blob = Blob;
     window.URL = URL;
 }
