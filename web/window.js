@@ -52,7 +52,7 @@ window.window = window;
 
 // methods
 window.alert = window.console.error;
-const {btoa, atob} = require('../lib/base64.min.js');
+const { btoa, atob } = require('../lib/base64.min.js');
 window.atob = atob;
 window.btoa = btoa;
 window.close = function () {
@@ -116,7 +116,7 @@ window.Image = Image;
 window.TouchEvent = TouchEvent;
 window.XMLHttpRequest = XMLHttpRequest;
 if (!window.Blob || !window.URL) {
-    const {Blob, URL} = require('./Blob.js');
+    const { Blob, URL } = require('./Blob.js');
     window.Blob = Blob;
     window.URL = URL;
 }

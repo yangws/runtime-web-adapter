@@ -31,10 +31,7 @@ if (window.__gl) {
                 console.error("Invalid pixel argument passed to gl.texImage2D!");
             }
         } else if (argc === 9) {
-            let error = console.error;
-            console.error = function(){};
             _glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
-            console.error = error;
         } else {
             console.error("gl.texImage2D: invalid argument count!");
         }
@@ -74,10 +71,7 @@ if (window.__gl) {
             }
         }
         else if (argc === 9) {
-            let error = console.error;
-            console.error = function(){};
             _glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-            console.error = error;
         }
         else {
             console.error((new Error("gl.texImage2D: invalid argument count!").stack));
