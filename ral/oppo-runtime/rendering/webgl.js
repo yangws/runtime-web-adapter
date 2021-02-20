@@ -9,32 +9,12 @@ if (window.__gl) {
             format = width;
 
             if (image instanceof HTMLImageElement) {
-                if (typeof gl.texImage2D_image !== "undefined") {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexImage2D(...arguments);
-                    console.error = error;
-                    gl.texImage2D_image(target, level, image._imageMeta);
-                } else {
-                    _glTexImage2D(target, level, image._glInternalFormat, image.width, image.height, 0, image._glFormat, image._glType, image._data);
-                }
-
+                _glTexImage2D(target, level, image._glInternalFormat, image.width, image.height, 0, image._glFormat, image._glType, image._data);
             } else if (image instanceof HTMLCanvasElement) {
-                if (typeof gl.texImage2D_canvas !== "undefined") {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexImage2D(...arguments);
-                    console.error = error;
-                    let context2D = image.getContext('2d');
-                    gl.texImage2D_canvas(target, level, internalformat, format, type, context2D);
-                } else {
-                    var data = null;
-                    if (image._data) {
-                        data = image._data._data;
-                    }
-                    _glTexImage2D(target, level, internalformat, image.width, image.height, 0, format, type, data);
+                var data = null;
+                if (image._data) {
+                    data = image._data._data;
                 }
-
             } else if (image instanceof ImageData) {
                 let error = console.error;
                 console.error = function () { };
@@ -63,33 +43,14 @@ if (window.__gl) {
             format = width;
 
             if (image instanceof HTMLImageElement) {
-                if (typeof gl.texSubImage2D_image !== "undefined") {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexSubImage2D(...arguments);
-                    console.error = error;
-                    gl.texSubImage2D_image(target, level, xoffset, yoffset, image._imageMeta);
-                } else {
-                    _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, image._glFormat, image._glType, image._data);
-                }
+                _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, image._glFormat, image._glType, image._data);
             }
             else if (image instanceof HTMLCanvasElement) {
-                if (typeof gl.texSubImage2D_canvas !== "undefined") {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexSubImage2D(...arguments);
-                    console.error = error;
-                    let context2D = image.getContext('2d');
-                    gl.texSubImage2D_canvas(target, level, xoffset, yoffset, format, type, context2D);
+                var data = null;
+                if (image._data) {
+                    data = image._data._data;
                 }
-                else {
-                    var data = null;
-                    if (image._data) {
-                        data = image._data._data;
-                    }
-                    _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, data);
-                }
-
+                _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, data);
             }
             else if (image instanceof ImageData) {
                 let error = console.error;
