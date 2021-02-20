@@ -66,7 +66,7 @@ export default class HTMLCanvasElement extends HTMLElement {
         if (this._context2D === null) {
             return null;
         }
-        return this._context2D;
+        return this._context2D.getImageData();
     }
 
     get clientWidth() {
