@@ -1,3 +1,4 @@
+require('../ral/cocos-runtime/index.js');
 // 屏幕适配
 let _config;
 Object.defineProperty(window, "Config", {
@@ -19,7 +20,7 @@ Object.defineProperty(window, "Config", {
 });
 
 //iOS版本字体重叠bug修复
-let res = loadRuntime().getSystemInfoSync();
+let res = jsb.getSystemInfoSync();
 if (res && res.system.toLowerCase() !== 'ios 10.1.1') {
     let _Laya;
     Object.defineProperty(window, "Laya", {
@@ -43,6 +44,4 @@ if (res && res.system.toLowerCase() !== 'ios 10.1.1') {
     });
 }
 
-require('../ral/cocos-runtime/index.js');
 require("../web/window.js");
-

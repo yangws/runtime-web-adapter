@@ -155,7 +155,7 @@ gulp.task("oppo-runtime.min.js", () => {
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
 });
-//lib  adapter
+
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
