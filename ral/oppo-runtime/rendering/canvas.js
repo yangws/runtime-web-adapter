@@ -7,9 +7,3 @@ _UTIL.exportTo("createCanvas", qg, jsb, function () {
         };
     }
 });
-
-if (!CanvasRenderingContext2D.prototype.getImageData) {
-    CanvasRenderingContext2D.prototype.getImageData = function () {
-        console.error('unsupport getImageData');
-    }
-}
