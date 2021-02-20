@@ -9,24 +9,9 @@ if (window.__gl) {
             format = width;
 
             if (image instanceof HTMLImageElement) {
-                if (gl.texImage2D_image) {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexImage2D(...arguments);
-                    console.error = error;
-                    gl.texImage2D_image(target, level, image._imageMeta);
-                } else {
-                    _glTexImage2D(target, level, image._glInternalFormat, image.width, image.height, 0, image._glFormat, image._glType, image._data);
-                }
+                _glTexImage2D(target, level, image._glInternalFormat, image.width, image.height, 0, image._glFormat, image._glType, image._data);
             } else if (image instanceof HTMLCanvasElement) {
-                if (gl.texImage2D_canvas) {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexImage2D(...arguments);
-                    console.error = error;
-                    let context2D = image.getContext('2d');
-                    gl.texImage2D_canvas(target, level, internalformat, format, type, context2D);
-                } else if (image._context2D && image._context2D._getData) {
+                if (image._context2D && image._context2D._getData) {
                     var data = image._context2D._getData();
                     _glTexImage2D(target, level, internalformat, image.width, image.height, 0, format, type, data);
                 } else {
@@ -60,25 +45,10 @@ if (window.__gl) {
             format = width;
 
             if (image instanceof HTMLImageElement) {
-                if (gl.texSubImage2D_image) {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexSubImage2D(...arguments);
-                    console.error = error;
-                    gl.texSubImage2D_image(target, level, xoffset, yoffset, image._imageMeta);
-                } else {
-                    _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, image._glFormat, image._glType, image._data);
-                }
+                _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, image._glFormat, image._glType, image._data);
             }
             else if (image instanceof HTMLCanvasElement) {
-                if (gl.texSubImage2D_canvas) {
-                    let error = console.error;
-                    console.error = function () { };
-                    _glTexSubImage2D(...arguments);
-                    console.error = error;
-                    let context2D = image.getContext('2d');
-                    gl.texSubImage2D_canvas(target, level, xoffset, yoffset, format, type, context2D);
-                } else if (image._context2D && image._context2D._getData) {
+                if (image._context2D && image._context2D._getData) {
                     var data = image._context2D._getData();
                     _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, data);
                 }
