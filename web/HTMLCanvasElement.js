@@ -68,11 +68,9 @@ export default class HTMLCanvasElement extends HTMLElement {
             return null;
         }
         if (!this._dataInner) {
-            let data = this._context2D._getData();
-            this._dataInner = new ImageData(data, this.width, this.height);
+            this._dataInner = this._context2D._getData();
         }
         return this._dataInner;
-
     }
 
     get clientWidth() {
