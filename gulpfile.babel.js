@@ -156,10 +156,41 @@ gulp.task("oppo-runtime.min.js", () => {
         .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
 });
 
+gulp.task("huawei-runtime.js", () => {
+    return browserify("./ral/huawei-runtime/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("jsb.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("./dist/platforms/huawei-runtime/"));
+});
+
+gulp.task("huawei-runtime.min.js", () => {
+    return browserify("./ral/huawei-runtime/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("jsb.min.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest("./dist/platforms/huawei-runtime/"));
+});
+
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
 gulp.task("lib-cocos-oppo", gulp.series(["oppo-runtime.js", "oppo-runtime.min.js"]));
-gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-cocos-oppo"]));
+gulp.task("lib-cocos-huawei", gulp.series(["huawei-runtime.js", "huawei-runtime.min.js"]));
+gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-cocos-oppo", "lib-cocos-huawei"]));
 gulp.task("default", gulp.series(["lib-web", "lib-ral"]));
 gulp.task("adapter-runtime-laya", gulp.series(["runtime-laya.js", "runtime-laya.min.js"]));
