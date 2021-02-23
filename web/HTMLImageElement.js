@@ -1,9 +1,7 @@
 import HTMLElement from './HTMLElement'
 import Event from "./Event"
-import UTIL from "./util/util";
 
 window.jsb = window.jsb || {};
-let systemInfo = jsb.getSystemInfoSync();
 let _creteImage = jsb.createImage;
 let _image;
 let _setter;
@@ -29,7 +27,6 @@ export default class HTMLImageElement extends HTMLElement {
         this.width = width || 0;
         this.height = height || 0;
 
-        console.log("image: " + UTIL.compareVersion(systemInfo.coreVersion, "2.0.0"));
         if (jsb.runtimeSupport("createImage")) {
             // since runtime 2.0.0
             let image = _creteImage();
