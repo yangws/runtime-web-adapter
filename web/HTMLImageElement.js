@@ -9,7 +9,7 @@ let _image;
 let _setter;
 let _getter;
 
-if (UTIL.compareVersion(systemInfo.coreVersion, "2.0.0") >= 0) {
+if (jsb.runtimeSupport("createImage")) {
     _image = _creteImage();
     let _descriptor = Object.getOwnPropertyDescriptor(_image.__proto__, "src");
     _setter = _descriptor.set;
@@ -30,7 +30,7 @@ export default class HTMLImageElement extends HTMLElement {
         this.height = height || 0;
 
         console.log("image: " + UTIL.compareVersion(systemInfo.coreVersion, "2.0.0"));
-        if (UTIL.compareVersion(systemInfo.coreVersion, "2.0.0") >= 0) {
+        if (jsb.runtimeSupport("createImage")) {
             // since runtime 2.0.0
             let image = _creteImage();
             Object.keys(this).forEach(function (key) {

@@ -1,6 +1,18 @@
+import _UTIL from "../util";
+
 if (!window.jsb) {
     window.jsb = {};
 }
+// 将外部已知需要鉴别 runtime 明确不支持的功能的名称添加到 runtimeNonsupports 中。
+let _runtimeNonsupports = {
+    runtimeNonsupports: []
+};
+_UTIL.weakMap.set(jsb, _runtimeNonsupports);
+jsb.runtimeSupport = function (name) {
+    return !(_runtimeNonsupports.runtimeNonsupports.find(function (value) {
+        return name === value;
+    }));
+};
 
 // base
 require("./base/lifecycle");

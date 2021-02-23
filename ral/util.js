@@ -28,5 +28,6 @@ export default {
                 errCallback();
             }
         }
-    }
+    },
+    weakMap: new WeakMap()
 }
