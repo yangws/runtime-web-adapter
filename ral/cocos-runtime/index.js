@@ -1,3 +1,6 @@
+import _UTIL from "../util";
+import _FEATURE from "../feature";
+
 if (!window.jsb) {
     window.jsb = {};
 }
@@ -26,3 +29,5 @@ require("./rendering/webgl");
 require("./rendering/font");
 require("./rendering/frame");
 require("./rendering/image");
+// other
+_UTIL.exportTo("getFeatureProperty",_FEATURE, jsb);
