@@ -9,7 +9,7 @@ _UTIL.exportTo("loadImageData", hbs, jsb, function () {
     }
 });
 _UTIL.exportTo("createImage", hbs, jsb, function () {
-    let featureValue = "undefined";
+    let featureValue = "unsupported";
     if (document && typeof document.createElement === "function") {
         featureValue = "wrapper";
         jsb.createImage = function () {

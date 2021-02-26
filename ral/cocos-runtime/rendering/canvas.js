@@ -4,7 +4,7 @@ import _FEATURE from "../../feature";
 let _rt = loadRuntime();
 
 _UTIL.exportTo("createCanvas", _rt, jsb, function () {
-    let featureValue = "undefined";
+    let featureValue = "unsupported";
     if (document && typeof document.createElement === "function") {
         featureValue = "wrapper";
         jsb.createCanvas = function () {
