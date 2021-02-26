@@ -1,17 +1,9 @@
 import _UTIL from "../util";
+import _FEATURE from "../feature";
 
 if (!window.jsb) {
     window.jsb = {};
 }
-let _runtimeNonsupports = {
-    runtimeNonsupports: []
-};
-_UTIL.weakMap.set(jsb, _runtimeNonsupports);
-jsb.runtimeSupport = function (name) {
-    return !(_runtimeNonsupports.runtimeNonsupports.find(function (value) {
-        return name === value;
-    }));
-};
 
 // base
 require("./base/lifecycle");
@@ -37,3 +29,5 @@ require("./rendering/webgl");
 require("./rendering/font");
 require("./rendering/frame");
 require("./rendering/image");
+// other
+_UTIL.exportTo("getFeatureProperty",_FEATURE, jsb);

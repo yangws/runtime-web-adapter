@@ -20,7 +20,6 @@ export default {
                 to[name] = fromProperty;
             }
         } else {
-            this.weakMap.get(to).runtimeNonsupports.push(name);
             to[name] = function () {
                 console.error(name + " is not support!");
                 return {};
@@ -29,6 +28,5 @@ export default {
                 errCallback();
             }
         }
-    },
-    weakMap: new WeakMap()
+    }
 }

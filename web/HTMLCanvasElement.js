@@ -16,7 +16,7 @@ export default class HTMLCanvasElement extends HTMLElement {
         this.top = 0;
         this.left = 0;
 
-        if (jsb.runtimeSupport("createCanvas")) {
+        if (typeof jsb.getFeatureProperty("ral.createCanvas", "spec") === "undefined") {
             // since runtime 2.0.0
             let canvas = _createCanvas();
             canvas.__proto__.__proto__ = HTMLCanvasElement.prototype;
