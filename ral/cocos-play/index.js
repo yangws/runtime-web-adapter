@@ -1,6 +1,17 @@
+import _UTIL from "../util";
+
 if (!window.jsb) {
     window.jsb = {};
 }
+let _runtimeNonsupports = {
+    runtimeNonsupports: []
+};
+_UTIL.weakMap.set(jsb, _runtimeNonsupports);
+jsb.runtimeSupport = function (name) {
+    return !(_runtimeNonsupports.runtimeNonsupports.find(function (value) {
+        return name === value;
+    }));
+};
 
 // base
 require("./base/lifecycle");

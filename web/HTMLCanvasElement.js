@@ -1,13 +1,10 @@
-import UTIL from "./util/util"
 import HTMLElement from './HTMLElement.js'
-import DOMRect from './DOMRect.js'
 
 const CANVAS_DEFAULT_WIDTH = 300;
 const CANVAS_DEFAULT_HEIGHT = 150;
 
 window.jsb = window.jsb || {};
 let _createCanvas = jsb.createCanvas;
-let systemInfo = jsb.getSystemInfoSync();
 
 export default class HTMLCanvasElement extends HTMLElement {
     constructor(width, height) {
@@ -19,7 +16,7 @@ export default class HTMLCanvasElement extends HTMLElement {
         this.top = 0;
         this.left = 0;
 
-        if (UTIL.compareVersion(systemInfo.coreVersion, "2.0.0") >= 0) {
+        if (jsb.runtimeSupport("createCanvas")) {
             // since runtime 2.0.0
             let canvas = _createCanvas();
             canvas.__proto__.__proto__ = HTMLCanvasElement.prototype;

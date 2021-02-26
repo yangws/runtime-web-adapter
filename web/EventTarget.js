@@ -19,8 +19,41 @@ let _onTouchEnd = function (e) {
     let event = new TouchEvent("touchend");
     window.dispatchEvent(Object.assign(event, e));
 };
+
+let _systemInfo = jsb.getSystemInfoSync();
+let _isAndroid = _systemInfo.platform.toLowerCase() === "android";
+let _alpha = 0.8;
+let _gravity = [0, 0, 0];
 let _onAccelerometerChange = function (e) {
-    let event = new DeviceMotionEvent(e);
+    if (_isAndroid) {
+        // 调整坐标系 + 适配 web 标准
+        e.x *= -10;
+        e.y *= -10;
+        e.z *= -10;
+    } else {
+        // 适配 web 标准
+        e.x *= 10;
+        e.y *= 10;
+        e.z *= 10;
+    }
+    // Isolate the force of gravity with the low-pass filter.
+    _gravity[0] = _alpha * _gravity[0] + (1 - _alpha) * e.x;
+    _gravity[1] = _alpha * _gravity[1] + (1 - _alpha) * e.y;
+    _gravity[2] = _alpha * _gravity[2] + (1 - _alpha) * e.z;
+
+    let event = new DeviceMotionEvent({
+        // Remove the gravity contribution with the high-pass filter.
+        acceleration: {
+            x: e.x - _gravity[0],
+            y: e.y - _gravity[1],
+            z: e.z - _gravity[2]
+        },
+        accelerationIncludingGravity: {
+            x: e.x,
+            y: e.y,
+            z: e.z
+        }
+    });
     window.dispatchEvent(event);
 };
 

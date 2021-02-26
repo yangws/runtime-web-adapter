@@ -180,9 +180,19 @@ function InnerAudioContext() {
                     _audioEngine.stop(audioID);
                     privateThis.audioID = -1;
                 }
-                if (this.autoplay) {
-                    this.play();
-                }
+                let self = this;
+                _audioEngine.preload(value, function () {
+                    // 已经预加载过的，不是异步回调，所以加上 setTimeout
+                    setTimeout(function () {
+                        // 异步过程，src 可能发生了变化
+                        if (self.src === value) {
+                            _dispatchCallback(self, _CANPLAY_CALLBACK);
+                            if (self.autoplay) {
+                                self.play();
+                            }
+                        }
+                    });
+                });
             }
         },
 
