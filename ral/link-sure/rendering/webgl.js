@@ -23,10 +23,7 @@ if (window.__gl) {
                 let context2D = image.getContext('2d');
                 gl.texImage2D_canvas(target, level, internalformat, format, type, context2D);
             } else if (image instanceof ImageData) {
-                let error = console.error;
-                console.error = function(){};
                 _glTexImage2D(target, level, internalformat, image.width, image.height, 0, format, type, image.data);
-                console.error = error;
             } else {
                 console.error("Invalid pixel argument passed to gl.texImage2D!");
             }
@@ -61,10 +58,7 @@ if (window.__gl) {
                 gl.texSubImage2D_canvas(target, level, xoffset, yoffset, format, type, context2D);
             }
             else if (image instanceof ImageData) {
-                let error = console.error;
-                console.error = function(){};
                 _glTexSubImage2D(target, level, xoffset, yoffset, image.width, image.height, format, type, image.data);
-                console.error = error;
             }
             else {
                 console.error("Invalid pixel argument passed to gl.texImage2D!");
