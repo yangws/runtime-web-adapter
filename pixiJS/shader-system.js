@@ -18,13 +18,7 @@ Object.defineProperty(PIXI.systems.ShaderSystem.prototype, "createSyncGroups", {
 
 
 function generateUniformsSync(group, uniformData) {
-    /**
-     * the introduction of syncData is to solve an issue where textures in uniform groups are not set correctly
-     * the texture count was always starting from 0 in each group. This needs to increment each time a texture is used
-     * no matter which group is being used
-     *
-     */
-    // eslint-disable-next-line no-new-func
+    // 以下为引擎字符串代码转义
     return (function (group, uniformData) {
         return function (ud, uv, renderer, syncData) {
             var v = null;
