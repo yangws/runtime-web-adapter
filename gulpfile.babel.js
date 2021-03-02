@@ -256,7 +256,7 @@ gulp.task("runtime-pixiJS.js", () => {
         .bundle()
         .pipe(source("pixiJS-adapter.js"))
         .pipe(buffer())
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/"));
