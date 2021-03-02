@@ -1,4 +1,6 @@
 require('../ral/cocos-runtime/index.js');
+require("../web/window.js");
+
 // 屏幕适配
 let _config;
 Object.defineProperty(window, "Config", {
@@ -43,5 +45,3 @@ if (res && res.system.toLowerCase() !== 'ios 10.1.1') {
         }
     });
 }
-
-require("../web/window.js");

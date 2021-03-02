@@ -1,5 +1,6 @@
 
 require('../ral/cocos-runtime/index.js');
+require("../web/window.js");
 
 // 引擎依赖模块，在引擎加载时覆盖
 let _PIXI;
@@ -100,6 +101,3 @@ function _renderOptions(settings) {
         });
     }
 }
-
-
-require("../web/window.js");
