@@ -6,7 +6,7 @@ export default class Image extends HTMLImageElement {
     }
 }
 
-let _creteImage = jsb.createImage;
+let _creteImage = ral.createImage;
 if (_creteImage) {
     _Image.prototype.__proto__ = Image.prototype;
 }

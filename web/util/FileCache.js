@@ -1,7 +1,7 @@
 let md5 = require("../../lib/md5.min");
 
-let fileMgr = jsb.getFileSystemManager();
-let cacheDir = jsb.env.USER_DATA_PATH + "/fileCache/";
+let fileMgr = ral.getFileSystemManager();
+let cacheDir = ral.env.USER_DATA_PATH + "/fileCache/";
 
 class FileCache {
     constructor() {
