@@ -1,11 +1,11 @@
 let _rt = loadRuntime();
 
 if (jsb.setPreferredFramesPerSecond) {
-    jsb.setPreferredFramesPerSecond = jsb.setPreferredFramesPerSecond.bind(jsb);
+    ral.setPreferredFramesPerSecond = jsb.setPreferredFramesPerSecond.bind(jsb);
 } else if (_rt.setPreferredFramesPerSecond) {
-    jsb.setPreferredFramesPerSecond = _rt.setPreferredFramesPerSecond.bind(_rt);
+    ral.setPreferredFramesPerSecond = _rt.setPreferredFramesPerSecond.bind(_rt);
 } else {
-    jsb.setPreferredFramesPerSecond = function () {
+    ral.setPreferredFramesPerSecond = function () {
         console.error("The setPreferredFramesPerSecond is not define!");
     };
 }

@@ -1,11 +1,11 @@
 import _UTIL from "../../util"
 import _FEATURE from "../../feature";
 
-_UTIL.exportTo("createCanvas", wuji, jsb, function () {
+_UTIL.exportTo("createCanvas", wuji, ral, function () {
     let featureValue = "unsupported";
     if (document && typeof document.createElement === "function") {
         featureValue = "wrapper";
-        jsb.createCanvas = function () {
+        ral.createCanvas = function () {
             return document.createElement("canvas");
         };
     }

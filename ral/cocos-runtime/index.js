@@ -1,8 +1,8 @@
 import _UTIL from "../util";
 import _FEATURE from "../feature";
 
-if (!window.jsb) {
-    window.jsb = {};
+if (!window.ral) {
+    window.ral = {};
 }
 
 // base
@@ -30,4 +30,4 @@ require("./rendering/font");
 require("./rendering/frame");
 require("./rendering/image");
 // other
-_UTIL.exportTo("getFeatureProperty",_FEATURE, jsb);
+_UTIL.exportTo("getFeatureProperty", _FEATURE, ral);

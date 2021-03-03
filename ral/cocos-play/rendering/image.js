@@ -3,12 +3,12 @@ import _FEATURE from "../../feature";
 
 let _rt = loadRuntime();
 
-_UTIL.exportTo("loadImageData", _rt, jsb);
-_UTIL.exportTo("createImage", _rt, jsb, function () {
+_UTIL.exportTo("loadImageData", _rt, ral);
+_UTIL.exportTo("createImage", _rt, ral, function () {
     let featureValue = "unsupported";
     if (document && typeof document.createElement === "function") {
         featureValue = "wrapper";
-        jsb.createImage = function () {
+        ral.createImage = function () {
             return document.createElement("image");
         };
     }

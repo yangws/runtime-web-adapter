@@ -1,3 +1,3 @@
 import _UTIL from "../../util"
 
-_UTIL.exportTo("createVideo", qg, jsb);
+_UTIL.exportTo("createVideo", qg, ral);

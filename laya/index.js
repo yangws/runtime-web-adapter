@@ -22,7 +22,7 @@ Object.defineProperty(window, "Config", {
 });
 
 //iOS版本字体重叠bug修复
-let res = jsb.getSystemInfoSync();
+let res = ral.getSystemInfoSync();
 if (res && res.system.toLowerCase() !== 'ios 10.1.1') {
     let _Laya;
     Object.defineProperty(window, "Laya", {

@@ -1,7 +1,7 @@
 let _systemInfo = qg.getSystemInfoSync();
 let _listeners = [];
-jsb.device = jsb.device || {};
+ral.device = ral.device || {};
 
-jsb.stopAccelerometer = qg.stopAccelerometer.bind(qg);
-jsb.startAccelerometer = qg.startAccelerometer.bind(qg);
-jsb.onAccelerometerChange = qg.onAccelerometerChange.bind(qg);
+ral.stopAccelerometer = qg.stopAccelerometer.bind(qg);
+ral.startAccelerometer = qg.startAccelerometer.bind(qg);
+ral.onAccelerometerChange = qg.onAccelerometerChange.bind(qg);

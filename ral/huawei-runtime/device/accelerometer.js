@@ -1,7 +1,7 @@
 let _systemInfo = hbs.getSystemInfoSync();
 let _listeners = [];
-jsb.device = jsb.device || {};
+ral.device = ral.device || {};
 
-jsb.stopAccelerometer = hbs.stopAccelerometer.bind(hbs);
-jsb.startAccelerometer = hbs.startAccelerometer.bind(hbs);
-jsb.onAccelerometerChange = hbs.onAccelerometerChange.bind(hbs);
+ral.stopAccelerometer = hbs.stopAccelerometer.bind(hbs);
+ral.startAccelerometer = hbs.startAccelerometer.bind(hbs);
+ral.onAccelerometerChange = hbs.onAccelerometerChange.bind(hbs);

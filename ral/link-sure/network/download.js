@@ -1,3 +1,3 @@
 import _UTIL from "../../util"
 
-_UTIL.exportTo("downloadFile", wuji, jsb);
+_UTIL.exportTo("downloadFile", wuji, ral);

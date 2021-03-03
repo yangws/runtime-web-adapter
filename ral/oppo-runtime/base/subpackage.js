@@ -1,3 +1,3 @@
 import _UTIL from "../../util"
 
-_UTIL.exportTo("loadSubpackage", qg, jsb);
+_UTIL.exportTo("loadSubpackage", qg, ral);

@@ -3,11 +3,11 @@ import _FEATURE from "../../feature";
 
 let _rt = loadRuntime();
 
-_UTIL.exportTo("createCanvas", _rt, jsb, function () {
+_UTIL.exportTo("createCanvas", _rt, ral, function () {
     let featureValue = "unsupported";
     if (document && typeof document.createElement === "function") {
         featureValue = "wrapper";
-        jsb.createCanvas = function () {
+        ral.createCanvas = function () {
             return document.createElement("canvas");
         };
     }
