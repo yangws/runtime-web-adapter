@@ -3,8 +3,8 @@ import HTMLElement from './HTMLElement.js'
 const CANVAS_DEFAULT_WIDTH = 300;
 const CANVAS_DEFAULT_HEIGHT = 150;
 
-window.jsb = window.jsb || {};
-let _createCanvas = jsb.createCanvas;
+window.ral = window.ral || {};
+let _createCanvas = ral.createCanvas;
 
 export default class HTMLCanvasElement extends HTMLElement {
     constructor(width, height) {
@@ -16,7 +16,7 @@ export default class HTMLCanvasElement extends HTMLElement {
         this.top = 0;
         this.left = 0;
 
-        if (typeof jsb.getFeatureProperty("ral.createCanvas", "spec") === "undefined") {
+        if (typeof ral.getFeatureProperty("ral.createCanvas", "spec") === "undefined") {
             // since runtime 2.0.0
             let canvas = _createCanvas();
             canvas.__proto__.__proto__ = HTMLCanvasElement.prototype;

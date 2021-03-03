@@ -1,13 +1,13 @@
 import HTMLElement from './HTMLElement'
 import Event from "./Event"
 
-window.jsb = window.jsb || {};
-let _creteImage = jsb.createImage;
+window.ral = window.ral || {};
+let _creteImage = ral.createImage;
 let _image;
 let _setter;
 let _getter;
 
-if (typeof jsb.getFeatureProperty("ral.createImage", "spec") === "undefined") {
+if (typeof ral.getFeatureProperty("ral.createImage", "spec") === "undefined") {
     _image = _creteImage();
     let _descriptor = Object.getOwnPropertyDescriptor(_image.__proto__, "src");
     _setter = _descriptor.set;
@@ -27,7 +27,7 @@ export default class HTMLImageElement extends HTMLElement {
         this.width = width || 0;
         this.height = height || 0;
 
-        if (typeof jsb.getFeatureProperty("ral.createImage", "spec") === "undefined") {
+        if (typeof ral.getFeatureProperty("ral.createImage", "spec") === "undefined") {
             // since runtime 2.0.0
             let image = _creteImage();
             Object.keys(this).forEach(function (key) {
@@ -75,7 +75,7 @@ export default class HTMLImageElement extends HTMLElement {
             return;
         }
 
-        jsb.loadImageData(src, (info) => {
+        ral.loadImageData(src, (info) => {
             if (!info) {
                 let event = new Event('error');
                 this.dispatchEvent(event);

@@ -1,6 +1,6 @@
 import HTMLElement from "./HTMLElement"
 
-window.jsb = window.jsb || {};
+window.ral = window.ral || {};
 
 export default class HTMLInputElement extends HTMLElement {
     constructor() {
@@ -26,13 +26,13 @@ export default class HTMLInputElement extends HTMLElement {
             that.target.event(/*laya.events.Event.INPUT*/"input");
             that.target.focus = false;
 
-            jsb.offKeyboardConfirm(onKeyboardConfirm);
-            jsb.offKeyboardInput(onKeyboardInput);
-            jsb.hideKeyboard({});
+            ral.offKeyboardConfirm(onKeyboardConfirm);
+            ral.offKeyboardInput(onKeyboardInput);
+            ral.hideKeyboard({});
         };
-        jsb.offKeyboardInput(onKeyboardInput);
-        jsb.offKeyboardConfirm(onKeyboardConfirm);
-        jsb.showKeyboard({
+        ral.offKeyboardInput(onKeyboardInput);
+        ral.offKeyboardConfirm(onKeyboardConfirm);
+        ral.showKeyboard({
             defaultValue: this.value,
             maxLength: this.maxLength,
             multiple: this.target.multiline,
@@ -44,12 +44,12 @@ export default class HTMLInputElement extends HTMLElement {
             fail: function (res) {
             }
         });
-        jsb.onKeyboardInput(onKeyboardInput);
-        jsb.onKeyboardConfirm(onKeyboardConfirm);
+        ral.onKeyboardInput(onKeyboardInput);
+        ral.onKeyboardConfirm(onKeyboardConfirm);
     }
 
     blur() {
         super.blur();
-        jsb.hideKeyboard({});
+        ral.hideKeyboard({});
     }
 }

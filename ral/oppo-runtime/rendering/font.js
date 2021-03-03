@@ -1,3 +1,3 @@
 import _UTIL from "../../util"
 
-_UTIL.exportTo("loadFont", qg, jsb);
+_UTIL.exportTo("loadFont", qg, ral);

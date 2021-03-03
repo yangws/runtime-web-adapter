@@ -1,30 +1,30 @@
 import _UTIL from "../../util";
 
 let _listeners = [];
-jsb.device = jsb.device || {};
+ral.device = ral.device || {};
 
 if (wuji.offAccelerometerChange) {
     // runtime v2
-    jsb.onAccelerometerChange = wuji.onAccelerometerChange.bind(wuji);
-    jsb.offAccelerometerChange = wuji.offAccelerometerChange.bind(wuji);
-    jsb.stopAccelerometer = wuji.stopAccelerometer.bind(wuji);
+    ral.onAccelerometerChange = wuji.onAccelerometerChange.bind(wuji);
+    ral.offAccelerometerChange = wuji.offAccelerometerChange.bind(wuji);
+    ral.stopAccelerometer = wuji.stopAccelerometer.bind(wuji);
     let _startAccelerometer = wuji.startAccelerometer.bind(wuji);
-    jsb.startAccelerometer = function (obj) {
-        return _startAccelerometer(Object.assign({type: "accelerationIncludingGravity"}, obj));
+    ral.startAccelerometer = function (obj) {
+        return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
     };
 
-    jsb.device.setMotionEnabled = function (enable) {
+    ral.device.setMotionEnabled = function (enable) {
         if (enable) {
-            wuji.startAccelerometer({type: "accelerationIncludingGravity"});
+            wuji.startAccelerometer({ type: "accelerationIncludingGravity" });
         } else {
             wuji.stopAccelerometer({});
         }
     };
 } else {
-    _UTIL.weakMap.get(jsb).runtimeNonsupports.push("offAccelerometerChange");
+    _UTIL.weakMap.get(ral).runtimeNonsupports.push("offAccelerometerChange");
 
     // runtime v1
-    jsb.onAccelerometerChange = function (listener) {
+    ral.onAccelerometerChange = function (listener) {
         if (typeof listener === "function") {
             let length = _listeners.length;
             for (let index = 0; index < length; ++index) {
@@ -35,7 +35,7 @@ if (wuji.offAccelerometerChange) {
             _listeners.push(listener);
         }
     };
-    jsb.offAccelerometerChange = function (listener) {
+    ral.offAccelerometerChange = function (listener) {
         let length = _listeners.length;
         for (let index = 0; index < length; ++index) {
             if (listener === _listeners[index]) {
@@ -67,10 +67,10 @@ if (wuji.offAccelerometerChange) {
         });
     };
 
-    jsb.stopAccelerometer = function () {
+    ral.stopAccelerometer = function () {
         jsb.device.setMotionEnabled(false);
     };
-    jsb.startAccelerometer = function () {
+    ral.startAccelerometer = function () {
         jsb.device.setMotionEnabled(true);
     };
 }

@@ -2,9 +2,9 @@ import Event from "./Event"
 import FILE_CACHE from "./util/FileCache"
 import XMLHttpRequestEventTarget from "./XMLHttpRequestEventTarget"
 
-const fsm = jsb.getFileSystemManager();
+const fsm = ral.getFileSystemManager();
 const _XMLHttpRequest = window.XMLHttpRequest;
-window.jsb = window.jsb || {};
+window.ral = window.ral || {};
 
 export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     _isLocal = false;

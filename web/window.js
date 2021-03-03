@@ -17,9 +17,9 @@ import Screen from "./Screen"
 import TouchEvent from "./TouchEvent"
 import XMLHttpRequest from "./XMLHttpRequest"
 
-window.jsb = window.jsb || {};
+window.ral = window.ral || {};
 
-let _systemInfo = window.jsb.getSystemInfoSync();
+let _systemInfo = window.ral.getSystemInfoSync();
 
 // properties
 window.clientTop = 0;
@@ -83,7 +83,7 @@ window.getComputedStyle = function () {
     };
 };
 
-jsb.onWindowResize(function (width, height) {
+ral.onWindowResize && ral.onWindowResize(function (width, height) {
     window.innerWidth = width;
     window.innerHeight = height;
     window.outerWidth = window.innerWidth;

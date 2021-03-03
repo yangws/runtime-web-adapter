@@ -1,4 +1,4 @@
-window.jsb = window.jsb || {};
+window.ral = window.ral || {};
 export default class Screen {
     availTop = 0;
     availLeft = 0;

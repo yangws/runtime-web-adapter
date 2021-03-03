@@ -2,30 +2,30 @@ import _UTIL from "../../util";
 
 let _rt = loadRuntime();
 let _listeners = [];
-jsb.device = jsb.device || {};
+ral.device = ral.device || {};
 
 if (_rt.offAccelerometerChange) {
     // runtime v2
-    jsb.onAccelerometerChange = _rt.onAccelerometerChange.bind(_rt);
-    jsb.offAccelerometerChange = _rt.offAccelerometerChange.bind(_rt);
-    jsb.stopAccelerometer = _rt.stopAccelerometer.bind(_rt);
+    ral.onAccelerometerChange = _rt.onAccelerometerChange.bind(_rt);
+    ral.offAccelerometerChange = _rt.offAccelerometerChange.bind(_rt);
+    ral.stopAccelerometer = _rt.stopAccelerometer.bind(_rt);
     let _startAccelerometer = _rt.startAccelerometer.bind(_rt);
-    jsb.startAccelerometer = function (obj) {
-        return _startAccelerometer(Object.assign({type: "accelerationIncludingGravity"}, obj));
+    ral.startAccelerometer = function (obj) {
+        return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
     };
 
-    jsb.device.setMotionEnabled = function (enable) {
+    ral.device.setMotionEnabled = function (enable) {
         if (enable) {
-            _rt.startAccelerometer({type: "accelerationIncludingGravity"});
+            _rt.startAccelerometer({ type: "accelerationIncludingGravity" });
         } else {
             _rt.stopAccelerometer({});
         }
     };
 } else {
-    _UTIL.weakMap.get(jsb).runtimeNonsupports.push("offAccelerometerChange");
+    _UTIL.weakMap.get(ral).runtimeNonsupports.push("offAccelerometerChange");
 
     // runtime v1
-    jsb.onAccelerometerChange = function (listener) {
+    ral.onAccelerometerChange = function (listener) {
         if (typeof listener === "function") {
             let length = _listeners.length;
             for (let index = 0; index < length; ++index) {
@@ -36,7 +36,7 @@ if (_rt.offAccelerometerChange) {
             _listeners.push(listener);
         }
     };
-    jsb.offAccelerometerChange = function (listener) {
+    ral.offAccelerometerChange = function (listener) {
         let length = _listeners.length;
         for (let index = 0; index < length; ++index) {
             if (listener === _listeners[index]) {
@@ -68,10 +68,10 @@ if (_rt.offAccelerometerChange) {
         });
     };
 
-    jsb.stopAccelerometer = function () {
+    ral.stopAccelerometer = function () {
         jsb.device.setMotionEnabled(false);
     };
-    jsb.startAccelerometer = function () {
+    ral.startAccelerometer = function () {
         jsb.device.setMotionEnabled(true);
     };
 }

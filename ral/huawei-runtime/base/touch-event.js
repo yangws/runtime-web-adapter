@@ -138,38 +138,38 @@ let _touchEventHandlerFactory = function (type) {
 };
 
 if (hbs.onTouchStart) {
-    jsb.onTouchStart = hbs.onTouchStart;
-    jsb.offTouchStart = hbs.offTouchStart;
+    ral.onTouchStart = hbs.onTouchStart;
+    ral.offTouchStart = hbs.offTouchStart;
 } else {
-    jsb.onTouchStart = _touchEventHandlerFactory('touchstart');
-    jsb.offTouchStart = function (callback) {
+    ral.onTouchStart = _touchEventHandlerFactory('touchstart');
+    ral.offTouchStart = function (callback) {
         _removeListener("touchstart", callback);
     };
 }
 if (hbs.onTouchMove) {
-    jsb.onTouchMove = hbs.onTouchMove;
-    jsb.offTouchMove = hbs.offTouchMove;
+    ral.onTouchMove = hbs.onTouchMove;
+    ral.offTouchMove = hbs.offTouchMove;
 } else {
-    jsb.onTouchMove = _touchEventHandlerFactory('touchmove');
-    jsb.offTouchMove = function (callback) {
+    ral.onTouchMove = _touchEventHandlerFactory('touchmove');
+    ral.offTouchMove = function (callback) {
         _removeListener("touchmove", callback);
     };
 }
 if (hbs.onTouchCancel) {
-    jsb.onTouchCancel = hbs.onTouchCancel;
-    jsb.offTouchCancel = hbs.offTouchCancel;
+    ral.onTouchCancel = hbs.onTouchCancel;
+    ral.offTouchCancel = hbs.offTouchCancel;
 } else {
-    jsb.onTouchCancel = _touchEventHandlerFactory('touchcancel');
-    jsb.offTouchCancel = function (callback) {
+    ral.onTouchCancel = _touchEventHandlerFactory('touchcancel');
+    ral.offTouchCancel = function (callback) {
         _removeListener("touchcancel", callback);
     };
 }
 if (hbs.onTouchEnd) {
-    jsb.onTouchEnd = hbs.onTouchEnd;
-    jsb.offTouchEnd = hbs.offTouchEnd;
+    ral.onTouchEnd = hbs.onTouchEnd;
+    ral.offTouchEnd = hbs.offTouchEnd;
 } else {
-    jsb.onTouchEnd = _touchEventHandlerFactory('touchend');
-    jsb.offTouchEnd = function (callback) {
+    ral.onTouchEnd = _touchEventHandlerFactory('touchend');
+    ral.offTouchEnd = function (callback) {
         _removeListener("touchend", callback);
     };
 }

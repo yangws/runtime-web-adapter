@@ -138,38 +138,38 @@ let _touchEventHandlerFactory = function (type) {
 };
 
 if (wuji.onTouchStart) {
-    jsb.onTouchStart = wuji.onTouchStart;
-    jsb.offTouchStart = wuji.offTouchStart;
+    ral.onTouchStart = wuji.onTouchStart;
+    ral.offTouchStart = wuji.offTouchStart;
 } else {
-    jsb.onTouchStart = _touchEventHandlerFactory('touchstart');
-    jsb.offTouchStart = function (callback) {
+    ral.onTouchStart = _touchEventHandlerFactory('touchstart');
+    ral.offTouchStart = function (callback) {
         _removeListener("touchstart", callback);
     };
 }
 if (wuji.onTouchMove) {
-    jsb.onTouchMove = wuji.onTouchMove;
-    jsb.offTouchMove = wuji.offTouchMove;
+    ral.onTouchMove = wuji.onTouchMove;
+    ral.offTouchMove = wuji.offTouchMove;
 } else {
-    jsb.onTouchMove = _touchEventHandlerFactory('touchmove');
-    jsb.offTouchMove = function (callback) {
+    ral.onTouchMove = _touchEventHandlerFactory('touchmove');
+    ral.offTouchMove = function (callback) {
         _removeListener("touchmove", callback);
     };
 }
 if (wuji.onTouchCancel) {
-    jsb.onTouchCancel = wuji.onTouchCancel;
-    jsb.offTouchCancel = wuji.offTouchCancel;
+    ral.onTouchCancel = wuji.onTouchCancel;
+    ral.offTouchCancel = wuji.offTouchCancel;
 } else {
-    jsb.onTouchCancel = _touchEventHandlerFactory('touchcancel');
-    jsb.offTouchCancel = function (callback) {
+    ral.onTouchCancel = _touchEventHandlerFactory('touchcancel');
+    ral.offTouchCancel = function (callback) {
         _removeListener("touchcancel", callback);
     };
 }
 if (wuji.onTouchEnd) {
-    jsb.onTouchEnd = wuji.onTouchEnd;
-    jsb.offTouchEnd = wuji.offTouchEnd;
+    ral.onTouchEnd = wuji.onTouchEnd;
+    ral.offTouchEnd = wuji.offTouchEnd;
 } else {
-    jsb.onTouchEnd = _touchEventHandlerFactory('touchend');
-    jsb.offTouchEnd = function (callback) {
+    ral.onTouchEnd = _touchEventHandlerFactory('touchend');
+    ral.offTouchEnd = function (callback) {
         _removeListener("touchend", callback);
     };
 }

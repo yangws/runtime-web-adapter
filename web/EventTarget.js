@@ -20,7 +20,7 @@ let _onTouchEnd = function (e) {
     window.dispatchEvent(Object.assign(event, e));
 };
 
-let _systemInfo = jsb.getSystemInfoSync();
+let _systemInfo = ral.getSystemInfoSync();
 let _isAndroid = _systemInfo.platform.toLowerCase() === "android";
 let _alpha = 0.8;
 let _gravity = [0, 0, 0];
@@ -90,24 +90,24 @@ export default class EventTarget {
             _listenerStat[type] = 1;
             switch (type) {
                 case "touchstart": {
-                    jsb.onTouchStart(_onTouchStart);
+                    ral.onTouchStart(_onTouchStart);
                     break;
                 }
                 case "touchmove": {
-                    jsb.onTouchMove(_onTouchMove);
+                    ral.onTouchMove(_onTouchMove);
                     break;
                 }
                 case "touchcancel": {
-                    jsb.onTouchCancel(_onTouchCancel);
+                    ral.onTouchCancel(_onTouchCancel);
                     break;
                 }
                 case "touchend": {
-                    jsb.onTouchEnd(_onTouchEnd);
+                    ral.onTouchEnd(_onTouchEnd);
                     break;
                 }
                 case "devicemotion": {
-                    jsb.onAccelerometerChange(_onAccelerometerChange);
-                    jsb.device.setMotionEnabled(true);
+                    ral.onAccelerometerChange(_onAccelerometerChange);
+                    ral.device.setMotionEnabled(true);
                     break;
                 }
             }
@@ -141,24 +141,24 @@ export default class EventTarget {
                         if (--_listenerStat[type] === 0) {
                             switch (type) {
                                 case "touchstart": {
-                                    jsb.offTouchStart(_onTouchStart);
+                                    ral.offTouchStart(_onTouchStart);
                                     break;
                                 }
                                 case "touchmove": {
-                                    jsb.offTouchMove(_onTouchMove);
+                                    ral.offTouchMove(_onTouchMove);
                                     break;
                                 }
                                 case "touchcancel": {
-                                    jsb.offTouchCancel(_onTouchCancel);
+                                    ral.offTouchCancel(_onTouchCancel);
                                     break;
                                 }
                                 case "touchend": {
-                                    jsb.offTouchEnd(_onTouchEnd);
+                                    ral.offTouchEnd(_onTouchEnd);
                                     break;
                                 }
                                 case "devicemotion": {
-                                    jsb.offAccelerometerChange(_onAccelerometerChange);
-                                    jsb.device.setMotionEnabled(false);
+                                    ral.offAccelerometerChange(_onAccelerometerChange);
+                                    ral.device.setMotionEnabled(false);
                                     break;
                                 }
                             }

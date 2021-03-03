@@ -1,3 +1,3 @@
 import _UTIL from "../../util"
 
-_UTIL.exportTo("getFileSystemManager", wuji, jsb);
+_UTIL.exportTo("getFileSystemManager", wuji, ral);

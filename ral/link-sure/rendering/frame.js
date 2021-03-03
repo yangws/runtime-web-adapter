@@ -1,9 +1,9 @@
 if (jsb.setPreferredFramesPerSecond) {
-    jsb.setPreferredFramesPerSecond = jsb.setPreferredFramesPerSecond.bind(jsb);
+    ral.setPreferredFramesPerSecond = jsb.setPreferredFramesPerSecond.bind(jsb);
 } else if (wuji.setPreferredFramesPerSecond) {
-    jsb.setPreferredFramesPerSecond = wuji.setPreferredFramesPerSecond.bind(wuji);
+    ral.setPreferredFramesPerSecond = wuji.setPreferredFramesPerSecond.bind(wuji);
 } else {
-    jsb.setPreferredFramesPerSecond = function () {
+    ral.setPreferredFramesPerSecond = function () {
         console.error("The setPreferredFramesPerSecond is not define!");
     };
 }

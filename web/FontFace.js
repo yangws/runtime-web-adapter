@@ -11,15 +11,15 @@ class FontFace {
             // the status of the font, one of  "unloaded", "loading", "loaded", or "error".
             status: "unloaded",
             _status: "unloaded",
-            load () {
+            load() {
                 this.status = "loading";
                 let source;
                 if (self.source.match(/url\(\s*'\s*(.*?)\s*'\s*\)/)) {
                     source = self.source;
                 } else {
-                    source = "url('"+ self.source +"')"
+                    source = "url('" + self.source + "')"
                 }
-                let family = jsb.loadFont(self.family, source);
+                let family = ral.loadFont(self.family, source);
                 if (family) {
                     this._status = "loaded";
                 } else {

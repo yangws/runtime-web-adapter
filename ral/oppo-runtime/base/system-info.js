@@ -1,5 +1,5 @@
 import _UTIL from "../../util"
 
-_UTIL.exportTo("env", qg, jsb);
-_UTIL.exportTo("getSystemInfo", qg, jsb);
-_UTIL.exportTo("getSystemInfoSync", qg, jsb);
+_UTIL.exportTo("env", qg, ral);
+_UTIL.exportTo("getSystemInfo", qg, ral);
+_UTIL.exportTo("getSystemInfoSync", qg, ral);
