@@ -276,14 +276,45 @@ gulp.task("runtime-pixiJS.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
+gulp.task("vivo-runtime.js", () => {
+    return browserify("./ral/vivo-runtime/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("jsb.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
+});
+
+gulp.task("vivo-runtime.min.js", () => {
+    return browserify("./ral/vivo-runtime/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("jsb.min.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
+});
+
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
 gulp.task("lib-link-sure", gulp.series(["link-sure.js", "link-sure.min.js"]));
 gulp.task("lib-qtt", gulp.series(["qtt.js", "qtt.min.js"]));
-gulp.task("lib-cocos-oppo", gulp.series(["oppo-runtime.js", "oppo-runtime.min.js"]));
-gulp.task("lib-cocos-huawei", gulp.series(["huawei-runtime.js", "huawei-runtime.min.js"]));
-gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-link-sure", "lib-qtt", "lib-cocos-oppo", "lib-cocos-huawei"]));
+gulp.task("lib-oppo", gulp.series(["oppo-runtime.js", "oppo-runtime.min.js"]));
+gulp.task("lib-huawei", gulp.series(["huawei-runtime.js", "huawei-runtime.min.js"]));
+gulp.task("lib-vivo", gulp.series(["vivo-runtime.js", "vivo-runtime.min.js"]));
+gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-link-sure", "lib-qtt", "lib-oppo", "lib-huawei", "lib-vivo"]));
 gulp.task("default", gulp.series(["lib-web", "lib-ral"]));
 gulp.task("adapter-runtime-laya", gulp.series(["runtime-laya.js", "runtime-laya.min.js"]));
 gulp.task("adapter-runtime-pixiJS", gulp.series(["runtime-pixiJS.js", "runtime-pixiJS.min.js"]));
