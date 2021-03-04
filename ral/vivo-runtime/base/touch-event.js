@@ -1,8 +1,10 @@
-ral.onTouchStart = qg.onTouchStart;
-ral.offTouchStart = qg.offTouchStart;
-ral.onTouchMove = qg.onTouchMove;
-ral.offTouchMove = qg.offTouchMove;
-ral.onTouchCancel = qg.onTouchCancel;
-ral.offTouchCancel = qg.offTouchCancel;
-ral.onTouchEnd = qg.onTouchEnd;
-ral.offTouchEnd = qg.offTouchEnd;
+import _UTIL from "../../util"
+
+_UTIL.exportTo("onTouchStart", qg, ral);
+_UTIL.exportTo("offTouchStart", qg, ral);
+_UTIL.exportTo("onTouchMove", qg, ral);
+_UTIL.exportTo("offTouchMove", qg, ral);
+_UTIL.exportTo("onTouchCancel", qg, ral);
+_UTIL.exportTo("offTouchCancel", qg, ral);
+_UTIL.exportTo("onTouchEnd", qg, ral);
+_UTIL.exportTo("offTouchEnd", qg, ral);

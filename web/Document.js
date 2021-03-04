@@ -7,19 +7,12 @@ import HTMLElement from './HTMLElement'
 import HTMLHtmlElement from './HTMLHtmlElement'
 import HTMLBodyElement from './HTMLBodyElement'
 import HTMLHeadElement from './HTMLHeadElement'
-
+import HTMLCanvasElement from './HTMLCanvasElement'
 import HTMLVideoElement from './HTMLVideoElement'
 import HTMLScriptElement from './HTMLScriptElement'
 import HTMLStyleElement from './HTMLStyleElement'
 import HTMLInputElement from './HTMLInputElement'
 import _weakMap from "./util/WeakMap"
-
-let HTMLCanvasElement;
-if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "wrapper") {
-    HTMLCanvasElement = window.HTMLCanvasElement;
-} else {
-    HTMLCanvasElement = require('./HTMLCanvasElement');
-}
 
 let _html = new HTMLHtmlElement();
 

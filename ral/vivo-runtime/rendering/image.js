@@ -9,7 +9,9 @@ Object.defineProperty(window, "HTMLImageElement", {
     }
 });
 
-let featureValue = "wrapper";
+_UTIL.exportTo("createImage", qg, ral);
+
+let featureValue = "vivo_platform_support";
 _FEATURE.setFeature("HTMLImageElement", "spec", featureValue);
 _FEATURE.setFeature("Image", "spec", featureValue);
 _FEATURE.setFeature("ral.createImage", "spec", featureValue);

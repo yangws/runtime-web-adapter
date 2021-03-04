@@ -13,7 +13,7 @@ Object.defineProperty(window, "HTMLCanvasElement", {
     }
 });
 
-let featureValue = "wrapper";
+let featureValue = "vivo_platform_support";
 _FEATURE.setFeature("CanvasRenderingContext2D", "spec", featureValue);
 _FEATURE.setFeature("HTMLCanvasElement", "spec", featureValue);
 
