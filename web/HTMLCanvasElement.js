@@ -1,10 +1,9 @@
+import HTMLElement from "./HTMLElement"
 
 if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_support") {
     let HTMLCanvasElement = window.HTMLCanvasElement;
     module.exports = HTMLCanvasElement;
 } else {
-    const HTMLElement = require('./HTMLElement.js');
-
     const CANVAS_DEFAULT_WIDTH = 300;
     const CANVAS_DEFAULT_HEIGHT = 150;
 

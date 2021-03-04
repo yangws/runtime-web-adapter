@@ -16,7 +16,6 @@ gulp.task("web.js", () => {
         .bundle()
         .pipe(source("web-adapter.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/common"));
@@ -46,7 +45,6 @@ gulp.task("cocos-runtime.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/cocos-runtime/"));
@@ -76,7 +74,6 @@ gulp.task("cocos-play.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/cocos-play/"));
@@ -106,7 +103,6 @@ gulp.task("link-sure.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/link-sure/"));
@@ -136,7 +132,6 @@ gulp.task("qtt.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/qtt/"));
@@ -166,7 +161,6 @@ gulp.task("runtime-laya.js", () => {
         .bundle()
         .pipe(source("laya-adapter.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/"));
@@ -196,7 +190,6 @@ gulp.task("oppo-runtime.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
@@ -226,7 +219,6 @@ gulp.task("huawei-runtime.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/huawei-runtime/"));
@@ -256,7 +248,6 @@ gulp.task("runtime-pixiJS.js", () => {
         .bundle()
         .pipe(source("pixiJS-adapter.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/"));
@@ -286,7 +277,6 @@ gulp.task("vivo-runtime.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
