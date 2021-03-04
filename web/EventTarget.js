@@ -21,7 +21,7 @@ let _onTouchEnd = function (e) {
 };
 
 let _systemInfo = ral.getSystemInfoSync();
-let _isAndroid = _systemInfo.platform.toLowerCase() === "android";
+let _isAndroid = _systemInfo.platform ? _systemInfo.platform.toLowerCase() === "android" : true;
 let _alpha = 0.8;
 let _gravity = [0, 0, 0];
 let _onAccelerometerChange = function (e) {
