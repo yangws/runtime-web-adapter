@@ -1,5 +1,5 @@
 
-if (ral.getFeatureProperty("ral.createImage", "spec") === "vivo_platform_support") {
+if (ral.getFeatureProperty("HTMLImageElement", "spec") === "vivo_platform_support") {
     let HTMLImageElement = window.HTMLImageElement;
     module.exports = HTMLCanvasElement;
 } else {
