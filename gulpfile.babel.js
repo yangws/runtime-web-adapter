@@ -16,7 +16,7 @@ gulp.task("web.js", () => {
         .bundle()
         .pipe(source("web-adapter.js"))
         .pipe(buffer())
-        // .pipe(uglify())
+        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/common"));
@@ -286,7 +286,7 @@ gulp.task("vivo-runtime.js", () => {
         .bundle()
         .pipe(source("jsb.js"))
         .pipe(buffer())
-        // .pipe(uglify())
+        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
