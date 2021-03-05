@@ -97,6 +97,11 @@ ral.onWindowResize && ral.onWindowResize(function (width, height) {
     let event = new Event("resize");
     window.dispatchEvent(event);
 });
+
+window.resize = function () {
+    console.warn('window.resize() not supported');
+}
+
 window.stop = function () {
     console.warn("window.stop() not implemented");
 };

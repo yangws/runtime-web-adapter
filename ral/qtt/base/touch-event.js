@@ -1,3 +1,7 @@
+if (!window.jsb) {
+    window.jsb = {};
+}
+let jsb = window.jsb;
 let _rt = loadRuntime();
 let _touches = [];
 
@@ -142,35 +146,43 @@ if (_rt.onTouchStart) {
     ral.onTouchStart = _rt.onTouchStart;
     ral.offTouchStart = _rt.offTouchStart;
 } else {
-    ral.onTouchStart = _touchEventHandlerFactory('touchstart');
-    ral.offTouchStart = function (callback) {
+    jsb.onTouchStart = _touchEventHandlerFactory('touchstart');
+    jsb.offTouchStart = function (callback) {
         _removeListener("touchstart", callback);
     };
+    ral.onTouchStart = jsb.onTouchStart.bind(jsb);
+    ral.offTouchStart = jsb.offTouchStart.bind(jsb);
 }
 if (_rt.onTouchMove) {
     ral.onTouchMove = _rt.onTouchMove;
     ral.offTouchMove = _rt.offTouchMove;
 } else {
-    ral.onTouchMove = _touchEventHandlerFactory('touchmove');
-    ral.offTouchMove = function (callback) {
+    jsb.onTouchMove = _touchEventHandlerFactory('touchmove');
+    jsb.offTouchMove = function (callback) {
         _removeListener("touchmove", callback);
     };
+    ral.onTouchMove = jsb.onTouchMove.bind(jsb);
+    ral.offTouchMove = jsb.offTouchMove.bind(jsb);
 }
 if (_rt.onTouchCancel) {
     ral.onTouchCancel = _rt.onTouchCancel;
     ral.offTouchCancel = _rt.offTouchCancel;
 } else {
-    ral.onTouchCancel = _touchEventHandlerFactory('touchcancel');
-    ral.offTouchCancel = function (callback) {
+    jsb.onTouchCancel = _touchEventHandlerFactory('touchcancel');
+    jsb.offTouchCancel = function (callback) {
         _removeListener("touchcancel", callback);
     };
+    ral.onTouchCancel = jsb.onTouchCancel.bind(jsb);
+    ral.offTouchCancel = jsb.offTouchCancel.bind(jsb);
 }
 if (_rt.onTouchEnd) {
     ral.onTouchEnd = _rt.onTouchEnd;
     ral.offTouchEnd = _rt.offTouchEnd;
 } else {
-    ral.onTouchEnd = _touchEventHandlerFactory('touchend');
-    ral.offTouchEnd = function (callback) {
+    jsb.onTouchEnd = _touchEventHandlerFactory('touchend');
+    jsb.offTouchEnd = function (callback) {
         _removeListener("touchend", callback);
     };
+    ral.onTouchEnd = jsb.onTouchEnd.bind(jsb);
+    ral.offTouchEnd = jsb.offTouchEnd.bind(jsb);
 }
