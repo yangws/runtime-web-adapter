@@ -21,8 +21,6 @@ if (wuji.offAccelerometerChange) {
         }
     };
 } else {
-    _UTIL.weakMap.get(ral).runtimeNonsupports.push("offAccelerometerChange");
-
     // runtime v1
     ral.onAccelerometerChange = function (listener) {
         if (typeof listener === "function") {

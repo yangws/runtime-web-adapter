@@ -1,6 +1,6 @@
 let _rt = loadRuntime();
 
-if (jsb.setPreferredFramesPerSecond) {
+if (jsb && jsb.setPreferredFramesPerSecond) {
     ral.setPreferredFramesPerSecond = jsb.setPreferredFramesPerSecond.bind(jsb);
 } else if (_rt.setPreferredFramesPerSecond) {
     ral.setPreferredFramesPerSecond = _rt.setPreferredFramesPerSecond.bind(_rt);
