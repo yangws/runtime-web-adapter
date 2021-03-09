@@ -1,7 +1,8 @@
-if (!window.jsb) {
-    window.jsb = {};
+let _jsb = window.jsb;
+if (!_jsb) {
+    _jsb = {};
 }
-let jsb = window.jsb;
+
 let _touches = [];
 
 let _getTouchIndex = function (touch) {
@@ -145,43 +146,43 @@ if (wuji.onTouchStart) {
     ral.onTouchStart = wuji.onTouchStart;
     ral.offTouchStart = wuji.offTouchStart;
 } else {
-    jsb.onTouchStart = _touchEventHandlerFactory('touchstart');
-    jsb.offTouchStart = function (callback) {
+    _jsb.onTouchStart = _touchEventHandlerFactory('touchstart');
+    _jsb.offTouchStart = function (callback) {
         _removeListener("touchstart", callback);
     };
-    ral.onTouchStart = jsb.onTouchStart.bind(jsb);
-    ral.offTouchStart = jsb.offTouchStart.bind(jsb);
+    ral.onTouchStart = _jsb.onTouchStart.bind(_jsb);
+    ral.offTouchStart = _jsb.offTouchStart.bind(_jsb);
 }
 if (wuji.onTouchMove) {
     ral.onTouchMove = wuji.onTouchMove;
     ral.offTouchMove = wuji.offTouchMove;
 } else {
-    jsb.onTouchMove = _touchEventHandlerFactory('touchmove');
-    jsb.offTouchMove = function (callback) {
+    _jsb.onTouchMove = _touchEventHandlerFactory('touchmove');
+    _jsb.offTouchMove = function (callback) {
         _removeListener("touchmove", callback);
     };
-    ral.onTouchMove = jsb.onTouchMove.bind(jsb);
-    ral.offTouchMove = jsb.offTouchMove.bind(jsb);
+    ral.onTouchMove = _jsb.onTouchMove.bind(_jsb);
+    ral.offTouchMove = _jsb.offTouchMove.bind(_jsb);
 }
 if (wuji.onTouchCancel) {
     ral.onTouchCancel = wuji.onTouchCancel;
     ral.offTouchCancel = wuji.offTouchCancel;
 } else {
-    jsb.onTouchCancel = _touchEventHandlerFactory('touchcancel');
-    jsb.offTouchCancel = function (callback) {
+    _jsb.onTouchCancel = _touchEventHandlerFactory('touchcancel');
+    _jsb.offTouchCancel = function (callback) {
         _removeListener("touchcancel", callback);
     };
-    ral.onTouchCancel = jsb.onTouchCancel.bind(jsb);
-    ral.offTouchCancel = jsb.offTouchCancel.bind(jsb);
+    ral.onTouchCancel = _jsb.onTouchCancel.bind(_jsb);
+    ral.offTouchCancel = _jsb.offTouchCancel.bind(_jsb);
 }
 if (wuji.onTouchEnd) {
     ral.onTouchEnd = wuji.onTouchEnd;
     ral.offTouchEnd = wuji.offTouchEnd;
 } else {
-    jsb.onTouchEnd = _touchEventHandlerFactory('touchend');
-    jsb.offTouchEnd = function (callback) {
+    _jsb.onTouchEnd = _touchEventHandlerFactory('touchend');
+    _jsb.offTouchEnd = function (callback) {
         _removeListener("touchend", callback);
     };
-    ral.onTouchEnd = jsb.onTouchEnd.bind(jsb);
-    ral.offTouchEnd = jsb.offTouchEnd.bind(jsb);
+    ral.onTouchEnd = _jsb.onTouchEnd.bind(_jsb);
+    ral.offTouchEnd = _jsb.offTouchEnd.bind(_jsb);
 }

@@ -13,14 +13,6 @@ if (_rt.offAccelerometerChange) {
     ral.startAccelerometer = function (obj) {
         return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
     };
-
-    jsb.device.setMotionEnabled = function (enable) {
-        if (enable) {
-            _rt.startAccelerometer({ type: "accelerationIncludingGravity" });
-        } else {
-            _rt.stopAccelerometer({});
-        }
-    };
 } else {
 
     // runtime v1
