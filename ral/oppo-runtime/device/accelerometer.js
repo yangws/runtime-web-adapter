@@ -1,7 +1,9 @@
-let _systemInfo = qg.getSystemInfoSync();
-let _listeners = [];
+//TODO 数据不对，需要矫正。回调接口也需要相应保存处理
+_UTIL.exportTo("stopAccelerometer", qg, ral);
+_UTIL.exportTo("startAccelerometer", qg, ral);
+_UTIL.exportTo("onAccelerometerChange", qg, ral);
+_UTIL.exportTo("offAccelerometerChange", qg, ral, function () {
+    ral.offAccelerometerChange = function () {
 
-ral.stopAccelerometer = qg.stopAccelerometer.bind(qg);
-ral.startAccelerometer = qg.startAccelerometer.bind(qg);
-ral.offAccelerometerChange = qg.offAccelerometerChange.bind(qg) || function () { };
-ral.onAccelerometerChange = qg.onAccelerometerChange.bind(qg);
+    }
+});

@@ -1,7 +1,9 @@
 import _UTIL from "../util";
 import _FEATURE from "../feature";
-if (!window.ral) {
+if (!window.jsb) {
     window.ral = {};
+} else {
+    window.ral = Object.assign({}, window.jsb);
 }
 
 // base
