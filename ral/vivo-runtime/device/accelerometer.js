@@ -5,7 +5,15 @@ ral.stopAccelerometer = function () {
     qg.unsubscribeAccelerometer();
 }
 
-ral.startAccelerometer = function (cb) {
+ral.startAccelerometer = function () {
+
+}
+
+ral.offAccelerometerChange = function () {
+
+}
+
+ral.onAccelerometerChange = function () {
     qg.subscribeAccelerometer({
         callback: function (data) {
             let x = (data.x || 0) * 0.1;
