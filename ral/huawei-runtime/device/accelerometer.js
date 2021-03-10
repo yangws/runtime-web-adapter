@@ -1,7 +1,9 @@
-let _systemInfo = hbs.getSystemInfoSync();
-let _listeners = [];
-ral.device = ral.device || {};
+//TODO 数据不对，需要矫正。回调接口也需要相应保存处理
+_UTIL.exportTo("stopAccelerometer", hbs, ral);
+_UTIL.exportTo("startAccelerometer", hbs, ral);
+_UTIL.exportTo("onAccelerometerChange", hbs, ral);
+_UTIL.exportTo("offAccelerometerChange", hbs, ral, function () {
+    ral.offAccelerometerChange = function () {
 
-ral.stopAccelerometer = hbs.stopAccelerometer.bind(hbs);
-ral.startAccelerometer = hbs.startAccelerometer.bind(hbs);
-ral.onAccelerometerChange = hbs.onAccelerometerChange.bind(hbs);
+    }
+});

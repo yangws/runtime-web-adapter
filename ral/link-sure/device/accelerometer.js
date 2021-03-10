@@ -12,17 +12,7 @@ if (wuji.offAccelerometerChange) {
     ral.startAccelerometer = function (obj) {
         return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
     };
-
-    ral.device.setMotionEnabled = function (enable) {
-        if (enable) {
-            wuji.startAccelerometer({ type: "accelerationIncludingGravity" });
-        } else {
-            wuji.stopAccelerometer({});
-        }
-    };
 } else {
-    _UTIL.weakMap.get(ral).runtimeNonsupports.push("offAccelerometerChange");
-
     // runtime v1
     ral.onAccelerometerChange = function (listener) {
         if (typeof listener === "function") {

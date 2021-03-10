@@ -16,7 +16,6 @@ gulp.task("web.js", () => {
         .bundle()
         .pipe(source("web-adapter.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/common"));
@@ -44,9 +43,8 @@ gulp.task("cocos-runtime.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/cocos-runtime/"));
@@ -60,7 +58,7 @@ gulp.task("cocos-runtime.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/cocos-runtime/"));
@@ -74,9 +72,8 @@ gulp.task("cocos-play.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/cocos-play/"));
@@ -90,7 +87,7 @@ gulp.task("cocos-play.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/cocos-play/"));
@@ -104,9 +101,8 @@ gulp.task("link-sure.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/link-sure/"));
@@ -120,7 +116,7 @@ gulp.task("link-sure.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/link-sure/"));
@@ -134,9 +130,8 @@ gulp.task("qtt.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/qtt/"));
@@ -150,7 +145,7 @@ gulp.task("qtt.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/qtt/"));
@@ -166,7 +161,6 @@ gulp.task("runtime-laya.js", () => {
         .bundle()
         .pipe(source("laya-adapter.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/"));
@@ -194,9 +188,8 @@ gulp.task("oppo-runtime.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
@@ -210,7 +203,7 @@ gulp.task("oppo-runtime.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
@@ -224,9 +217,8 @@ gulp.task("huawei-runtime.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/huawei-runtime/"));
@@ -240,7 +232,7 @@ gulp.task("huawei-runtime.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/huawei-runtime/"));
@@ -256,7 +248,6 @@ gulp.task("runtime-pixiJS.js", () => {
         .bundle()
         .pipe(source("pixiJS-adapter.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/"));
@@ -284,9 +275,8 @@ gulp.task("vivo-runtime.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.js"))
+        .pipe(source("ral.js"))
         .pipe(buffer())
-        .pipe(uglify())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
@@ -300,7 +290,7 @@ gulp.task("vivo-runtime.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("jsb.min.js"))
+        .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));

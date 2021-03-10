@@ -1,17 +1,15 @@
+import HTMLElement from "./HTMLElement"
+import Event from "./Event"
 
 if (ral.getFeatureProperty("HTMLImageElement", "spec") === "vivo_platform_support") {
     let HTMLImageElement = window.HTMLImageElement;
-    module.exports = HTMLCanvasElement;
+    module.exports = HTMLImageElement;
 } else {
-    let HTMLElement = require('./HTMLElement');
-    let Event = require("./Event");
-
     window.ral = window.ral || {};
     let _creteImage = ral.createImage;
     let _image;
     let _setter;
     let _getter;
-
     if (typeof ral.getFeatureProperty("ral.createImage", "spec") === "undefined") {
         _image = _creteImage();
         let _descriptor = Object.getOwnPropertyDescriptor(_image.__proto__, "src");

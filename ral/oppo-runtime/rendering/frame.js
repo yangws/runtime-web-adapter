@@ -1,5 +1,5 @@
 
-if (jsb.setPreferredFramesPerSecond) {
+if (jsb && jsb.setPreferredFramesPerSecond) {
     ral.setPreferredFramesPerSecond = jsb.setPreferredFramesPerSecond.bind(jsb);
 } else if (qg.setPreferredFramesPerSecond) {
     ral.setPreferredFramesPerSecond = qg.setPreferredFramesPerSecond.bind(qg);

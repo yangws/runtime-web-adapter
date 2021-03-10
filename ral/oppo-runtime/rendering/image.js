@@ -2,8 +2,8 @@ import _UTIL from "../../util";
 import _FEATURE from "../../feature";
 
 _UTIL.exportTo("loadImageData", qg, ral, function () {
-    if (typeof ral.loadImage === "function") {
-        ral.loadImageData = ral.loadImage;
+    if (jsb && typeof jsb.loadImage === "function") {
+        ral.loadImageData = jsb.loadImage;
     } else {
         console.error("loadImageData is not function");
     }

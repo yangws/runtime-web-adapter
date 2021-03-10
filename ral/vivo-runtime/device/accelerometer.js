@@ -1,11 +1,18 @@
 import _FEATURE from "../../feature";
-let _systemInfo = qg.getSystemInfoSync();
-let _isLandscape = _systemInfo.screenWidth > _systemInfo.screenHeight;
+//TODO 数据不对，需要矫正。回调接口也需要相应保存处理
 ral.stopAccelerometer = function () {
     qg.unsubscribeAccelerometer();
 }
 
-ral.startAccelerometer = function (cb) {
+ral.startAccelerometer = function () {
+
+}
+
+ral.offAccelerometerChange = function () {
+
+}
+
+ral.onAccelerometerChange = function () {
     qg.subscribeAccelerometer({
         callback: function (data) {
             let x = (data.x || 0) * 0.1;

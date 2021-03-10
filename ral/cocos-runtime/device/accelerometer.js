@@ -13,16 +13,7 @@ if (_rt.offAccelerometerChange) {
     ral.startAccelerometer = function (obj) {
         return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
     };
-
-    ral.device.setMotionEnabled = function (enable) {
-        if (enable) {
-            _rt.startAccelerometer({ type: "accelerationIncludingGravity" });
-        } else {
-            _rt.stopAccelerometer({});
-        }
-    };
 } else {
-    _UTIL.weakMap.get(ral).runtimeNonsupports.push("offAccelerometerChange");
 
     // runtime v1
     ral.onAccelerometerChange = function (listener) {
