@@ -4,7 +4,7 @@ _UTIL.exportTo("env", qg, ral);
 _UTIL.exportTo("getSystemInfo", qg, ral);
 
 ral.getSystemInfoSync = function () {
-    let env = qg.getSystemInfoSync();
-    env.platform = "android";
-    return env;
-}
+    let systemInfo = qg.getSystemInfoSync();
+    systemInfo.platform = "android";
+    return systemInfo;
+};
