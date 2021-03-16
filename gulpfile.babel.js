@@ -180,8 +180,8 @@ gulp.task("runtime-laya.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
-gulp.task("oppo-runtime.js", () => {
-    return browserify("./ral/oppo-runtime/index.js")
+gulp.task("oppo-mini-game.js", () => {
+    return browserify("./ral/oppo-mini-game/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -192,11 +192,11 @@ gulp.task("oppo-runtime.js", () => {
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
+        .pipe(gulp.dest("./dist/platforms/oppo-mini-game/"));
 });
 
-gulp.task("oppo-runtime.min.js", () => {
-    return browserify("./ral/oppo-runtime/index.js")
+gulp.task("oppo-mini-game.min.js", () => {
+    return browserify("./ral/oppo-mini-game/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -206,7 +206,7 @@ gulp.task("oppo-runtime.min.js", () => {
         .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(gulp.dest("./dist/platforms/oppo-runtime/"));
+        .pipe(gulp.dest("./dist/platforms/oppo-mini-game/"));
 });
 
 gulp.task("huawei-quick-game.js", () => {
@@ -267,8 +267,8 @@ gulp.task("runtime-pixiJS.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
-gulp.task("vivo-runtime.js", () => {
-    return browserify("./ral/vivo-runtime/index.js")
+gulp.task("vivo-mini-game.js", () => {
+    return browserify("./ral/vivo-mini-game/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -279,11 +279,11 @@ gulp.task("vivo-runtime.js", () => {
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
+        .pipe(gulp.dest("./dist/platforms/vivo-mini-game/"));
 });
 
-gulp.task("vivo-runtime.min.js", () => {
-    return browserify("./ral/vivo-runtime/index.js")
+gulp.task("vivo-mini-game.min.js", () => {
+    return browserify("./ral/vivo-mini-game/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -293,7 +293,7 @@ gulp.task("vivo-runtime.min.js", () => {
         .pipe(source("ral.min.js"))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(gulp.dest("./dist/platforms/vivo-runtime/"));
+        .pipe(gulp.dest("./dist/platforms/vivo-mini-game/"));
 });
 
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
@@ -301,9 +301,9 @@ gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.m
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
 gulp.task("lib-link-sure", gulp.series(["link-sure.js", "link-sure.min.js"]));
 gulp.task("lib-qtt", gulp.series(["qtt.js", "qtt.min.js"]));
-gulp.task("lib-oppo", gulp.series(["oppo-runtime.js", "oppo-runtime.min.js"]));
+gulp.task("lib-oppo", gulp.series(["oppo-mini-game.js", "oppo-mini-game.min.js"]));
 gulp.task("lib-huawei", gulp.series(["huawei-quick-game.js", "huawei-quick-game.min.js"]));
-gulp.task("lib-vivo", gulp.series(["vivo-runtime.js", "vivo-runtime.min.js"]));
+gulp.task("lib-vivo", gulp.series(["vivo-mini-game.js", "vivo-mini-game.min.js"]));
 gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-link-sure", "lib-qtt", "lib-oppo", "lib-huawei", "lib-vivo"]));
 gulp.task("default", gulp.series(["lib-web", "lib-ral"]));
 gulp.task("adapter-runtime-laya", gulp.series(["runtime-laya.js", "runtime-laya.min.js"]));
