@@ -1,4 +1,3 @@
-
 Object.defineProperty(window, "devicePixelRatio", {
     set(val) {
     },
