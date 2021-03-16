@@ -5,11 +5,6 @@ _UTIL.exportTo("getSystemInfo", qg, ral);
 
 ral.getSystemInfoSync = function () {
     let systemInfo = qg.getSystemInfoSync();
-    let isAndroid = systemInfo.osType.toLowerCase().indexOf("android") !== -1;
-    if (isAndroid) {
-        systemInfo.platform = "android";
-    } else {
-        systemInfo.platform = "ios";
-    }
+    systemInfo.platform = "android";
     return systemInfo;
 };

@@ -26,20 +26,11 @@ ral.stopAccelerometer = function () {
 };
 
 ral.startAccelerometer = function () {
-    let _systemInfo = qg.getSystemInfoSync();
-    let _isAndroid = _systemInfo.osType.toLowerCase().indexOf("android") !== -1;
     qg.subscribeAccelerometer({
         callback: function (data) {
-            let x, y, z;
-            if (_isAndroid) {
-                x = data.x / -10;
-                y = data.y / -10;
-                z = data.z / -10;
-            } else {
-                x = data.x / 10;
-                y = data.y / 10;
-                z = data.z / 10;
-            }
+            let x = data.x / -10;
+            let y = data.y / -10;
+            let z = data.z / -10;
             let timestamp = data.timeStamp || Date.now();
             _listeners.forEach(function (listener) {
                 listener({
