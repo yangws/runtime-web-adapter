@@ -24,19 +24,11 @@ const _addEventListener = window.addEventListener.bind(window);
 let _onAccelerometerChange;
 ral.startAccelerometer = function () {
     if (!_onAccelerometerChange) {
-        let _systemInfo = qg.getSystemInfoSync();
-        let _isAndroid = _systemInfo.platform.toLowerCase().indexOf("android") !== -1;
         _onAccelerometerChange = function (event) {
             let acceleration = Object.assign({}, event.accelerationIncludingGravity);
-            if (_isAndroid) {
-                acceleration.x /= -10;
-                acceleration.y /= -10;
-                acceleration.z /= -10;
-            } else {
-                acceleration.x /= 10;
-                acceleration.y /= 10;
-                acceleration.z /= 10;
-            }
+            acceleration.x /= -10;
+            acceleration.y /= -10;
+            acceleration.z /= -10;
             _listeners.forEach(function (listener) {
                 listener({
                     x: acceleration.x,
