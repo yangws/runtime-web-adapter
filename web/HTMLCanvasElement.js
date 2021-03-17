@@ -9,6 +9,7 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
 
     window.ral = window.ral || {};
     let _createCanvas = ral.createCanvas;
+    let __canvas = window.__canvas;
 
     class HTMLCanvasElement extends HTMLElement {
         constructor(width, height) {
@@ -27,6 +28,24 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
                 Object.keys(this).forEach(function (key) {
                     canvas[key] = this[key];
                 }.bind(this));
+
+                let _getContext = canvas.getContext;
+                canvas.getContext = function (type, attributes) {
+                    if (type === 'webgl' ||
+                        type === 'webgl2' ||
+                        type === 'experimental-webgl' ||
+                        type === 'experimental-webgl2') {
+                        if (typeof __canvas === "undefined") {
+                            __canvas = this;
+                            return _getContext.call(this, type, attributes);
+                        } else if (__canvas === this) {
+                            return _getContext.call(this, type, attributes);
+                        }
+                        return __canvas.getContext(type, attributes);
+                    } else {
+                        return _getContext.call(this, type, attributes);
+                    }
+                }
 
                 canvas.width = width >= 0 ? Math.ceil(width) : CANVAS_DEFAULT_WIDTH;
                 canvas.height = height >= 0 ? Math.ceil(height) : CANVAS_DEFAULT_HEIGHT;
