@@ -10,6 +10,7 @@ import HTMLElement from './HTMLElement'
 import HTMLAudioElement from "./HTMLAudioElement"
 import HTMLCanvasElement from "./HTMLCanvasElement"
 import HTMLImageElement from "./HTMLImageElement"
+import HTMLVideoElement from "./HTMLVideoElement"
 import Image from "./Image"
 import Location from "./Location"
 import Navigator from "./Navigator"
@@ -118,6 +119,7 @@ window.HTMLElement = HTMLElement;
 window.HTMLAudioElement = HTMLAudioElement;
 window.HTMLCanvasElement = HTMLCanvasElement;
 window.HTMLImageElement = HTMLImageElement;
+window.HTMLVideoElement = HTMLVideoElement;
 window.Image = Image;
 window.TouchEvent = TouchEvent;
 window.XMLHttpRequest = XMLHttpRequest;

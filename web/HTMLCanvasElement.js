@@ -27,7 +27,6 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
                 Object.keys(this).forEach(function (key) {
                     canvas[key] = this[key];
                 }.bind(this));
-
                 canvas.width = width >= 0 ? Math.ceil(width) : CANVAS_DEFAULT_WIDTH;
                 canvas.height = height >= 0 ? Math.ceil(height) : CANVAS_DEFAULT_HEIGHT;
 
