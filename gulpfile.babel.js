@@ -296,6 +296,35 @@ gulp.task("vivo-mini-game.min.js", () => {
         .pipe(gulp.dest("./dist/platforms/vivo-mini-game/"));
 });
 
+gulp.task("runtime-phaser.js", () => {
+    return browserify("./phaser/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("phaser-adapter.js"))
+        .pipe(buffer())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("./dist/"));
+});
+
+gulp.task("runtime-phaser.min.js", () => {
+    return browserify("./phaser/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("phaser-adapter.min.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest("./dist/"));
+});
+
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
@@ -308,3 +337,4 @@ gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-li
 gulp.task("default", gulp.series(["lib-web", "lib-ral"]));
 gulp.task("adapter-runtime-laya", gulp.series(["runtime-laya.js", "runtime-laya.min.js"]));
 gulp.task("adapter-runtime-pixiJS", gulp.series(["runtime-pixiJS.js", "runtime-pixiJS.min.js"]));
+gulp.task("adapter-runtime-phaser", gulp.series(["runtime-phaser.js", "runtime-phaser.min.js"]));
