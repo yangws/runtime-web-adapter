@@ -58,7 +58,7 @@ export default class HTMLScriptElement extends HTMLElement {
     }
 }
 Object.defineProperty(HTMLScriptElement.prototype, "noModule", {
-    get(value) {
+    get() {
         throw new TypeError(message, "Illegal invocation");
     },
     set(value) {
