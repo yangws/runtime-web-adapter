@@ -41,6 +41,9 @@ function _getDiskPathFromArrayBuffer(source, len) {
 }
 
 export default class HTMLScriptElement extends HTMLElement {
+
+    noModule = false;
+
     constructor() {
         super('SCRIPT');
 
@@ -54,3 +57,11 @@ export default class HTMLScriptElement extends HTMLElement {
         this.addEventListener("append", onAppend);
     }
 }
+Object.defineProperty(HTMLScriptElement.prototype, "noModule", {
+    get(value) {
+        throw new TypeError(message, "Illegal invocation");
+    },
+    set(value) {
+        throw new TypeError(message, "Illegal invocation");
+    }
+});
