@@ -17,6 +17,7 @@ import Navigator from "./Navigator"
 import Screen from "./Screen"
 import TouchEvent from "./TouchEvent"
 import XMLHttpRequest from "./XMLHttpRequest"
+import HTMLScriptElement from "./HTMLScriptElement"
 
 window.ral = window.ral || {};
 
@@ -123,6 +124,7 @@ window.HTMLVideoElement = HTMLVideoElement;
 window.Image = Image;
 window.TouchEvent = TouchEvent;
 window.XMLHttpRequest = XMLHttpRequest;
+window.HTMLScriptElement = HTMLScriptElement;
 if (!window.Blob || !window.URL) {
     const { Blob, URL } = require('./Blob.js');
     window.Blob = Blob;
