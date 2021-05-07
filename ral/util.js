@@ -5,8 +5,9 @@ export default {
      * @param from {Object}
      * @param to {Object}
      * @param errCallback {=function}
+     * @param successCallback {=function}
      */
-    exportTo(name, from, to, errCallback) {
+    exportTo(name, from, to, errCallback, successCallback) {
         if (typeof from !== "object" || typeof to !== "object") {
             console.warn("invalid exportTo: ", name);
             return;
@@ -18,6 +19,9 @@ export default {
                 Object.assign(to[name], fromProperty);
             } else {
                 to[name] = fromProperty;
+            }
+            if (typeof successCallback === "function") {
+                successCallback();
             }
         } else {
             to[name] = function () {
