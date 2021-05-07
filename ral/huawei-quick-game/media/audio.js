@@ -8,4 +8,16 @@ _UTIL.exportTo("createInnerAudioContext", hbs, ral, function () {
             return _CREATE_INNER_AUDIO_CONTEXT(hbs.AudioEngine);
         };
     }
+}, function () {
+    let ctx = ral.createInnerAudioContext();
+    let prototype = ctx.__proto__.constructor.prototype;
+    let desc = Object.getOwnPropertyDescriptor(prototype, "currentTime");
+    if (desc) {
+        let get = desc.get;
+        Object.defineProperty(prototype, "currentTime", {
+            get() {
+                return parseFloat(get.call(this));
+            }
+        });
+    }
 });
