@@ -347,7 +347,7 @@ gulp.task("runtime-construct3.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("runtime-construct3.min.js"))
+        .pipe(source("construct3-adapter.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
