@@ -3,10 +3,10 @@ export default class Location {
     hash = "";
     host = "";
     hostname = "";
-    href = "game.js";
+    href = "";
     origin = "";
     password = "";
-    pathname = "game.js";
+    pathname = "";
     port = "";
     protocol = "";
     search = "";
