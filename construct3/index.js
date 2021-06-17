@@ -35,7 +35,7 @@ if (_is_jsbcompatible_loaded) {
                 var oldGetContext = node.getContext.bind(node);
                 node.style = _getElementById_Jsb("canvas").style;
                 node.getContext = function (type, opts) {
-                    // 特殊处理：任何canvas都返回主canvas的webgl
+                    // 特殊处理：任何获取 webgl 相关context 都返回主 canvas 的 webgl
                     if (type === 'webgl' ||
                         type === 'webgl2' ||
                         type === 'experimental-webgl' ||
