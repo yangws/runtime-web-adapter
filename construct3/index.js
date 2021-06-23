@@ -1,7 +1,7 @@
 require('../ral/cocos-runtime/index.js');
 require("../web/window.js");
 
-// 重写 document.createElement 方法
+
 let __canvas = window.__canvas;
 let oldCreateElement = document.createElement;
 document.createElement = function (name) {
@@ -37,7 +37,11 @@ document.createElement = function (name) {
     }
 }
 
+
+
 window.MessagePort = require("./MessagePort.js");
 window.MessageChannel = require("./MessageChannel.js");
+window.Response = require("./Response.js");
 window.Worker = require("./Worker.js");
 window.fetch = require("./Fetch.js");
+

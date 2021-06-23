@@ -1,5 +1,7 @@
 function arraybufferToText(arrayBufferObject) {
-    return String.fromCharCode.apply(null, new Uint8Array(arrayBufferObject));
+    const uint8Array = new Uint8Array(arrayBufferObject);
+    const data = uint8Array.reduce((acc, i) => acc += String.fromCharCode.apply(null, [i]), '');
+    return data;
 }
 
 function fetch(url, init) {
