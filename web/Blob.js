@@ -35,8 +35,7 @@
             try {
                 new Blob;
                 return;
-            } catch (e) {
-            }
+            } catch (e) { }
         }
 
         // Internally we use a BlobBuilder implementation to base Blob off of
@@ -48,12 +47,14 @@
                 }
                 , FakeBlobBuilder = function BlobBuilder() {
                     this.data = [];
+                    this._arrayBuffer = new ArrayBuffer();
                 }
                 , FakeBlob = function Blob(data, type, encoding) {
                     this.data = data;
                     this.size = data.length;
                     this.type = type;
                     this.encoding = encoding;
+                    this._arrayBuffer = new ArrayBuffer();
                 }
                 , FBB_proto = FakeBlobBuilder.prototype
                 , FB_proto = FakeBlob.prototype
@@ -77,7 +78,7 @@
                 , Uint8Array = global.Uint8Array
 
                 , origin = /^[\w-]+:\/*\[?[\w\.:-]+\]?(?::[0-9]+)?/
-            ;
+                ;
             FakeBlob.fake = FB_proto.fake = true;
             while (file_ex_code--) {
                 FileException.prototype[file_ex_codes[file_ex_code]] = file_ex_code + 1;
@@ -88,7 +89,7 @@
                     var
                         uri_info = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
                         , uri_origin
-                    ;
+                        ;
                     uri_info.href = uri;
                     if (!("origin" in uri_info)) {
                         if (uri_info.protocol.toLowerCase() === "data:") {
@@ -105,7 +106,7 @@
                 var
                     type = blob.type
                     , data_URI_header
-                ;
+                    ;
                 if (type === null) {
                     type = "application/octet-stream";
                 }
@@ -115,8 +116,7 @@
                         return data_URI_header + ";base64," + blob.data;
                     } else if (blob.encoding === "URI") {
                         return data_URI_header + "," + decodeURIComponent(blob.data);
-                    }
-                    if (btoa) {
+                    } if (btoa) {
                         return data_URI_header + ";base64," + btoa(blob.data);
                     } else {
                         return data_URI_header + "," + encodeURIComponent(blob.data);
@@ -133,21 +133,23 @@
             FBB_proto.append = function (data/*, endings*/) {
                 var bb = this.data;
                 // decode data to a binary string
-                if (Uint8Array && (data instanceof ArrayBuffer || data instanceof Uint8Array)) {
+                if (data instanceof ArrayBuffer) {
                     var
                         str = ""
                         , buf = new Uint8Array(data)
                         , i = 0
                         , buf_len = buf.length
-                    ;
+                        ;
                     for (; i < buf_len; i++) {
                         str += String.fromCharCode(buf[i]);
                     }
                     bb.push(str);
+                    this._arrayBuffer = data.slice(0);
                 } else if (get_class(data) === "Blob" || get_class(data) === "File") {
                     if (FileReaderSync) {
                         var fr = new FileReaderSync;
                         bb.push(fr.readAsBinaryString(data));
+                        this._arrayBuffer = data.arrayBuffer();
                     } else {
                         // async FileReader won't work as BlobBuilder is sync
                         throw new FileException("NOT_READABLE_ERR");
@@ -160,19 +162,52 @@
                     } else if (data.encoding === "raw") {
                         bb.push(data.data);
                     }
+                    this._arrayBuffer = data._arrayBuffer.slice(0);
                 } else {
                     if (typeof data !== "string") {
                         data += ""; // convert unsupported types to strings
                     }
                     // decode UTF-16 to binary string
-                    bb.push(unescape(encodeURIComponent(data)));
+                    let string = unescape(encodeURIComponent(data));
+                    bb.push(string);
+                    let length = string.length;
+                    let array = new Array(4 * length);
+                    let actualLength = 0;
+                    for (let index = 0; index < length; index++) {
+                        let code = string.charCodeAt(index);
+                        if (code < 0x80) {
+                            array[actualLength++] = code;
+                        } else if (code < 0x800) {
+                            let codeBinary = code.toString(2);
+                            codeBinary = ("000" + codeBinary).slice(-11);
+                            array[actualLength++] = parseInt("110" + codeBinary.substr(0, 5), 2);
+                            array[actualLength++] = parseInt("10" + codeBinary.substr(5, 6), 2);
+                        } else if (code < 0x10000) {
+                            let codeBinary = code.toString(2);
+                            codeBinary = ("0000" + codeBinary).slice(-16);
+                            array[actualLength++] = parseInt("1110" + codeBinary.substr(0, 4), 2);
+                            array[actualLength++] = parseInt("10" + codeBinary.substr(4, 6), 2);
+                            array[actualLength++] = parseInt("10" + codeBinary.substr(10, 6), 2);
+                        } else if (code < 0x200000) {
+                            let codeBinary = code.toString(2);
+                            codeBinary = ("00000000" + codeBinary).slice(-21);
+                            array[actualLength++] = parseInt("11110" + codeBinary.substr(0, 3), 2);
+                            array[actualLength++] = parseInt("10" + codeBinary.substr(3, 6), 2);
+                            array[actualLength++] = parseInt("10" + codeBinary.substr(9, 6), 2);
+                            array[actualLength++] = parseInt("10" + codeBinary.substr(15, 6), 2);
+                        }
+                    }
+                    array.length = actualLength;
+                    this._arrayBuffer = new Uint8Array(array).buffer;
                 }
             };
             FBB_proto.getBlob = function (type) {
                 if (!arguments.length) {
                     type = null;
                 }
-                return new FakeBlob(this.data.join(""), type, "raw");
+                let blob = new FakeBlob(this.data.join(""), type, "raw");
+                blob._arrayBuffer = this._arrayBuffer;
+                return blob;
             };
             FBB_proto.toString = function () {
                 return "[object BlobBuilder]";
@@ -182,11 +217,16 @@
                 if (args < 3) {
                     type = null;
                 }
-                return new FakeBlob(
+                let blob = new FakeBlob(
                     this.data.slice(start, args > 1 ? end : this.data.length)
                     , type
                     , this.encoding
                 );
+                let arrayBuffer = this._arrayBuffer;
+                if (arrayBuffer instanceof ArrayBuffer) {
+                    blob._arrayBuffer = this._arrayBuffer.slice(start, end);
+                }
+                return blob;
             };
             FB_proto.toString = function () {
                 return "[object Blob]";
@@ -194,6 +234,9 @@
             FB_proto.close = function () {
                 this.size = 0;
                 delete this.data;
+            };
+            FB_proto.arrayBuffer = function () {
+                return this._arrayBuffer.slice(0);
             };
             return FakeBlobBuilder;
         }());
@@ -205,7 +248,8 @@
                 for (var i = 0, len = blobParts.length; i < len; i++) {
                     if (Uint8Array && blobParts[i] instanceof Uint8Array) {
                         builder.append(blobParts[i].buffer);
-                    } else {
+                    }
+                    else {
                         builder.append(blobParts[i]);
                     }
                 }
