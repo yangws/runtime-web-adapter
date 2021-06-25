@@ -1,6 +1,4 @@
-function arraybufferToText(arrayBufferObject) {
-    return String.fromCharCode.apply(null, new Uint8Array(arrayBufferObject));
-}
+import _UTIL from "./util";
 
 function fetch(url, init) {
     let _url = null;
@@ -19,7 +17,7 @@ function fetch(url, init) {
             if (request.status === 200) {
                 let _arrayBuffer = request.response;
                 let _blob = new Blob([request.response], { type: '' });
-                let _text = arraybufferToText(_arrayBuffer);
+                let _text = _UTIL.arraybufferToText(_arrayBuffer);
                 let response = {
                     _arrayBuffer,
                     _blob,

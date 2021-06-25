@@ -48,12 +48,14 @@
                 }
                 , FakeBlobBuilder = function BlobBuilder() {
                     this.data = [];
+                    this._arrayBuffer = new ArrayBuffer();
                 }
                 , FakeBlob = function Blob(data, type, encoding) {
                     this.data = data;
                     this.size = data.length;
                     this.type = type;
                     this.encoding = encoding;
+                    this._arrayBuffer = new ArrayBuffer();
                 }
                 , FBB_proto = FakeBlobBuilder.prototype
                 , FB_proto = FakeBlob.prototype
@@ -133,7 +135,7 @@
             FBB_proto.append = function (data/*, endings*/) {
                 var bb = this.data;
                 // decode data to a binary string
-                if (Uint8Array && (data instanceof ArrayBuffer || data instanceof Uint8Array)) {
+                if (data instanceof ArrayBuffer) {
                     var
                         str = ""
                         , buf = new Uint8Array(data)
@@ -144,10 +146,12 @@
                         str += String.fromCharCode(buf[i]);
                     }
                     bb.push(str);
+                    this._arrayBuffer = data.slice(0);
                 } else if (get_class(data) === "Blob" || get_class(data) === "File") {
                     if (FileReaderSync) {
                         var fr = new FileReaderSync;
                         bb.push(fr.readAsBinaryString(data));
+                        this._arrayBuffer = data.arrayBuffer();
                     } else {
                         // async FileReader won't work as BlobBuilder is sync
                         throw new FileException("NOT_READABLE_ERR");
@@ -160,19 +164,66 @@
                     } else if (data.encoding === "raw") {
                         bb.push(data.data);
                     }
+                    this._arrayBuffer = data._arrayBuffer.slice(0);
                 } else {
                     if (typeof data !== "string") {
                         data += ""; // convert unsupported types to strings
                     }
                     // decode UTF-16 to binary string
                     bb.push(unescape(encodeURIComponent(data)));
+                    let string = data;
+                    let length = string.length;
+                    let array = new Array(4 * length);
+                    let actualLength = 0;
+                    for (let index = 0; index < length; index++) {
+                        let code = string.charCodeAt(index);
+                        // transfer UTF-16 to UTF-8
+                        if (code < 0x80) {
+                            // utf-8 One bytes, first byte 0100 0000
+                            array[actualLength++] = code;
+                        } else if (code < 0x800) {
+                            // utf-8 two bytes, first byte 110x xxxx
+                            array[actualLength++] = 192 + (code >>> 6);
+                            array[actualLength++] = 128 + (code & 63);
+                        } else if (code < 0x10000) {
+                            // utf-8 three bytes, first byte 1110 xxxx
+                            array[actualLength++] = 224 + (code >>> 12);
+                            array[actualLength++] = 128 + (code >>> 6 & 63);
+                            array[actualLength++] = 128 + (code & 63);
+                        } else if (code < 0x200000) {
+                            // utf-8 four bytes, first byte 1111 0xxx
+                            array[actualLength++] = 240 + (code >>> 18);
+                            array[actualLength++] = 128 + (code >>> 12 & 63);
+                            array[actualLength++] = 128 + (code >>> 6 & 63);
+                            array[actualLength++] = 128 + (code & 63);
+                        } else if (code < 0x4000000) {
+                            // utf-8 five bytes, first byte 1111 10xx
+                            array[actualLength++] = 248 + (code >>> 24);
+                            array[actualLength++] = 128 + (code >>> 18 & 63);
+                            array[actualLength++] = 128 + (code >>> 12 & 63);
+                            array[actualLength++] = 128 + (code >>> 6 & 63);
+                            array[actualLength++] = 128 + (code & 63);
+                        } else if (code < 0x4000000) {
+                            // utf-8 six bytes, first byte 1111 110x
+                            array[actualLength++] = 252 + (code >>> 30);
+                            array[actualLength++] = 128 + (code >>> 24 & 63);
+                            array[actualLength++] = 128 + (code >>> 18 & 63);
+                            array[actualLength++] = 128 + (code >>> 12 & 63);
+                            array[actualLength++] = 128 + (code >>> 6 & 63);
+                            array[actualLength++] = 128 + (code & 63);
+                        }
+                    }
+                    array.length = actualLength;
+                    this._arrayBuffer = new Uint8Array(array).buffer;
                 }
             };
             FBB_proto.getBlob = function (type) {
                 if (!arguments.length) {
                     type = null;
                 }
-                return new FakeBlob(this.data.join(""), type, "raw");
+                let blob = new FakeBlob(this.data.join(""), type, "raw");
+                blob._arrayBuffer = this._arrayBuffer;
+                return blob;
             };
             FBB_proto.toString = function () {
                 return "[object BlobBuilder]";
@@ -182,11 +233,16 @@
                 if (args < 3) {
                     type = null;
                 }
-                return new FakeBlob(
+                let blob = new FakeBlob(
                     this.data.slice(start, args > 1 ? end : this.data.length)
                     , type
                     , this.encoding
                 );
+                let arrayBuffer = this._arrayBuffer;
+                if (arrayBuffer instanceof ArrayBuffer) {
+                    blob._arrayBuffer = this._arrayBuffer.slice(start, end);
+                }
+                return blob;
             };
             FB_proto.toString = function () {
                 return "[object Blob]";
@@ -194,6 +250,9 @@
             FB_proto.close = function () {
                 this.size = 0;
                 delete this.data;
+            };
+            FB_proto.arrayBuffer = function () {
+                return this._arrayBuffer.slice(0);
             };
             return FakeBlobBuilder;
         }());
