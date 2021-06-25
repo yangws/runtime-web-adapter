@@ -13,6 +13,7 @@
   plusplus: true */
 
 /*! @source http://purl.eligrey.com/github/Blob.js/blob/master/Blob.js */
+import _UTIL from "../util";
 
 (function (global) {
     (function (factory) {
@@ -48,12 +49,14 @@
                 }
                 , FakeBlobBuilder = function BlobBuilder() {
                     this.data = [];
+                    this._arrayBuffer = new ArrayBuffer();
                 }
                 , FakeBlob = function Blob(data, type, encoding) {
                     this.data = data;
                     this.size = data.length;
                     this.type = type;
                     this.encoding = encoding;
+                    this._arrayBuffer = new ArrayBuffer();
                 }
                 , FBB_proto = FakeBlobBuilder.prototype
                 , FB_proto = FakeBlob.prototype
@@ -133,7 +136,7 @@
             FBB_proto.append = function (data/*, endings*/) {
                 var bb = this.data;
                 // decode data to a binary string
-                if (Uint8Array && (data instanceof ArrayBuffer || data instanceof Uint8Array)) {
+                if (data instanceof ArrayBuffer) {
                     var
                         str = ""
                         , buf = new Uint8Array(data)
@@ -144,10 +147,12 @@
                         str += String.fromCharCode(buf[i]);
                     }
                     bb.push(str);
+                    this._arrayBuffer = data.slice(0);
                 } else if (get_class(data) === "Blob" || get_class(data) === "File") {
                     if (FileReaderSync) {
                         var fr = new FileReaderSync;
                         bb.push(fr.readAsBinaryString(data));
+                        this._arrayBuffer = data.arrayBuffer();
                     } else {
                         // async FileReader won't work as BlobBuilder is sync
                         throw new FileException("NOT_READABLE_ERR");
@@ -160,19 +165,24 @@
                     } else if (data.encoding === "raw") {
                         bb.push(data.data);
                     }
+                    this._arrayBuffer = data._arrayBuffer.slice(0);
                 } else {
                     if (typeof data !== "string") {
                         data += ""; // convert unsupported types to strings
                     }
                     // decode UTF-16 to binary string
                     bb.push(unescape(encodeURIComponent(data)));
+
+                    this._arrayBuffer = _UTIL.stringToArraybuffer();
                 }
             };
             FBB_proto.getBlob = function (type) {
                 if (!arguments.length) {
                     type = null;
                 }
-                return new FakeBlob(this.data.join(""), type, "raw");
+                let blob = new FakeBlob(this.data.join(""), type, "raw");
+                blob._arrayBuffer = this._arrayBuffer;
+                return blob;
             };
             FBB_proto.toString = function () {
                 return "[object BlobBuilder]";
@@ -182,11 +192,16 @@
                 if (args < 3) {
                     type = null;
                 }
-                return new FakeBlob(
+                let blob = new FakeBlob(
                     this.data.slice(start, args > 1 ? end : this.data.length)
                     , type
                     , this.encoding
                 );
+                let arrayBuffer = this._arrayBuffer;
+                if (arrayBuffer instanceof ArrayBuffer) {
+                    blob._arrayBuffer = this._arrayBuffer.slice(start, end);
+                }
+                return blob;
             };
             FB_proto.toString = function () {
                 return "[object Blob]";
@@ -194,6 +209,9 @@
             FB_proto.close = function () {
                 this.size = 0;
                 delete this.data;
+            };
+            FB_proto.arrayBuffer = function () {
+                return this._arrayBuffer.slice(0);
             };
             return FakeBlobBuilder;
         }());
