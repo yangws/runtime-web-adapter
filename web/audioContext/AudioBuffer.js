@@ -1,6 +1,5 @@
 import fileCache from "../util/FileCache";
-let ae = ral.AudioEngine;
-
+import _weakMap from "../util/WeakMap"
 class AudioBuffer {
     constructor(context, buffer) {
         this.context = context;
@@ -16,10 +15,10 @@ class AudioBuffer {
                 return;
             }
             this.url = url;
-            ae.preload(url, function (isSucceed, duration) {
-                if (isSucceed) {
-                    this._duration = duration;
-                }
+
+            _weakMap.get(this.context).innerAudioContext.src = this.url;
+            _weakMap.get(this.context).innerAudioContext.onCanplay(function () {
+                this._duration = _weakMap.get(this.context).innerAudioContext.duration;
             }.bind(this));
         }.bind(this));
     }

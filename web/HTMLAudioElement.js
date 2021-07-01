@@ -2,234 +2,130 @@ import HTMLMediaElement from './HTMLMediaElement';
 import Event from './Event';
 import _weakMap from "./util/WeakMap"
 
-const _ERROR = -1;
-const _INITIALIZING = 0;
-const _PLAYING = 1;
-const _PAUSE = 2;
-
-const _audio_valid_id = function (audioID) {
-    return typeof audioID === "number";
-};
-
-const _audio_valid_src = function (src) {
-    return typeof src === "string" && src !== "";
-};
-
 export default class HTMLAudioElement extends HTMLMediaElement {
     constructor(url) {
         super(url, 'AUDIO');
+        let innerAudioContext = ral.createInnerAudioContext();
+
+        // Add callback function to dispatch related event
+        innerAudioContext.onCanplay(function () {
+            _weakMap.get(this).duration = innerAudioContext.duration;
+            this.dispatchEvent(new Event("canplay"));
+            this.dispatchEvent(new Event("canplaythrough"));
+            // The duration attribute has just been updated.
+            this.dispatchEvent(new Event("durationchange"));
+            // The user agent has just determined the duration and dimensions of the media resource and the text tracks are ready.
+            this.dispatchEvent(new Event("loadedmetadata"));
+            // The user agent can render the media data at the current playback position for the first time.
+            this.dispatchEvent(new Event("loadeddata"));
+        }.bind(this));
+        innerAudioContext.onPlay(function () {
+            // The element is no longer paused. Fired after the play() method has returned, or when the autoplay attribute has caused playback to begin.
+            this.dispatchEvent(new Event("play"));
+            // Playback is ready to start after having been paused or delayed due to lack of media data.
+            this.dispatchEvent(new Event("playing"));
+        }.bind(this));
+        innerAudioContext.onPause(function () {
+            // The element has been paused. Fired after the pause() method has returned.
+            this.dispatchEvent(new Event("pause"));
+        }.bind(this));
+        innerAudioContext.onEnded(function () {
+            // Playback has stopped because the end of the media resource was reached.
+            this.dispatchEvent(new Event("ended"));
+        }.bind(this));
+        innerAudioContext.onError(function () {
+            _weakMap.get(this).duration = NaN;
+            // An error occurs while fetching the media data or the type of the resource is not supported media format.
+            this.dispatchEvent(new Event("error"));
+            // The emptied event is fired when the media has become empty;
+            this.dispatchEvent(new Event("emptied"));
+        }.bind(this));
+        innerAudioContext.onWaiting(function () {
+            // Playback has stopped because the next frame is not available, but the user agent expects that frame to become available in due course.
+            this.dispatchEvent(new Event("waiting"));
+        }.bind(this));
+        innerAudioContext.onSeeked(function () {
+            // The seeking IDL attribute changed to false after the current playback position was changed.
+            this.dispatchEvent(new Event("seeked"));
+        }.bind(this));
+        innerAudioContext.onSeeking(function () {
+            // The seeking IDL attribute changed to true, and the user agent has started seeking to a new position.
+            this.dispatchEvent(new Event("seeking"));
+        }.bind(this));
+
+        innerAudioContext.onTimeUpdate(function () {
+            // The current playback position changed as part of normal playback or in an especially interesting way, for example discontinuously.
+            this.dispatchEvent(new Event("timeupdate"));
+        }.bind(this));
+
+        innerAudioContext.src = url;
+        _weakMap.get(this).innerAudioContext = innerAudioContext;
+        _weakMap.get(this).duration = NaN;
     }
 
     get currentTime() {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            return ral.AudioEngine.getCurrentTime(audioID);
-        } else {
-            return super.currentTime;
-        }
+        return _weakMap.get(this).innerAudioContext.currentTime;
     }
 
     set currentTime(value) {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            ral.AudioEngine.setCurrentTime(audioID, value);
-        }
-        super.currentTime = value;
-    }
-
-    get duration() {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            return ral.AudioEngine.getDuration(audioID);
-        } else {
-            return super.duration;
-        }
+        _weakMap.get(this).innerAudioContext.seek(value);
     }
 
     get loop() {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            return ral.AudioEngine.isLoop(audioID);
-        } else {
-            return super.loop;
-        }
+        return super.loop;
     }
 
     set loop(value) {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            ral.AudioEngine.setLoop(audioID, value);
-        }
         super.loop = value;
+        _weakMap.get(this).innerAudioContext.loop = value;
     }
 
     get volume() {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            return ral.AudioEngine.getVolume(audioID);
-        } else {
-            return super.volume;
-        }
+        return super.volume;
     }
 
     set volume(value) {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            ral.AudioEngine.setVolume(audioID, value);
-        }
         super.volume = value;
+        // Sets the volume at which the media will be played
+        _weakMap.get(this).innerAudioContext.volume = value;
+        // Either the volume attribute or the muted attribute has changed.Fired after the relevant attribute's setter has returned.
+        this.dispatchEvent(new Event("volumechange"));
     }
 
     canPlayType(mediaType = '') {
         if (typeof mediaType !== 'string') {
             return ''
         }
-
         if (mediaType.indexOf('audio/mpeg') > -1 || mediaType.indexOf('audio/mp4')) {
             return 'probably'
         }
         return ''
     }
-
     get src() {
         return super.src;
     }
-
     set src(value) {
-        let privateThis = _weakMap.get(this);
-        // 停止有效的音频
-        let audioID = privateThis.audioID;
-        if (_audio_valid_id(audioID)) {
-            ral.AudioEngine.stop(audioID);
-            privateThis.audioID = null;
-        }
         super.src = value;
-        if (_audio_valid_src(value)) {
-            if (this.autoplay || this.preload === "auto") {
-                this.load();
-            }
-        } else {
-            if (value !== "") {
-                console.error("invalid src: ", value);
-            }
-            this.dispatchEvent(new Event("error"));
-        }
+        // The user agent begins looking for media data, as part of the resource selection algorithm.
+        this.dispatchEvent(new Event("loadstart"));
+        _weakMap.get(this).innerAudioContext.src = value;
     }
 
     load() {
-        let privateThis = _weakMap.get(this);
-        // 停止有效的音频
-        let audioID = privateThis.audioID;
-        if (_audio_valid_id(audioID)) {
-            ral.AudioEngine.stop(audioID);
-            privateThis.audioID = null;
-        }
-
-        let src = this.src;
-        if (_audio_valid_src(src)) {
-            this.dispatchEvent({ type: "loadstart" });
-            let self = this;
-            ral.AudioEngine.preload(this.src, function () {
-                // 已经预加载过的，不是异步回调，所以加上 setTimeout
-                setTimeout(function () {
-                    // 异步过程，src 可能发生了变化
-                    if (self.src === src) {
-                        if (self.autoplay) {
-                            self.play();
-                        }
-                        self.dispatchEvent(new Event("loadedmetadata"));
-                        self.dispatchEvent(new Event("loadeddata"));
-                        self.dispatchEvent(new Event("canplay"));
-                        self.dispatchEvent(new Event("canplaythrough"));
-                    }
-                });
-            });
-        } else {
-            if (src !== "") {
-                console.error("invalid src: ", src);
-            }
-            this.dispatchEvent(new Event("error"));
-        }
+        // Reset the media element and restart selecting the media resource
+        // The user agent begins looking for media data, as part of the resource selection algorithm.
+        this.dispatchEvent(new Event("loadstart"));
+        _weakMap.get(this).innerAudioContext.src = super.src;
     }
 
     pause() {
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            let state = ral.AudioEngine.getState(audioID);
-            if (state === _INITIALIZING || state === _PLAYING) {
-                ral.AudioEngine.pause(audioID);
-                this.dispatchEvent(new Event("pause"));
-            }
-        }
+        // Method will pause playback of the media, if the media is already in a paused state this method will have no effect.
+        _weakMap.get(this).innerAudioContext.pause();
     }
 
     play() {
-        if (!_audio_valid_src(this.src)) {
-            this.dispatchEvent({ type: "emptied" });
-            console.error("Audio play: please define src before play");
-            return;
-        }
-
-        let audioID = _weakMap.get(this).audioID;
-        if (_audio_valid_id(audioID)) {
-            let state = ral.AudioEngine.getState(audioID);
-            switch (state) {
-                case _PAUSE: {
-                    ral.AudioEngine.resume(audioID);
-
-                    this.dispatchEvent(new Event("play"));
-                    this.dispatchEvent(new Event("playing"));
-                    return;
-                }
-                case _PLAYING: {
-                    this.currentTime = 0;
-                    return;
-                }
-                case _INITIALIZING: {
-                    return;
-                }
-                case _ERROR:
-                default: {
-                    // do nothing
-                }
-            }
-        }
-        // need call play function
-        let self = this;
-        audioID = ral.AudioEngine.play(this.src, this.loop, this.volume);
-        if (audioID === -1) {
-            setTimeout(function () {
-                self.dispatchEvent(new Event("error"));
-                self.dispatchEvent(new Event("ended"));
-            });
-            return;
-        }
-        let currentTime = this.currentTime;
-        if (typeof currentTime === "number" && currentTime > 0) {
-            ral.AudioEngine.setCurrentTime(audioID, currentTime);
-        }
-
-        this.dispatchEvent(new Event("play"));
-        ral.AudioEngine.setFinishCallback(audioID, function () {
-            _weakMap.get(self).audioID = null;
-            self.dispatchEvent(new Event("ended"));
-        });
-        if (typeof ral.AudioEngine.setErrorCallback !== "undefined") {
-            ral.AudioEngine.setErrorCallback(audioID, function () {
-                _weakMap.get(self).audioID = null;
-                self.dispatchEvent(new Event("error"));
-            });
-        }
-        if (typeof ral.AudioEngine.setWaitingCallback !== "undefined") {
-            ral.AudioEngine.setWaitingCallback(audioID, function () {
-                self.dispatchEvent(new Event("waiting"));
-            });
-        }
-        if (typeof ral.AudioEngine.setCanPlayCallback === "function") {
-            ral.AudioEngine.setCanPlayCallback(audioID, function () {
-                self.dispatchEvent(new Event("canplay"));
-            });
-        }
-        _weakMap.get(this).audioID = audioID;
+        _weakMap.get(this).innerAudioContext.play();
+        // The user agent is fetching media data.
+        this.dispatchEvent(new Event("progress"));
     }
 }
