@@ -1,5 +1,6 @@
 import AudioNode from "./AudioNode";
 import AudioParam from "./AudioParam";
+import _weakMap from "../util/WeakMap"
 
 class AudioBufferSourceNode extends AudioNode {
     /**
@@ -22,42 +23,44 @@ class AudioBufferSourceNode extends AudioNode {
         this.loopStart = 0; // 可选的 一个浮点值，指示AudioBuffer必须在何时开始播放的时间（以秒loop为单位）true。它的默认值是0（意味着在每个循环开始时，播放从音频缓冲区的开始处开始）。
         this.loopEnd = 0; // 可选的 一个浮点数，表示AudioBuffer停止和循环回放到指示时间的时间（以秒为单位）loopStart，如果loop是true。默认值为0。
         this._playbackRate = new AudioParam({ value: 1.0 }); // 的一个速率 AudioParam限定的速度因子在该音频资产将播放，其中值1.0是声音的自然采样率。由于没有对输出应用音调校正，因此可以使用它来改变样本的音高。该值与复合detune以确定最终回放速率。
-
-        this.audioEngine = ral.AudioEngine;
-        this.audioID = -1;
     }
 
     /**
-     * 用于安排缓冲区中包含的音频数据的播放，或立即开始播放。
-     * @param when 可选的
+     * 令音频在指定时间之后(when), 从音频的指定位置(offset), 开始播放。
+     * @param when 可选的 若省略该值，或传入等于0的值，立刻执行播放操作
      * @param offset 可选的
      * @param duration 可选的
      */
     start(when, offset, duration) {
-        if (!this.buffer) {
-            return;
+        // Set offset
+        if (!offset || typeof offset !== 'number' || offset <= 0) {
+            _weakMap.get(this._context).innerAudioContext.seek(0);
+        } else {
+            _weakMap.get(this._context).innerAudioContext.seek(offset);
         }
-        let audioEngine = this.audioEngine;
-
-        if (this.audioID !== -1) {
-            audioEngine.stop(this.audioID);
+        // Set when
+        if (!when || typeof when !== 'number' || when <= 0) {
+            _weakMap.get(this._context).innerAudioContext.play();
+        } else {
+            setTimeout(function () {
+                _weakMap.get(this._context).innerAudioContext.play();
+            }.bind(this), when * 1000);
         }
-        let audioID = this.audioID = audioEngine.play(this.buffer.url, this.loop, 1);
-        audioEngine.setFinishCallback(audioID, this.onended);
-        audioEngine.setCurrentTime(audioID, this.loopStart);
     }
 
     /**
-     * 声音安排在指定的时间停止播放。如果没有指定时间，声音将立即停止播放。
-     * @param when
+     * 令音频在指定时间之后(when), 停止播放。
+     * @param when 可选的 若省略该值，或传入小于等于0的值, 立刻执行停止操作
      */
+    //
     stop(when) {
-        let audioEngine = this.audioEngine;
-        if (this.audioID === -1) {
-            return;
+        if (!when || typeof when !== 'number' || when <= 0) {
+            _weakMap.get(this._context).innerAudioContext.stop();
+        } else {
+            setTimeout(function () {
+                _weakMap.get(this._context).innerAudioContext.stop();
+            }.bind(this), when * 1000);
         }
-        audioEngine.stop(this.audioID);
-        this.audioID = -1;
     }
 
     onended() {
@@ -74,14 +77,8 @@ class AudioBufferSourceNode extends AudioNode {
     }
 
     set loop(value) {
-        let audioEngine = this.audioEngine;
-        let audioID = this.audioID;
-        let loop = !!value;
-
-        if (audioID !== -1 && audioEngine) {
-            audioEngine.setLoop(audioID, loop);
-        }
-        this._loop = loop;
+        this._loop = value;
+        _weakMap.get(this._context).innerAudioContext.loop = value;
     }
 
     get loop() {
