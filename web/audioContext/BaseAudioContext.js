@@ -10,6 +10,8 @@ import OscillatorNode from "./OscillatorNode";
 import AnalyserNode from "./AnalyserNode";
 import PannerNode from "./PannerNode";
 import GainNode from "./GainNode";
+import _weakMap from "../util/WeakMap"
+
 
 class BaseAudioContext extends EventTarget {
     constructor() {
@@ -22,6 +24,9 @@ class BaseAudioContext extends EventTarget {
         this.listener = new AudioListener(this);  // 返回AudioListener用于3D空间化的对象。
         this.sampleRate;    // 返回表示此上下文中所有节点使用的采样率（以每秒采样数为单位）的浮点数。a的采样率AudioContext无法改变。
         this.state = "running"; // 返回的当前状态AudioContext。
+
+        // 添加innnerAudioContexts
+        _weakMap.get(this).innerAudioContext = ral.createInnerAudioContext();
     }
 
     // 创建一个AnalyserNode，可用于公开音频时间和频率数据，例如创建数据可视化。
