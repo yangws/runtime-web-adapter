@@ -17,14 +17,15 @@ class AudioBuffer {
             this.url = url;
 
             let innerAudioContext = ral.createInnerAudioContext();
-            innerAudioContext.src = this.url;
-            innerAudioContext.onCanplay((function (audioBuffer) {
-                return function () {
-                    audioBuffer._duration = this.duration;
-                    this.destroy();
-                    callback(audioBuffer);
-                }
-            })(this));
+            innerAudioContext.src = url;
+            innerAudioContext.onCanplay(function () {
+                this.audioBuffer._duration = this.innerAudioContext.duration;
+                this.innerAudioContext.destroy();
+                callback(this.audioBuffer);
+            }.bind({
+                audioBuffer: this,
+                innerAudioContext: innerAudioContext
+            }));
         }.bind(this));
     }
 
