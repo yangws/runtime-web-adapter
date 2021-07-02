@@ -107,7 +107,7 @@ export default class EventTarget {
                 }
                 case "devicemotion": {
                     ral.onAccelerometerChange(_onAccelerometerChange);
-                    ral.device.setMotionEnabled(true);
+                    ral.startAccelerometer();
                     break;
                 }
             }
@@ -158,7 +158,7 @@ export default class EventTarget {
                                 }
                                 case "devicemotion": {
                                     ral.offAccelerometerChange(_onAccelerometerChange);
-                                    ral.device.setMotionEnabled(false);
+                                    ral.stopAccelerometer();
                                     break;
                                 }
                             }
