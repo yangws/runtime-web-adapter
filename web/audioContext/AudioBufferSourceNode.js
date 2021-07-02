@@ -40,9 +40,9 @@ class AudioBufferSourceNode extends AudioNode {
             innerAudioContext.src = this.buffer.url;
             // Set offset
             if (!offset || typeof offset !== 'number' || offset <= 0) {
-                innerAudioContext.seek(0);
+                innerAudioContext.startTime = 0;
             } else {
-                innerAudioContext.seek(offset);
+                innerAudioContext.startTime = offset;
             }
             // Set when
             if (!when || typeof when !== 'number' || when <= 0) {
