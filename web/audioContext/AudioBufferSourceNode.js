@@ -23,6 +23,9 @@ class AudioBufferSourceNode extends AudioNode {
         this.loopStart = 0; // 可选的 一个浮点值，指示AudioBuffer必须在何时开始播放的时间（以秒loop为单位）true。它的默认值是0（意味着在每个循环开始时，播放从音频缓冲区的开始处开始）。
         this.loopEnd = 0; // 可选的 一个浮点数，表示AudioBuffer停止和循环回放到指示时间的时间（以秒为单位）loopStart，如果loop是true。默认值为0。
         this._playbackRate = new AudioParam({ value: 1.0 }); // 的一个速率 AudioParam限定的速度因子在该音频资产将播放，其中值1.0是声音的自然采样率。由于没有对输出应用音调校正，因此可以使用它来改变样本的音高。该值与复合detune以确定最终回放速率。
+
+        // 添加innnerAudioContexts
+        _weakMap.get(this).innerAudioContext = ral.createInnerAudioContext();
     }
 
     /**
@@ -32,19 +35,23 @@ class AudioBufferSourceNode extends AudioNode {
      * @param duration 可选的
      */
     start(when, offset, duration) {
-        // Set offset
-        if (!offset || typeof offset !== 'number' || offset <= 0) {
-            _weakMap.get(this._context).innerAudioContext.seek(0);
-        } else {
-            _weakMap.get(this._context).innerAudioContext.seek(offset);
-        }
-        // Set when
-        if (!when || typeof when !== 'number' || when <= 0) {
-            _weakMap.get(this._context).innerAudioContext.play();
-        } else {
-            setTimeout(function () {
-                _weakMap.get(this._context).innerAudioContext.play();
-            }.bind(this), when * 1000);
+        if (this.buffer) {
+            let innerAudioContext = _weakMap.get(this).innerAudioContext;
+            innerAudioContext.src = this.buffer.url;
+            // Set offset
+            if (!offset || typeof offset !== 'number' || offset <= 0) {
+                innerAudioContext.seek(0);
+            } else {
+                innerAudioContext.seek(offset);
+            }
+            // Set when
+            if (!when || typeof when !== 'number' || when <= 0) {
+                innerAudioContext.play();
+            } else {
+                setTimeout(function () {
+                    innerAudioContext.play();
+                }.bind(this), when * 1000);
+            }
         }
     }
 
@@ -55,10 +62,10 @@ class AudioBufferSourceNode extends AudioNode {
     //
     stop(when) {
         if (!when || typeof when !== 'number' || when <= 0) {
-            _weakMap.get(this._context).innerAudioContext.stop();
+            _weakMap.get(this).innerAudioContext.stop();
         } else {
             setTimeout(function () {
-                _weakMap.get(this._context).innerAudioContext.stop();
+                _weakMap.get(this).innerAudioContext.stop();
             }.bind(this), when * 1000);
         }
     }
@@ -78,7 +85,7 @@ class AudioBufferSourceNode extends AudioNode {
 
     set loop(value) {
         this._loop = value;
-        _weakMap.get(this._context).innerAudioContext.loop = value;
+        _weakMap.get(this).innerAudioContext.loop = value;
     }
 
     get loop() {

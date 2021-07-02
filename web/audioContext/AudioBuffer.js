@@ -1,7 +1,7 @@
 import fileCache from "../util/FileCache";
-import _weakMap from "../util/WeakMap"
+
 class AudioBuffer {
-    constructor(context, buffer) {
+    constructor(context, buffer, callback) {
         this.context = context;
 
         this.url = "";
@@ -16,10 +16,15 @@ class AudioBuffer {
             }
             this.url = url;
 
-            _weakMap.get(this.context).innerAudioContext.src = this.url;
-            _weakMap.get(this.context).innerAudioContext.onCanplay(function () {
-                this._duration = _weakMap.get(this.context).innerAudioContext.duration;
-            }.bind(this));
+            let innerAudioContext = ral.createInnerAudioContext();
+            innerAudioContext.src = this.url;
+            innerAudioContext.onCanplay((function (audioBuffer) {
+                return function () {
+                    audioBuffer._duration = this.duration;
+                    this.destroy();
+                    callback(audioBuffer);
+                }
+            })(this));
         }.bind(this));
     }
 

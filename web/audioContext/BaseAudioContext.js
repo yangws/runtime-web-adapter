@@ -10,23 +10,18 @@ import OscillatorNode from "./OscillatorNode";
 import AnalyserNode from "./AnalyserNode";
 import PannerNode from "./PannerNode";
 import GainNode from "./GainNode";
-import _weakMap from "../util/WeakMap"
-
 
 class BaseAudioContext extends EventTarget {
     constructor() {
         super();
 
-        // 一下属性全为只读
+        // 以下属性全为只读
         this.audioWorklet;  // 返回AudioWorklet对象，该对象可用于创建和管理AudioNode实现AudioWorkletProcessor接口的JavaScript代码在后台运行以处理音频数据。
         this.currentTime = 0; // 返回一个double，表示用于调度的不断增加的硬件时间（以秒为单位）。它始于0。
         this.destination = new AudioDestinationNode(this); // 返回AudioDestinationNode表示上下文中所有音频的最终目标。它可以被认为是音频呈现设备。
         this.listener = new AudioListener(this);  // 返回AudioListener用于3D空间化的对象。
         this.sampleRate;    // 返回表示此上下文中所有节点使用的采样率（以每秒采样数为单位）的浮点数。a的采样率AudioContext无法改变。
         this.state = "running"; // 返回的当前状态AudioContext。
-
-        // 添加innnerAudioContexts
-        _weakMap.get(this).innerAudioContext = ral.createInnerAudioContext();
     }
 
     // 创建一个AnalyserNode，可用于公开音频时间和频率数据，例如创建数据可视化。
@@ -108,7 +103,7 @@ class BaseAudioContext extends EventTarget {
      * @param callFunc
      */
     decodeAudioData(audioData, callFunc) {
-        callFunc(new AudioBuffer(this, audioData));
+        new AudioBuffer(this, audioData, callFunc);
     }
 
     // statechange触发类型事件时运行的事件处理程序。当AudioContext状态发生变化时，由于调用了一种状态变化方法（，或）AudioContext.suspend，就会发生这种情况。AudioContext.resumeAudioContext.close
