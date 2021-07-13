@@ -2,6 +2,22 @@ import AudioNode from "./AudioNode";
 import AudioParam from "./AudioParam";
 import _weakMap from "../util/WeakMap"
 
+const _destroy = function () {
+    let innerAudioContext = _weakMap.get(this.sourceNode).innerAudioContext;
+    if (innerAudioContext !== null) {
+        innerAudioContext.destroy();
+        let audioBufferSourceNodeArray = _weakMap.get(this.audioContext).audioBufferSourceNodeArray;
+        let length = audioBufferSourceNodeArray.length;
+        for (let i = 0; i < length; ++i) {
+            if (_weakMap.get(audioBufferSourceNodeArray[i]).innerAudioContext == innerAudioContext) {
+                audioBufferSourceNodeArray.splice(i, 1);
+                break;
+            }
+        }
+        _weakMap.get(this.sourceNode).innerAudioContext = null;
+    }
+};
+
 class AudioBufferSourceNode extends AudioNode {
     /**
      * @param context {AudioContext}
@@ -27,12 +43,14 @@ class AudioBufferSourceNode extends AudioNode {
         // 添加innnerAudioContexts
         let innerAudioContext = ral.createInnerAudioContext();
         _weakMap.get(this).innerAudioContext = innerAudioContext;
-        innerAudioContext.onEnded(function () {
-            _weakMap.get(this).innerAudioContext.destroy();
-        }.bind(this));
-        innerAudioContext.onStop(function () {
-            _weakMap.get(this).innerAudioContext.destroy();
-        }.bind(this));
+        innerAudioContext.onEnded(_destroy.bind({
+            sourceNode: this,
+            audioContext: context
+        }));
+        innerAudioContext.onStop(_destroy.bind({
+            sourceNode: this,
+            audioContext: context
+        }));
     }
 
     /**
