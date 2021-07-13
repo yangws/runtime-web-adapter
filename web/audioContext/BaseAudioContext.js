@@ -2,6 +2,7 @@ import EventTarget from "../EventTarget";
 import AudioListener from "./AudioListener";
 import PeriodicWave from "./PeriodicWave";
 import AudioBuffer from "./AudioBuffer";
+import _weakMap from "../util/WeakMap"
 
 import DynamicsCompressorNode from "./DynamicsCompressorNode";
 import AudioBufferSourceNode from "./AudioBufferSourceNode";
@@ -22,6 +23,7 @@ class BaseAudioContext extends EventTarget {
         this.listener = new AudioListener(this);  // 返回AudioListener用于3D空间化的对象。
         this.sampleRate;    // 返回表示此上下文中所有节点使用的采样率（以每秒采样数为单位）的浮点数。a的采样率AudioContext无法改变。
         this.state = "running"; // 返回的当前状态AudioContext。
+        _weakMap.get(this).audioBufferSourceNodeArray = [];
     }
 
     // 创建一个AnalyserNode，可用于公开音频时间和频率数据，例如创建数据可视化。
@@ -38,7 +40,9 @@ class BaseAudioContext extends EventTarget {
     }
     // 创建一个AudioBufferSourceNode，可用于播放和操作AudioBuffer对象中包含的音频数据。AudioBuffers 在成功解码音频轨道时使用AudioContext.createBuffer或返回创建AudioContext.decodeAudioData。
     createBufferSource() {
-        return new AudioBufferSourceNode(this);
+        let sourceNode = new AudioBufferSourceNode(this)
+        _weakMap.get(this).audioBufferSourceNodeArray.push(sourceNode);
+        return sourceNode;
     }
     // 创建一个ConstantSourceNode对象，这是一个连续输出单声道（单声道）声音信号的音频源，其声音信号的样本都具有相同的值。
     createConstantSource() {

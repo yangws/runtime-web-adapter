@@ -1,5 +1,6 @@
 import BaseAudioContext from "./BaseAudioContext";
 import MediaElementAudioSourceNode from "./MediaElementAudioSourceNode";
+import _weakMap from "../util/WeakMap"
 
 class AudioContext extends BaseAudioContext {
     /**
@@ -24,7 +25,12 @@ class AudioContext extends BaseAudioContext {
     }
     // 关闭音频上下文，释放它使用的任何系统音频资源。
     close() {
-        console.log("AudioContext close");
+        let audioBufferSourceNodeArray = _weakMap.get(this).audioBufferSourceNodeArray;
+        audioBufferSourceNodeArray.forEach(element => {
+            _weakMap.get(element).innerAudioContext.destroy();
+            _weakMap.get(element).innerAudioContext = null;
+        });
+        array.length = 0;
     }
 
     /**
@@ -32,7 +38,7 @@ class AudioContext extends BaseAudioContext {
      * @param myMediaElement {HTMLMediaElement}
      */
     createMediaElementSource(myMediaElement) {
-        return new MediaElementAudioSourceNode(this, {mediaElement: myMediaElement});
+        return new MediaElementAudioSourceNode(this, { mediaElement: myMediaElement });
     }
     // 创建MediaStreamAudioSourceNode与MediaStream表示可能来自本地计算机麦克风或其他来源的音频流相关联的。
     createMediaStreamSource() {

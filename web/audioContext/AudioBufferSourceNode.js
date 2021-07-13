@@ -25,7 +25,14 @@ class AudioBufferSourceNode extends AudioNode {
         this._playbackRate = new AudioParam({ value: 1.0 }); // 的一个速率 AudioParam限定的速度因子在该音频资产将播放，其中值1.0是声音的自然采样率。由于没有对输出应用音调校正，因此可以使用它来改变样本的音高。该值与复合detune以确定最终回放速率。
 
         // 添加innnerAudioContexts
-        _weakMap.get(this).innerAudioContext = ral.createInnerAudioContext();
+        let innerAudioContext = ral.createInnerAudioContext();
+        _weakMap.get(this).innerAudioContext = innerAudioContext;
+        innerAudioContext.onEnded(function () {
+            _weakMap.get(this).innerAudioContext.destroy();
+        }.bind(this));
+        innerAudioContext.onStop(function () {
+            _weakMap.get(this).innerAudioContext.destroy();
+        }.bind(this));
     }
 
     /**
@@ -37,6 +44,9 @@ class AudioBufferSourceNode extends AudioNode {
     start(when, offset, duration) {
         if (this.buffer) {
             let innerAudioContext = _weakMap.get(this).innerAudioContext;
+            if (innerAudioContext === null) {
+                return;
+            }
             innerAudioContext.src = this.buffer.url;
             // Set offset
             if (!offset || typeof offset !== 'number' || offset <= 0) {
@@ -49,7 +59,7 @@ class AudioBufferSourceNode extends AudioNode {
                 innerAudioContext.play();
             } else {
                 setTimeout(function () {
-                    innerAudioContext.play();
+                    _weakMap.get(this).innerAudioContext.play();
                 }.bind(this), when * 1000);
             }
         }
@@ -61,8 +71,12 @@ class AudioBufferSourceNode extends AudioNode {
      */
     //
     stop(when) {
+        let innerAudioContext = _weakMap.get(this).innerAudioContext;
+        if (innerAudioContext === null) {
+            return;
+        }
         if (!when || typeof when !== 'number' || when <= 0) {
-            _weakMap.get(this).innerAudioContext.stop();
+            innerAudioContext.stop();
         } else {
             setTimeout(function () {
                 _weakMap.get(this).innerAudioContext.stop();
