@@ -116,8 +116,12 @@ class AudioBufferSourceNode extends AudioNode {
     }
 
     set loop(value) {
+        let innerAudioContext = _weakMap.get(this).innerAudioContext;
+        if (innerAudioContext === null) {
+            return;
+        }
         this._loop = value;
-        _weakMap.get(this).innerAudioContext.loop = value;
+        innerAudioContext.loop = value;
     }
 
     get loop() {
