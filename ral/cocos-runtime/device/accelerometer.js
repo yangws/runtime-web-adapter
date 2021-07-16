@@ -7,7 +7,7 @@ ral.device = ral.device || {};
 if (_rt.offAccelerometerChange) {
     // runtime v2
     // 使用兼容模式运行v1游戏，此时游戏会加载 rt_compatibility.js
-    if (_rt.compatibleMode !== undefined && _rt.compatibleMode === 1) {
+    if (_rt._compatibleMode === 1) {
         let _systemInfo = _rt.getSystemInfoSync();
         let _isAndroid = _systemInfo.platform.toLowerCase() === "android";
         let _compatibleAccelerometerChange = function (e) {
@@ -53,20 +53,15 @@ if (_rt.offAccelerometerChange) {
                 }
             }
         };
-        ral.stopAccelerometer = _rt.stopAccelerometer.bind(_rt);
-        let _startAccelerometer = _rt.startAccelerometer.bind(_rt);
-        ral.startAccelerometer = function (obj) {
-            return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
-        };
     } else {
         ral.onAccelerometerChange = _rt.onAccelerometerChange.bind(_rt);
         ral.offAccelerometerChange = _rt.offAccelerometerChange.bind(_rt);
-        ral.stopAccelerometer = _rt.stopAccelerometer.bind(_rt);
-        let _startAccelerometer = _rt.startAccelerometer.bind(_rt);
-        ral.startAccelerometer = function (obj) {
-            return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
-        };
     }
+    ral.stopAccelerometer = _rt.stopAccelerometer.bind(_rt);
+    let _startAccelerometer = _rt.startAccelerometer.bind(_rt);
+    ral.startAccelerometer = function (obj) {
+        return _startAccelerometer(Object.assign({ type: "accelerationIncludingGravity" }, obj));
+    };
 } else {
     // runtime v1
     ral.onAccelerometerChange = function (listener) {
