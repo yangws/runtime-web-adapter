@@ -264,7 +264,7 @@ Object.defineProperty(PIXI.systems.ShaderSystem.prototype, "systemCheck", {
     }
 });
 
-let unsafeEval = false;
+let unsafeEval;
 function unsafeEvalSupported() {
     if (typeof unsafeEval === 'boolean') {
         return unsafeEval;
