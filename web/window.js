@@ -81,7 +81,10 @@ window.getComputedStyle = function () {
         left: '0px',
         top: '0px',
         height: '0px',
-        paddingLeft: 0
+        paddingLeft: 0,
+        getPropertyValue: function (key) {
+            return this[key];
+        }
     };
 };
 
