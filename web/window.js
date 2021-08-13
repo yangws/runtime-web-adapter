@@ -83,9 +83,7 @@ window.getComputedStyle = function () {
         height: '0px',
         paddingLeft: 0,
         getPropertyValue: function (key) {
-            if (key && ("getPropertyValue" !== key) && this.hasOwnProperty(key)) {
-                return this[key];
-            }
+            return this[key];
         }
     };
 };
