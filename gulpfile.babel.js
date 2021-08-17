@@ -353,8 +353,8 @@ gulp.task("runtime-construct3.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
-gulp.task("runtime-cocos2.js", () => {
-    return browserify("./cocos2/index.js")
+gulp.task("runtime-cocos-creator2.js", () => {
+    return browserify("./cocos-creator2/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -368,8 +368,8 @@ gulp.task("runtime-cocos2.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
-gulp.task("runtime-cocos2.min.js", () => {
-    return browserify("./cocos2/index.js")
+gulp.task("runtime-cocos-creator2.min.js", () => {
+    return browserify("./cocos-creator2/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],

@@ -37,7 +37,6 @@ window.__getOSVersion = function () {
 window.__canvas = new HTMLCanvasElement();
 window.document.body.appendChild(window.__canvas);
 
-
 // 适配引擎中使用到的 jsb 空间下的方法
 window.jsb = {};
 if (typeof _rt.setPreferredFramesPerSecond !== 'undefined') {
