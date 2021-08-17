@@ -353,6 +353,35 @@ gulp.task("runtime-construct3.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
+gulp.task("runtime-cocos2.js", () => {
+    return browserify("./cocos2/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("index.js"))
+        .pipe(buffer())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("./dist/"));
+});
+
+gulp.task("runtime-cocos2.min.js", () => {
+    return browserify("./cocos2/index.js")
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("index.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest("./dist/"));
+});
+
 
 
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
