@@ -1,5 +1,4 @@
-let _rt = loadRuntime();
-let _systemInfo = _rt.getSystemInfoSync();
+let _systemInfo = ral.getSystemInfoSync();
 
 // 获取平台对应的编号
 window.__getPlatform = function () {
@@ -39,8 +38,8 @@ window.document.body.appendChild(window.__canvas);
 
 // 适配引擎中使用到的 jsb 空间下的方法
 window.jsb = {};
-if (typeof _rt.setPreferredFramesPerSecond !== 'undefined') {
-    jsb.setPreferredFramesPerSecond = _rt.setPreferredFramesPerSecond;
+if (typeof ral.setPreferredFramesPerSecond !== 'undefined') {
+    jsb.setPreferredFramesPerSecond = ral.setPreferredFramesPerSecond;
 } else {
     jsb.setPreferredFramesPerSecond = function () {
         console.error("The jsb.setPreferredFramesPerSecond is not define!");
