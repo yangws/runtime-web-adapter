@@ -1,10 +1,10 @@
 let _rt = loadRuntime();
-let systemInfo = _rt.getSystemInfoSync();
+let _systemInfo = _rt.getSystemInfoSync();
 
 // 获取平台对应的编号
 window.__getPlatform = function () {
-    var platform = systemInfo.platform.toLowerCase();
-    var model = systemInfo.model.toLowerCase();
+    var platform = _systemInfo.platform.toLowerCase();
+    var model = _systemInfo.model.toLowerCase();
 
     if (platform === "android") {
         return cc.sys.OS_ANDROID;
@@ -20,17 +20,17 @@ window.__getPlatform = function () {
 
 // 获取 os 字符串
 window.__getOS = function () {
-    return systemInfo.platform;
+    return _systemInfo.platform;
 };
 
 // 获取系统语言
 window.__getCurrentLanguage = function () {
-    return systemInfo.language;
+    return _systemInfo.language;
 };
 
 // 获取系统版本号
 window.__getOSVersion = function () {
-    return systemInfo.system;
+    return _systemInfo.system;
 };
 
 // 适配引擎中使用到的 window.__canvas
