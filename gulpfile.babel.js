@@ -353,30 +353,30 @@ gulp.task("runtime-construct3.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
-gulp.task("runtime-cocos-creator2.js", () => {
-    return browserify("./cocos-creator2/index.js")
+gulp.task("runtime-cocos-creator-v2.js", () => {
+    return browserify("./cocos-creator-v2/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
             comments: false
         })
         .bundle()
-        .pipe(source("index.js"))
+        .pipe(source("cocos-creator-v2-adapter.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest("./dist/"));
 });
 
-gulp.task("runtime-cocos-creator2.min.js", () => {
-    return browserify("./cocos-creator2/index.js")
+gulp.task("runtime-cocos-creator-v2.min.js", () => {
+    return browserify("./cocos-creator-v2/index.js")
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
             comments: false
         })
         .bundle()
-        .pipe(source("index.js"))
+        .pipe(source("cocos-creator-v2-adapter.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
@@ -398,3 +398,4 @@ gulp.task("adapter-runtime-laya", gulp.series(["runtime-laya.js", "runtime-laya.
 gulp.task("adapter-runtime-pixiJS", gulp.series(["runtime-pixiJS.js", "runtime-pixiJS.min.js"]));
 gulp.task("adapter-runtime-phaser", gulp.series(["runtime-phaser.js", "runtime-phaser.min.js"]));
 gulp.task("adapter-runtime-construct3", gulp.series(["runtime-construct3.js", "runtime-construct3.min.js"]));
+gulp.task("runtime-cocos-creator-v2", gulp.series(["runtime-cocos-creator-v2.js", "runtime-cocos-creator-v2.min.js"]));
