@@ -6,7 +6,7 @@ window.__getPlatform = function () {
     var model = _systemInfo.model.toLowerCase();
 
     if (platform === "android") {
-        return cc.sys.OS_ANDROID;
+        return cc.sys.ANDROID;
     } else if (platform === "ios") {
         if (model.indexOf("iphone")) {
             return cc.sys.IPHONE;
@@ -19,7 +19,14 @@ window.__getPlatform = function () {
 
 // 获取 os 字符串
 window.__getOS = function () {
-    return _systemInfo.platform;
+    var platform = _systemInfo.platform.toLowerCase();
+    if (platform === "android") {
+        return cc.sys.OS_ANDROID;
+    } else if (platform === "ios") {
+        return cc.sys.OS_IOS
+    } else {
+        return cc.sys.OS_UNKNOWN;
+    }
 };
 
 // 获取系统语言
