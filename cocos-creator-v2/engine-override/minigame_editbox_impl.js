@@ -1,32 +1,30 @@
 // 该文件将在引擎代码添加后加载
 // 适配小游戏中需要使用到小键盘的 case
-const EditBox = cc.EditBox;
-const js = cc.js;
-const KeyboardReturnType = EditBox.KeyboardReturnType;
-const MAX_VALUE = 65535;
+const _EDIBOX = cc.EditBox;
+const _KEYBOARD_RETURN_TYPE = _EDIBOX.KeyboardReturnType;
+const _MAX_VALUE = 65535;
+const _BASE_CLASS = _EDIBOX._ImplClass;
 let _currentEditBoxImpl = null;
 
-function getKeyboardReturnType(type) {
+function _getKeyboardReturnType(type) {
     switch (type) {
-        case KeyboardReturnType.DEFAULT:
-        case KeyboardReturnType.DONE:
+        case _KEYBOARD_RETURN_TYPE.DEFAULT:
+        case _KEYBOARD_RETURN_TYPE.DONE:
             return 'done';
-        case KeyboardReturnType.SEND:
+        case _KEYBOARD_RETURN_TYPE.SEND:
             return 'send';
-        case KeyboardReturnType.SEARCH:
+        case _KEYBOARD_RETURN_TYPE.SEARCH:
             return 'search';
-        case KeyboardReturnType.GO:
+        case _KEYBOARD_RETURN_TYPE.GO:
             return 'go';
-        case KeyboardReturnType.NEXT:
+        case _KEYBOARD_RETURN_TYPE.NEXT:
             return 'next';
     }
     return 'done';
 }
 
-const BaseClass = EditBox._ImplClass;
-
 function MiniGameEditBoxImpl() {
-    BaseClass.call(this);
+    _BASE_CLASS.call(this);
 
     this._eventListeners = {
         onKeyboardInput: null,
@@ -35,8 +33,8 @@ function MiniGameEditBoxImpl() {
     };
 }
 
-js.extend(MiniGameEditBoxImpl, BaseClass);
-EditBox._ImplClass = MiniGameEditBoxImpl;
+cc.js.extend(MiniGameEditBoxImpl, _BASE_CLASS);
+_EDIBOX._ImplClass = MiniGameEditBoxImpl;
 
 Object.assign(MiniGameEditBoxImpl.prototype, {
     init(delegate) {
@@ -126,15 +124,15 @@ Object.assign(MiniGameEditBoxImpl.prototype, {
 
     _showKeyboard() {
         let delegate = this._delegate;
-        let multiline = (delegate.inputMode === EditBox.InputMode.ANY);
-        let maxLength = (delegate.maxLength < 0 ? MAX_VALUE : delegate.maxLength);
+        let multiline = (delegate.inputMode === _EDIBOX.InputMode.ANY);
+        let maxLength = (delegate.maxLength < 0 ? _MAX_VALUE : delegate.maxLength);
 
         ral.showKeyboard({
             defaultValue: delegate._string,
             maxLength: maxLength,
             multiple: multiline,
             confirmHold: false,
-            confirmType: getKeyboardReturnType(delegate.returnType),
+            confirmType: _getKeyboardReturnType(delegate.returnType),
             success(res) {
 
             },
