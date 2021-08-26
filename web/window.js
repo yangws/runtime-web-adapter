@@ -100,10 +100,6 @@ ral.onWindowResize && ral.onWindowResize(function (width, height) {
     window.dispatchEvent(event);
 });
 
-//TODO 需要删除，引擎不应该调用这接口
-window.resize = function () {
-    console.warn('window.resize() not supported');
-}
 
 window.stop = function () {
     console.warn("window.stop() not implemented");
