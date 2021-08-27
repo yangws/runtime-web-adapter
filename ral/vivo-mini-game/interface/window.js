@@ -24,7 +24,7 @@ ral.offWindowResize = function (callBack) {
         _listeners.splice(index, 1);
     }
 };
-
+// 该平台暂未定义qg.onWindowResize, 这里使用 window.resize 来实现对onWindowResize 的处理
 window.resize = function (width, height) {
     qg._vivoInnerWidth = width;
     qg._vivoInnerHeight = height;
