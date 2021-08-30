@@ -38,6 +38,7 @@ window.name = "runtime";
 window.navigator = new Navigator(_systemInfo.platform, _systemInfo.language);
 window.outerHeight = _systemInfo.screenHeight;
 window.outerWidth = _systemInfo.screenWidth;
+window.orientation = _systemInfo.screenHeight > _systemInfo.screenWidth ? 0 : 90;
 window.pageXOffset = 0;
 window.pageYOffset = 0;
 window.parent = window;
@@ -98,6 +99,18 @@ ral.onWindowResize && ral.onWindowResize(function (width, height) {
     // 派发 resize 事件.
     let event = new Event("resize");
     window.dispatchEvent(event);
+});
+
+ral.onDeviceOrientationChange && ral.onDeviceOrientationChange(function (res) {
+    if (res.value === "portrait") {
+        window.orientation = 0;
+    } else if (res.value === "landscape") {
+        window.orientation = 90;
+    } else if (res.value === "landscapeReverse") {
+        window.orientation = -90;
+    } else if (res.value === "portraitReverse") {
+        window.orientation = 180;
+    }
 });
 
 //TODO 需要删除，引擎不应该调用这接口
