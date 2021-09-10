@@ -12,9 +12,13 @@ require("./base/lifecycle");
 require("./base/subpackage");
 require("./base/system-info");
 require("./base/touch-event");
+require("./base/performance");
 // device
 require("./device/accelerometer");
 require("./device/battery");
+require("./device/network");
+require("./device/device-orientation");
+
 // file
 require("./file/file-system-manager");
 // interface
