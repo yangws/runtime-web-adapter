@@ -37,7 +37,7 @@ sys.getNetworkType = function () {
     return currentNetworkType;
 }
 
-// 实现 cc.sys.getNetworkType. 返回值范围[0, 1], ral接口返回值[1, 100]
+// 实现 cc.sys.getBatteryLevel. 返回值范围[0, 1], ral接口返回值[1, 100]
 sys.getBatteryLevel = function () {
     return ral.getBatteryInfoSync().level / 100.0;
 }
