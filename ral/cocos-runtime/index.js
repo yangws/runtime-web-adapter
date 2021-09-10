@@ -15,6 +15,9 @@ require("./base/touch-event");
 // device
 require("./device/accelerometer");
 require("./device/battery");
+require("./device/network");
+require("./device/device-orientation");
+
 // file
 require("./file/file-system-manager");
 // interface
