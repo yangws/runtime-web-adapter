@@ -53,11 +53,21 @@ window.addEventListener("resize", function () {
 window.document.body.appendChild(window.__canvas);
 
 // 适配引擎中使用到的 jsb 空间下的方法
-window.jsb = {};
+if (!window.jsb) {
+    window.jsb = {};
+}
+
 if (typeof ral.setPreferredFramesPerSecond !== 'undefined') {
     jsb.setPreferredFramesPerSecond = ral.setPreferredFramesPerSecond;
 } else {
     jsb.setPreferredFramesPerSecond = function () {
         console.error("The jsb.setPreferredFramesPerSecond is not define!");
+    }
+}
+
+// 对应 v2 环境中 jsb.device undefined, 而引擎中调用 jsb.device.setMotionEnabled 导致的 error
+if (!jsb.device) {
+    if (!jsb.device.setMotionEnabled) {
+        jsb.device.setMotionEnabled = function () { }
     }
 }
