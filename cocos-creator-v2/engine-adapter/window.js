@@ -61,3 +61,12 @@ if (typeof ral.setPreferredFramesPerSecond !== 'undefined') {
         console.error("The jsb.setPreferredFramesPerSecond is not define!");
     }
 }
+
+// 对应 v2 环境中 jsb.device undefined, 而引擎中调用 jsb.device.setMotionEnabled 导致的 error
+if (!jsb.device) {
+    jsb.device = {
+        setMotionEnabled: function () {
+            console.warn("The jsb.device has been deprecated");
+        }
+    };
+}
