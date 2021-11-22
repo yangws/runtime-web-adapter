@@ -6,8 +6,6 @@ let _rt = loadRuntime();
 _UTIL.exportTo("loadImageData", _rt, ral, function () {
     if (window.jsb && typeof jsb.loadImage === "function") {
         ral.loadImageData = jsb.loadImage;
-    } else {
-        console.error("loadImageData is not function");
     }
 });
 _UTIL.exportTo("createImage", _rt, ral, function () {
