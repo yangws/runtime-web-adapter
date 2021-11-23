@@ -69,7 +69,7 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
             }
             if (!this._dataInner) {
                 var data = this._context2D._getData();
-                this._dataInner = new ImageData(data, this._width, this._height);
+                this._dataInner = new ImageData(data, this.width, this.height);
             }
             return this._dataInner;
         }
