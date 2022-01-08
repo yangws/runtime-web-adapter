@@ -13,3 +13,6 @@ _UTIL.exportTo("createCanvas", _rt, ral, function () {
     }
     _FEATURE.setFeature("ral.createCanvas", "spec", featureValue);
 });
+
+_UTIL.exportTo("setFeature", _rt, ral);
+_UTIL.exportTo("getFeature", _rt, ral);
