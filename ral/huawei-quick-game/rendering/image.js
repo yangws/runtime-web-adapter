@@ -18,4 +18,4 @@ _UTIL.exportTo("createImage", hbs, ral, function () {
     }
 });
 let featureValue = "huawei_platform_support";
-_FEATURE.setFeature("ral.createImage", "spec", featureValue);
+_FEATURE.setFeaturePropertyString("ral.createImage", "spec", featureValue);

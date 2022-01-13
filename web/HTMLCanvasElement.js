@@ -1,7 +1,7 @@
 import HTMLElement from "./HTMLElement"
 import ImageData from "./ImageData"
 
-if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_support") {
+if (ral.getFeaturePropertyString("HTMLCanvasElement", "spec") === "vivo_platform_support") {
     let HTMLCanvasElement = window.HTMLCanvasElement;
     module.exports = HTMLCanvasElement;
 } else {
@@ -21,7 +21,7 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
             this.top = 0;
             this.left = 0;
 
-            if (typeof ral.getFeatureProperty("ral.createCanvas", "spec") === "undefined") {
+            if (typeof ral.getFeaturePropertyString("ral.createCanvas", "spec") === "undefined") {
                 // since runtime 2.0.0
                 let canvas = _createCanvas();
                 canvas.__proto__.__proto__ = HTMLCanvasElement.prototype;
