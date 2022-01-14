@@ -1,4 +1,5 @@
 import HTMLElement from "./HTMLElement"
+import ImageData from "./ImageData"
 
 if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_support") {
     let HTMLCanvasElement = window.HTMLCanvasElement;
@@ -39,6 +40,7 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
                 this._width = width ? Math.ceil(width) : CANVAS_DEFAULT_WIDTH;
                 this._height = height ? Math.ceil(height) : CANVAS_DEFAULT_HEIGHT;
                 this._context2D = null;
+                this._dataInner = null;
                 // this._alignment = 4; // Canvas is used for rendering text only and we make sure the data format is RGBA.
                 this._alignment = this._width % 2 === 0 ? 8 : 4;
             }
@@ -59,6 +61,17 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
             }
 
             return null;
+        }
+
+        get _data() {
+            if (this._context2D === null) {
+                return null;
+            }
+            if (!this._dataInner) {
+                var data = this._context2D._getData();
+                this._dataInner = new ImageData(data, this.width, this.height);
+            }
+            return this._dataInner;
         }
 
         get clientWidth() {
@@ -82,6 +95,7 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
             if (this._context2D) {
                 this._context2D._width = width;
             }
+            this._dataInner = null;
         }
 
         get width() {
@@ -99,6 +113,7 @@ if (ral.getFeatureProperty("HTMLCanvasElement", "spec") === "vivo_platform_suppo
             if (this._context2D) {
                 this._context2D._height = height;
             }
+            this._dataInner = null;
         }
 
         get height() {
