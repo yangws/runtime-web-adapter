@@ -77,7 +77,10 @@ class AudioBufferSourceNode extends AudioNode {
                 innerAudioContext.play();
             } else {
                 setTimeout(function () {
-                    _weakMap.get(this).innerAudioContext.play();
+                    let audioContext = _weakMap.get(this).innerAudioContext;
+                    if (audioContext !== null) {
+                        audioContext.play();
+                    }
                 }.bind(this), when * 1000);
             }
         }
@@ -97,7 +100,10 @@ class AudioBufferSourceNode extends AudioNode {
             innerAudioContext.stop();
         } else {
             setTimeout(function () {
-                _weakMap.get(this).innerAudioContext.stop();
+                let audioContext = _weakMap.get(this).innerAudioContext;
+                if (audioContext !== null) {
+                    audioContext.stop();
+                }
             }.bind(this), when * 1000);
         }
     }
@@ -116,8 +122,12 @@ class AudioBufferSourceNode extends AudioNode {
     }
 
     set loop(value) {
+        let innerAudioContext = _weakMap.get(this).innerAudioContext;
+        if (innerAudioContext === null) {
+            return;
+        }
         this._loop = value;
-        _weakMap.get(this).innerAudioContext.loop = value;
+        innerAudioContext.loop = value;
     }
 
     get loop() {

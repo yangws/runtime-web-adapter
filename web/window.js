@@ -30,15 +30,14 @@ window.devicePixelRatio = _systemInfo.pixelRatio;
 window.document = new Document();
 window.frameElement = null;
 window.fullScreen = true;
-window.innerHeight = _systemInfo.screenHeight;
-window.innerWidth = _systemInfo.screenWidth;
+window.innerHeight = _systemInfo.windowHeight;
+window.innerWidth = _systemInfo.windowWidth;
 window.length = 0;
 window.location = new Location();
 window.name = "runtime";
 window.navigator = new Navigator(_systemInfo.platform, _systemInfo.language);
-window.outerHeight = _systemInfo.screenHeight;
-window.outerWidth = _systemInfo.screenWidth;
-window.orientation = _systemInfo.screenHeight > _systemInfo.screenWidth ? 0 : 90;
+window.outerHeight = _systemInfo.windowHeight;
+window.outerWidth = _systemInfo.windowWidth;
 window.pageXOffset = 0;
 window.pageYOffset = 0;
 window.parent = window;
@@ -82,7 +81,10 @@ window.getComputedStyle = function () {
         left: '0px',
         top: '0px',
         height: '0px',
-        paddingLeft: 0
+        paddingLeft: 0,
+        getPropertyValue: function (key) {
+            return this[key];
+        }
     };
 };
 
