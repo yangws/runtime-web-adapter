@@ -30,7 +30,6 @@ require("./rendering/webgl");
 require("./rendering/font");
 require("./rendering/frame");
 require("./rendering/image");
-_UTIL.exportTo("getFeaturePropertyString", _FEATURE, ral);
-_UTIL.exportTo("registerFeaturePropertyListener", _FEATURE, ral);
+_UTIL.exportTo("getFeatureProperty", _FEATURE, ral);
 _UTIL.exportTo("getFeaturePropertyInt", _FEATURE, ral);
 _UTIL.exportTo("setFeaturePropertyInt", _FEATURE, ral);

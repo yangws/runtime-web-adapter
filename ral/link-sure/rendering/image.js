@@ -10,5 +10,5 @@ _UTIL.exportTo("createImage", wuji, ral, function () {
             return document.createElement("image");
         };
     }
-    _FEATURE.setFeaturePropertyString("ral.createImage", "spec", featureValue);
+    _FEATURE.setFeature("ral.createImage", "spec", featureValue);
 });

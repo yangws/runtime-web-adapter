@@ -1,5 +1,5 @@
 import HTMLImageElement from './HTMLImageElement'
-if (ral.getFeaturePropertyString("Image", "spec") === "vivo_platform_support") {
+if (ral.getFeatureProperty("Image", "spec") === "vivo_platform_support") {
     let Image = window.Image;
     module.exports = Image;
 } else {

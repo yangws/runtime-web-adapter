@@ -1,7 +1,8 @@
 let _features = {};
-let _featurePropertyListeners = {};
+let _getCallbacks = {};
+let _setCallbacks = {};
 export default {
-    setFeaturePropertyString(featureName, property, value) {
+    setFeature(featureName, property, value) {
         let feature = _features[featureName];
         if (!feature) {
             feature = _features[featureName] = {};
@@ -18,54 +19,57 @@ export default {
      *      "unsupported": 不支持
      *      ...
      */
-    getFeaturePropertyString(featureName, property) {
+    getFeatureProperty(featureName, property) {
         let feature = _features[featureName];
         return feature ? feature[property] : undefined;
     },
 
 
     /**
-     * 注册功能属性的监听器
+     * 注册功能属性的操作实现, 仅RAL层的功能模块使用
      * @param {string} key
-     * @param {function} listener
+     * @param {function(stringKey) : int} getFunction 约定该函数的返回值：大于等于0为获取成功，-1为通用错误码，小于-1为具体错误码
+     * @param {function(stringKey, intValue) : boolean} setFunction 约定该函数的返回值：true为设置成功，false为设置失败
      * @returns {boolean}
      *     false: 注册功能属性失败
      *     true:  注册功能属性成功
      */
-    registerFeaturePropertyListener(key, listener) {
-        if (typeof key !== "string" || typeof listener !== "function") {
+    registerFeatureProperty(key, getFunction, setFunction) {
+        if (typeof key !== "string" || typeof getFunction !== "function" || typeof setFunction !== "function") {
             return false;
         }
-        let listenerArr = _featurePropertyListeners[key];
-        if (!Array.isArray(listenerArr)) {
-            listenerArr = [];
-            _featurePropertyListeners[key] = listenerArr;
+
+        if (typeof _getCallbacks[key] === "function" || typeof _setCallbacks[key] === "function") {
+            // 此特性属性已被占用
+            return false;
         }
-        for (let i = 0; i < listenerArr.length; ++i) {
-            if (listenerArr[i] === listener) {
-                return true;
-            }
-        }
-        listenerArr.push(listener);
+
+        _getCallbacks[key] = getFunction;
+        _setCallbacks[key] = setFunction;
+
         return true;
     },
 
     /**
-     * 获取功能属性描述
+     * 获取功能属性
      * @param {String} key 功能属性的名称
      * @returns {int}
-     *      -1: 获取功能属性失败
-     *      >= 0: 由功能属性定义
+     *      -1: 获取失败
+     *      >= 0: 由RAL层的功能模块定义返回值的含义,请参考相关文档
      */
     getFeaturePropertyInt(key) {
         if (typeof key !== "string") {
             return -1;
         }
-        let value = loadRuntime().getFeature(key);
-        if (value < 0) {
+
+        let getFunction = _getCallbacks[key];
+        if (getFunction === undefined) {
+            // 此功能属性上没有任何RAL功能模块进行绑定get操作
             return -1;
         }
-        return value;
+
+        let value = getFunction(key);
+        return typeof value !== "number" ? -1 : value;
     },
 
     /**
@@ -81,27 +85,16 @@ export default {
             return false;
         }
 
-        if (this.getFeaturePropertyInt(key) === value) {
-            return true;
-        }
-
-        if (!loadRuntime().setFeature(key, value)) {
+        let setFunction = _setCallbacks[key];
+        if (setFunction === undefined) {
+            // 此功能属性上没有任何RAL功能模块进行绑定set操作
             return false;
         }
 
-        let listenerArr = _featurePropertyListeners[key];
-        if (listenerArr === undefined) {
-            // 此功能属性上没有绑定的listener
-            return true;
+        let returnCode = setFunction(key, value);
+        if (typeof returnCode !== "number" && typeof returnCode !== 'boolean') {
+            return false;
         }
-
-        listenerArr.forEach(listener => {
-            if (typeof listener !== "function") {
-                return;
-            }
-            listener(key, value);
-        });
-
-        return true;
+        return returnCode ? true : false;
     }
 };

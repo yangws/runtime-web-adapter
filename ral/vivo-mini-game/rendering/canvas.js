@@ -16,7 +16,7 @@ Object.defineProperty(window, "HTMLCanvasElement", {
 _UTIL.exportTo("createCanvas", qg, ral);
 
 let featureValue = "vivo_platform_support";
-_FEATURE.setFeaturePropertyString("CanvasRenderingContext2D", "spec", featureValue);
-_FEATURE.setFeaturePropertyString("HTMLCanvasElement", "spec", featureValue);
+_FEATURE.setFeature("CanvasRenderingContext2D", "spec", featureValue);
+_FEATURE.setFeature("HTMLCanvasElement", "spec", featureValue);
 
 

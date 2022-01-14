@@ -12,5 +12,5 @@ _UTIL.exportTo("createImage", _rt, ral, function () {
             return document.createElement("image");
         };
     }
-    _FEATURE.setFeaturePropertyString("ral.createImage", "spec", featureValue);
+    _FEATURE.setFeature("ral.createImage", "spec", featureValue);
 });

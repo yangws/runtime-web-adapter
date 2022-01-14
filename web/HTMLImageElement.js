@@ -1,7 +1,7 @@
 import HTMLElement from "./HTMLElement"
 import Event from "./Event"
 
-if (ral.getFeaturePropertyString("HTMLImageElement", "spec") === "vivo_platform_support") {
+if (ral.getFeatureProperty("HTMLImageElement", "spec") === "vivo_platform_support") {
     let HTMLImageElement = window.HTMLImageElement;
     module.exports = HTMLImageElement;
 } else {
@@ -10,7 +10,7 @@ if (ral.getFeaturePropertyString("HTMLImageElement", "spec") === "vivo_platform_
     let _image;
     let _setter;
     let _getter;
-    if (typeof ral.getFeaturePropertyString("ral.createImage", "spec") === "undefined") {
+    if (typeof ral.getFeatureProperty("ral.createImage", "spec") === "undefined") {
         _image = _creteImage();
         let _descriptor = Object.getOwnPropertyDescriptor(_image.__proto__, "src");
         _setter = _descriptor.set;
@@ -30,7 +30,7 @@ if (ral.getFeaturePropertyString("HTMLImageElement", "spec") === "vivo_platform_
             this.width = width || 0;
             this.height = height || 0;
 
-            if (typeof ral.getFeaturePropertyString("ral.createImage", "spec") === "undefined") {
+            if (typeof ral.getFeatureProperty("ral.createImage", "spec") === "undefined") {
                 // since runtime 2.0.0
                 let image = _creteImage();
                 Object.keys(this).forEach(function (key) {

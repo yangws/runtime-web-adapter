@@ -12,6 +12,6 @@ Object.defineProperty(window, "HTMLImageElement", {
 _UTIL.exportTo("createImage", qg, ral);
 
 let featureValue = "vivo_platform_support";
-_FEATURE.setFeaturePropertyString("HTMLImageElement", "spec", featureValue);
-_FEATURE.setFeaturePropertyString("Image", "spec", featureValue);
-_FEATURE.setFeaturePropertyString("ral.createImage", "spec", featureValue);
+_FEATURE.setFeature("HTMLImageElement", "spec", featureValue);
+_FEATURE.setFeature("Image", "spec", featureValue);
+_FEATURE.setFeature("ral.createImage", "spec", featureValue);

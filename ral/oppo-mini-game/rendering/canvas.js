@@ -9,5 +9,5 @@ _UTIL.exportTo("createCanvas", qg, ral, function () {
             return document.createElement("canvas");
         };
     }
-    _FEATURE.setFeaturePropertyString("ral.createCanvas", "spec", featureValue);
+    _FEATURE.setFeature("ral.createCanvas", "spec", featureValue);
 });
