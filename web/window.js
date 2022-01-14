@@ -38,6 +38,7 @@ window.name = "runtime";
 window.navigator = new Navigator(_systemInfo.platform, _systemInfo.language);
 window.outerHeight = _systemInfo.windowHeight;
 window.outerWidth = _systemInfo.windowWidth;
+window.orientation = _systemInfo.screenHeight > _systemInfo.screenWidth ? 0 : 90;
 window.pageXOffset = 0;
 window.pageYOffset = 0;
 window.parent = window;
