@@ -2,15 +2,15 @@ let _systemInfo = ral.getSystemInfoSync();
 
 // 获取平台对应的编号
 window.__getPlatform = function () {
-    var platform = _systemInfo.platform.toLowerCase();
-    var model = _systemInfo.model.toLowerCase();
+    let platform = _systemInfo.platform.toLowerCase();
+    let model = _systemInfo.model.toLowerCase();
 
-    if (platform === "android") {
-        return cc.sys.OS_ANDROID;
-    } else if (platform === "ios") {
-        if (model.indexOf("iphone")) {
+    if (platform.indexOf("android") >= 0) {
+        return cc.sys.ANDROID;
+    } else if (platform.indexOf("ios") >= 0) {
+        if (model.indexOf("iphone") >= 0) {
             return cc.sys.IPHONE;
-        } else if (model.indexOf("ipad")) {
+        } else if (model.indexOf("ipad") >= 0) {
             return cc.sys.IPAD;
         }
     }
@@ -19,7 +19,14 @@ window.__getPlatform = function () {
 
 // 获取 os 字符串
 window.__getOS = function () {
-    return _systemInfo.platform;
+    let platform = _systemInfo.platform.toLowerCase();
+    if (platform.indexOf("android") >= 0) {
+        return cc.sys.OS_ANDROID;
+    } else if (platform.indexOf("ios") >= 0) {
+        return cc.sys.OS_IOS
+    } else {
+        return cc.sys.OS_UNKNOWN;
+    }
 };
 
 // 获取系统语言
