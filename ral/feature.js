@@ -26,10 +26,10 @@ export default {
 
 
     /**
-     * 注册功能属性的操作实现, 仅RAL层的功能模块使用
+     * 注册功能属性的get方法和set方法, 仅供RAL层的功能模块使用
      * @param {string} key
-     * @param {function(stringKey) : int} getFunction 约定该函数的返回值：大于等于0为获取成功，-1为通用错误码，小于-1为具体错误码
-     * @param {function(stringKey, intValue) : boolean} setFunction 约定该函数的返回值：true为设置成功，false为设置失败
+     * @param {function() : int} getFunction
+     * @param {function(intValue) : boolean} setFunction
      * @returns {boolean}
      *     false: 注册功能属性失败
      *     true:  注册功能属性成功
@@ -51,31 +51,41 @@ export default {
     },
 
     /**
-     * 获取功能属性
+     * 获取功能属性的能力
      * @param {String} key 功能属性的名称
      * @returns {int}
-     *      -1: 获取失败
-     *      >= 0: 由RAL层的功能模块定义返回值的含义,请参考相关文档
+     *      >= 0: 获取功能属性成功，返回值由功能模块定义含义,请参考功能模块的相关文档
+     *      -1: 功能属性获取错误
+     *      -2: 参数检查错误
+     *      -3: 功能模块不支持功能属性获取操作
      */
     getFeaturePropertyInt(key) {
         if (typeof key !== "string") {
-            return -1;
+            // 参数不是有效的字符串类型
+            return -2;
         }
 
         let getFunction = _getCallbacks[key];
         if (getFunction === undefined) {
-            // 此功能属性上没有任何RAL功能模块进行绑定get操作
-            return -1;
+            // 没有功能模块注册该功能属性的get方法
+            return -3;
         }
 
-        let value = getFunction(key);
-        return typeof value !== "number" ? -1 : value;
+        let value = getFunction();
+        if (value !== "number") {
+            // 返回值不是有效的数值类型
+            return -3;
+        }
+        if (value < -1) {
+            value = -1;
+        }
+        return value;
     },
 
     /**
-     * 设置功能属性的值，并派发功能属性变更事件到有注册监听的功能模块
+     * 设置或调整功能属性的能力
      * @param {String} key 功能属性的名称
-     * @param {String} value 即将设置的功能属性的值,该值不能是负数
+     * @param {String} value 表示功能属性能力,该值不能是负数
      * @return {boolean}
      *     false: 设置功能属性失败
      *     true:  设置功能属性成功
@@ -87,11 +97,11 @@ export default {
 
         let setFunction = _setCallbacks[key];
         if (setFunction === undefined) {
-            // 此功能属性上没有任何RAL功能模块进行绑定set操作
+            // 没有功能模块注册该功能属性的set方法
             return false;
         }
 
-        let returnCode = setFunction(key, value);
+        let returnCode = setFunction(value);
         if (typeof returnCode !== "number" && typeof returnCode !== 'boolean') {
             return false;
         }
