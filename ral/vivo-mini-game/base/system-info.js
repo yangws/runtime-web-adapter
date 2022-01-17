@@ -20,7 +20,7 @@ ral.getSystemInfo = function (object) {
     let _object = {};
 
     if (object && typeof object.success === "function") {
-        let _success = object.success;
+        let _success = object.success.bind();
         // 将 object 中的回调函数深拷贝到 _object 中
         Object.keys(object).forEach(function (name) {
             if (typeof object[name] === "function") {
