@@ -20,6 +20,7 @@ ral.getSystemInfo = function (object) {
     let _object = {};
 
     if (object && typeof object.success === "function") {
+        let _success = object.success;
         // 将 object 中的回调函数深拷贝到 _object 中
         Object.keys(object).forEach(function (name) {
             if (typeof object[name] === "function") {
@@ -36,7 +37,7 @@ ral.getSystemInfo = function (object) {
                 res.windowWidth = qg._vivoInnerWidth;
                 res.pixelRatio = 1;
             }
-            object.success(res);
+            _success(res);
         }
     }
     return _getSystemInfo(_object);
