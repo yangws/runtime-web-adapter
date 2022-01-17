@@ -17,20 +17,29 @@ qg._vivoInnerWidth = window.innerWidth;
 
 const _getSystemInfo = qg.getSystemInfo;
 ral.getSystemInfo = function (object) {
-    let _callbacks = object;
-    if (_callbacks && typeof _callbacks.success === "function") {
-        let _success = _callbacks.success;
-        _callbacks.success = function (res) {
+    let _object = {};
+
+    if (object && typeof object.success === "function") {
+        // 将 object 中的回调函数深拷贝到 _object 中
+        Object.keys(object).forEach(function (name) {
+            if (typeof object[name] === "function") {
+                _object[name] = object[name].bind();
+            } else {
+                _object[name] = object[name];
+            }
+        });
+
+        _object.success = function (res) {
             if (res) {
                 res.platform = "android";
                 res.windowHeight = qg._vivoInnerHeight;
                 res.windowWidth = qg._vivoInnerWidth;
                 res.pixelRatio = 1;
             }
-            _success(res);
+            object.success(res);
         }
     }
-    return _getSystemInfo(_callbacks);
+    return _getSystemInfo(_object);
 };
 
 ral.getSystemInfoSync = function () {
