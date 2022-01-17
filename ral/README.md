@@ -1,5 +1,7 @@
 # RAL 接口说明
 
+该文档中列举了全部可供调用的 RAL 层接口
+
 如未补充说明，相关 API 说明可查阅 https://developers.weixin.qq.com/minigame/dev/api/
 
 
@@ -48,11 +50,9 @@
 
 **补充说明**
 
-1. pixelRatio 表示物理像素 / 逻辑像素。不同平台对该属性的支持程度不同，在 ral 层约定 pixelRatio 与 screenWidth(screenHeight) 的乘积为设备实际的分辩率(单位：物理像素)。 
-
-2. screenWidth(screenHeight) 表示屏幕的宽高(单位:逻辑像素)。 screenWidth 在游戏横屏显示时表示屏幕较长一边，竖屏显示时表示较短的一边。 
-
-3. windowWidth(windowHeight) 表示游戏的可使用窗口宽高(单位:逻辑像素)，当游戏设置 canvas 宽高超出该值会导致 canvas 显示不全。windowWidth 在游戏横屏显示时表示窗口较长一边，竖屏显示时表示较短的一边。 
+1. pixelRatio 表示物理像素 / 逻辑像素。不同平台对该属性的支持程度不同，在 RAL 层约定 pixelRatio 与 screenWidth(screenHeight) 的乘积为设备实际的分辩率(单位：物理像素)。 
+2. screenWidth 表示屏幕水平方向的长度(单位:逻辑像素)， screenHeight 表示屏幕竖直方向的长度。当设备的方向发生旋转时，screenWidth 与 screenHeight 的返回值将发生变化。 
+3. windowWidth 表示游戏的可使用窗口水平方向的长度(单位:逻辑像素)，windowHeight 表示竖直方向的长度。当窗口的方向发生旋转时，windowWidth 与 windowHeight 的返回值将发生变化。当游戏设置 canvas 宽高超出该值时， 会导致 canvas 显示不全。
 
 windowWidth(windowHeight) 与 screenWidth(screenHeight) 返回值不一定相同，例如当游戏运行在刘海屏设备上，或者以悬浮窗方式（显示区域只占屏幕一部分）运行。 
 
@@ -165,8 +165,6 @@ __res 的属性说明__
 
 
 
-
-
 ### 触摸
 
 #### ral.onTouchStart(function callback)
@@ -214,4 +212,59 @@ __res 的属性说明__
 ## 文件
 
 #### ral.getFileSystemManager()
+
+
+
+## 其他
+
+#### string|undefined ral.getFeatureProperty(featureName, property)
+
+获取 RAL 指定 featureName 具有的 property 值
+
+- 同一个 featureName 在不同的小游戏平台，或同一平台的不同版本，对应 property 的返回值可能不相同
+- 在特定小游戏平台或同一平台的不同版本， 没有对应 property 的 featureName，将返回 **undefined** 
+
+
+
+下方列出所有在特定小游戏平台，具有 property 的 featureName 除 undefined 外可能的返回值。表格下方将说明返回值的含义
+
+| featureName                | property | return                  | platform                                              |
+| :------------------------- | :------- | ----------------------- | ----------------------------------------------------- |
+| "ral.createCanvas"         | "spec"   | "unsupported"           | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
+|                            |          | "wrapper"               | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
+|                            |          |                         |                                                       |
+| "ral.createImage"          | "spec"   | "unsupported"           | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
+|                            |          | "wrapper"               | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
+|                            |          |                         |                                                       |
+| "CanvasRenderingContext2D" | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
+|                            |          |                         |                                                       |
+| "HTMLCanvasElement"        | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
+|                            |          |                         |                                                       |
+| "HTMLImageElement"         | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
+|                            |          |                         |                                                       |
+| "Image"                    | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
+|                            |          |                         |                                                       |
+| "ral.createImage"          | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
+|                            |          |                         |                                                       |
+
+##### 返回值：
+
+| 属性                    | 说明                                                         |
+| :---------------------- | :----------------------------------------------------------- |
+| undefined               | 小游戏平台已同名实现了 RAL 层约定的 API                      |
+| "wrapper"               | 小游戏平台未实现 RAL 层约定的 API，由 ral 基于平台提供的其他 API 封装实现 |
+| "unsupported"           | 在该平台，RAL 不支持该 API                                   |
+| "vivo_platform_support" | vivo 平台提供了对该 API 的支持                               |
+
+
+
+##### 示例代码：
+
+```js
+if(ral.getFeatureProperty("ral.createCanvas", "spec") === undefined){
+    // 该方法为小游戏平台直接实现
+} else if(ral.getFeatureProperty("ral.createCanvas", "spec") === "wrapper"){
+    // 该方法为 RAL 层封装实现
+}
+```
 
