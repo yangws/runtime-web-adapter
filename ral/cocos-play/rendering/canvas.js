@@ -14,71 +14,56 @@ _UTIL.exportTo("createCanvas", _rt, ral, function () {
     _FEATURE.setFeature("ral.createCanvas", "spec", featureValue);
 });
 
-/*
- * 功能属性名称
- */
-const KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC = "canvas.context2d.textbaseline.alphabetic";
-const KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT = "canvas.context2d.textbaseline.default";
+let _rt_getFeature = _rt.getFeature;
+let _rt_setFeature = _rt.setFeature;
 
-const FEATURE_ERR_NONE = 0;  // 仅用于设置，表示设置成功
-const FEATURE_ERR_UNSUPPORT = -1;   // 不支持访问该功能属性，比如旧版本可能不存在该feature
-
-let _rt_getFeature = (typeof _rt.getFeature === "function") ? _rt.getFeature : undefined;
-let _rt_setFeature = (typeof _rt.setFeature === "function") ? _rt.setFeature : undefined;
-
-if (_rt_getFeature === "function") {
-    delete _rt.getFeature
-}
-if (_rt_setFeature === "function") {
-    delete _rt.setFeature
-}
-
-/*
- * 注册canvas context2d textBaseline alphabetic属性的get方法和set方法
- * get():
- *   返回值
- *     1: 表示平台的canvas context2d textBaseline支持alphabetic属性
- *     FEATURE_ERR_UNSUPPORT(-1): 不支持访问该功能属性
- * set(): 该属性不支持set方法
- */
 _FEATURE.registerFeatureProperty(
-    KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC,
-    function () { // get
+    _FEATURE.FEATURE_KEY.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC,
+    function () { // get method
         if (typeof _rt_getFeature === "function") {
-            return _rt_getFeature(KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC);
+            let value = _rt_getFeature(_FEATURE.FEATURE_KEY.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC);
+            switch (value) {
+                case 1:
+                    return _FEATURE.FEATURE_VALUE.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC;
+                default:
+                    break;
+            }
         }
-        return FEATURE_ERR_UNSUPPORT;
+        return _FEATURE.FEATURE_VALUE.FEATURE_UNSUPPORT;
     },
-    undefined // This feature property not support for set
+    undefined // not support for set the feature ability
 );
 
-/*
- * 注册canvas context2d textBaseline defalut属性的get方法和set方法
- * get():
- *   返回值
- *     1: 表示平台的canvas context2d textBaseline default属性是alphabetic
- *     0: 表示平台的canvas context2d textBaseline default属性是bottom，即用于兼容老版本的特性
- *     FEATURE_ERR_UNSUPPORT(-1): 不支持访问该功能属性
- * set(value):
- *   参数 value
- *     有效值为0或1
- *   返回值
- *     FEATURE_ERR_NONE(0): 设置功能属性成功
- *     FEATURE_ERR_UNSUPPORT(-1): 功能模块不支持该功能属性
- */
 _FEATURE.registerFeatureProperty(
-    KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT,
-    function () { // get
+    _FEATURE.FEATURE_KEY.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT,
+    function () { // get method
         if (typeof _rt_getFeature === "function") {
-            return _rt_getFeature(KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT);
+            let value = _rt_getFeature(_FEATURE.FEATURE_KEY.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT);
+            switch (value) {
+                case 1:
+                    return _FEATURE.FEATURE_VALUE.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_ALPHABETIC;
+                case 0:
+                    return _FEATURE.FEATURE_VALUE.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_BOTTOM;
+                default:
+                    break;
+            }
         }
-        return FEATURE_ERR_UNSUPPORT;
+        return _FEATURE.FEATURE_VALUE.FEATURE_UNSUPPORT;
     },
-    function (value) { // set
+    function (value) { // set method
         if (typeof _rt_setFeature === "function") {
-            let returnCode = _rt_setFeature(KEY_FEATURE_CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT, value);
-            return returnCode ? FEATURE_ERR_NONE : FEATURE_ERR_UNSUPPORT;
+            switch (value) {
+                case _FEATURE.FEATURE_VALUE.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_ALPHABETIC:
+                    value = 1;
+                    break;
+                case _FEATURE.FEATURE_VALUE.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_BOTTOM:
+                    value = 0;
+                    break;
+                default:
+                    return false;
+            }
+            return _rt_setFeature(_FEATURE.FEATURE_KEY.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT, value);
         }
-        return FEATURE_ERR_UNSUPPORT;
+        return false;
     }
 );

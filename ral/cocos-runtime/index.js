@@ -35,3 +35,5 @@ require("./rendering/image");
 _UTIL.exportTo("getFeatureProperty", _FEATURE, ral);
 _UTIL.exportTo("getFeaturePropertyInt", _FEATURE, ral);
 _UTIL.exportTo("setFeaturePropertyInt", _FEATURE, ral);
+_UTIL.exportTo("FEATURE_KEY", _FEATURE, ral);
+_UTIL.exportTo("FEATURE_VALUE", _FEATURE, ral);

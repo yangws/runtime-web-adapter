@@ -2,12 +2,50 @@ let _features = {};
 let _getCallbacks = {};
 let _setCallbacks = {};
 
-const FEATURE_ERR_NONE = 0;  // 仅用于设置，表示设置成功
-const FEATURE_ERR_UNSUPPORT = -1;   // 不支持访问该功能属性，比如旧版本可能不存在该feature
-const FEATURE_ERR_UNREGISTER = -2;  // 没有功能模块对功能属性进行注册get或set方法
-const FEATURE_ERR_INVALID_ARGUMENT = -3;  // 参数类型或值不按规范设置
+const _FEATURE_KEY = {
+    CANVAS_CONTEXT2D: "canvas.context2d",
+    CANVAS_CONTEXT2D_PREMULTIPLY: "canvas.context2d.premultiply_image_data",
+    CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC: "canvas.context2d.textbaseline.alphabetic",
+    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT: "canvas.context2d.textbaseline.default",
+    CANVAS_WEBGL: "canvas.webgl",
+    CANVAS_WEBGL_VAO: "canvas.webgl.extensions.oes_vertex_array_object.revision",
+    DEBUG_VCONSOLE: "debug.vconsole",
+    DEBUG_JS_DEBUGGER: "debug.js_debugger",
+    FONT_FAMILY_FROM_FONT: "canvas.family_from_font",
+    IMAGE_LOAD_FROM_URL: "image.load_from_url",
+    IMAGE_WEBP: "image.webp",
+    IMAGE_TIFF: "image.tiff",
+    NETWORK_DOWNLOAD: "network.download",
+    NETWORK_UPLOAD: "network.upload",
+    NETWORK_XML_HTTP_REQUEST: "network.xml_http_request",
+    VM_WEB_ASSEMBLY: "vm.web_assembly",
+};
+
+const _FEATURE_VALUE = {
+    FEATURE_UNSUPPORT: -1,
+    FEATURE_DISABLE: 0,
+    CANVAS_CONTEXT2D: 1,
+    CANVAS_CONTEXT2D_PREMULTIPLY: 2,
+    CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC: 3,
+    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_BOTTOM: 4,
+    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_ALPHABETIC: 5,
+    CANVAS_WEBGL: 6,
+    CANVAS_WEBGL_VAO: 7,
+    DEBUG_JS_DEBUGGER: 8,
+    DEBUG_VCONSOLE: 9,
+    FONT_FAMILY_FROM_FONT: 10,
+    IMAGE_LOAD_FROM_URL: 11,
+    IMAGE_WEBP: 12,
+    IMAGE_TIFF: 13,
+    NETWORK_DOWNLOAD: 14,
+    NETWORK_UPLOAD: 15,
+    NETWORK_XML_HTTP_REQUEST: 16,
+    VM_WEB_ASSEMBLY: 17,
+};
 
 export default {
+    FEATURE_KEY : _FEATURE_KEY,
+    FEATURE_VALUE : _FEATURE_VALUE,
     setFeature(featureName, property, value) {
         let feature = _features[featureName];
         if (!feature) {
@@ -31,13 +69,13 @@ export default {
     },
 
     /**
-     * 注册功能属性的get方法或set方法.仅供RAL层的功能模块使用
+     * Register the get or set method registered to the feature specified by key.
      * @param {string} key
-     * @param {function() : int} getFunction
-     * @param {function(intValue) : boolean} setFunction
+     * @param {function() : int} getFunction to get the feature ability
+     * @param {function(intValue) : boolean} setFunction to set the feature ability
      * @returns {boolean}
-     *     false: 注册功能属性的get方法或set方法失败
-     *     true:  注册功能属性的get方法或set方法成功
+     *     false: failed to register the get or set method of the feature
+     *     true:  success to register the get or set method of the feature
      */
     registerFeatureProperty(key, getFunction, setFunction) {
         if (typeof key !== "string") {
@@ -64,20 +102,21 @@ export default {
     },
 
     /**
-     * 注销功能属性的get方法或set方法.仅供RAL层的功能模块使用
-     * @param {string} key
-     * @param {boolean} getBool
-     * @param {boolean} setBool
+     * Clean the get or set method registered to the feature specified by key.
+     * Note: the API is only used in RAL.
+     * @param {string} key to match the feature name
+     * @param {boolean} getBool to clean get method if it is set to true, or nothing to do.
+     * @param {boolean} setBool to clean set method if it is set to true, or nothing to do.
      * @returns {boolean}
-     *     false: 注销功能属性的get方法或set方法失败
-     *     true:  注销功能属性的get方法或set方法成功
+     *     false: failed to clean the get or set method of the feature
+     *     true:  success to clean the get or set method of the feature
      */
     unregisterFeatureProperty(key, getBool, setBool) {
         if (typeof key !== "string") {
             return false;
         }
         if (typeof getBool !== "boolean" || typeof setBool !== "boolean") {
-            return false;  // 确保两个参数必须是boolean类型
+            return false;
         }
         if (getBool === true && typeof _getCallbacks[key] === "function") {
             _getCallbacks[key] = undefined;
@@ -90,62 +129,57 @@ export default {
     },
 
     /**
-     * 获取功能属性的能力
-     * @param {String} key 功能属性的名称
+     * Get the feature ability
+     * @param {String} key to match the feature name
      * @returns {int}
-     *      >= 0: 获取功能属性成功，返回值由功能模块定义含义,请参考功能模块的相关文档
-     *      FEATURE_ERR_UNSUPPORT(-1): 功能模块不支持该功能属性
-     *      FEATURE_ERR_UNREGISTER(-2): 没有功能模块注册该功能属性的get方法
-     *      FEATURE_ERR_INVALID_ARGUMENT(-3): 参数不合法
+     *      Please refer to the description defined in _FEATURE_VALUE map
+     *      or more details in the related doc.
+     *      FEATURE_UNSUPPORT will be returned if get the feature ability failure.
      */
     getFeaturePropertyInt(key) {
         if (typeof key !== "string") {
-            // 参数不是有效的字符串类型
-            return FEATURE_ERR_INVALID_ARGUMENT;
+            return _FEATURE_VALUE.FEATURE_UNSUPPORT;
         }
 
         let getFunction = _getCallbacks[key];
         if (getFunction === undefined) {
-            // 没有功能模块注册该功能属性的get方法
-            return FEATURE_ERR_UNREGISTER;
+            // not register any get method for the feature specified by key
+            return _FEATURE_VALUE.FEATURE_UNSUPPORT;
         }
 
         let value = getFunction();
         if (typeof value !== "number") {
-            // 返回值不是有效的数值类型
-            return FEATURE_ERR_UNSUPPORT;
+            return _FEATURE_VALUE.FEATURE_UNSUPPORT;
         }
-        if (value < FEATURE_ERR_UNSUPPORT) {
-            value = FEATURE_ERR_UNSUPPORT;
+        if (value < _FEATURE_VALUE.FEATURE_UNSUPPORT) {
+            value = _FEATURE_VALUE.FEATURE_UNSUPPORT;
         }
         return value;
     },
 
     /**
-     * 设置或调整功能属性的能力
-     * @param {String} key 功能属性的名称
-     * @param {String} value 表示功能属性能力,该值不能是负数
-     * @return {int}
-     *     FEATURE_ERR_NONE(0): 设置功能属性成功
-     *     FEATURE_ERR_UNSUPPORT(-1): 功能模块不支持该功能属性
-     *     FEATURE_ERR_UNREGISTER(-2): 没有功能模块注册该功能属性的get方法
-     *     FEATURE_ERR_INVALID_ARGUMENT(-3): 参数不合法
+     * Set the feature ability
+     * @param {String} key to match the feature name
+     * @param {String} value to select the feature ability
+     * @return {boolean}
+     *     true : success to set the feature ability
+     *     false: failed to set the feature ability
      */
     setFeaturePropertyInt(key, value) {
         if (typeof key !== "string" && typeof value !== "number" && value < 0) {
-            return FEATURE_ERR_INVALID_ARGUMENT;
+            return false;
         }
 
         let setFunction = _setCallbacks[key];
         if (setFunction === undefined) {
-            // 没有功能模块注册该功能属性的set方法
-            return FEATURE_ERR_UNREGISTER;
+            // not register any set method for the feature specified by key
+            return false;
         }
 
         let returnCode = setFunction(value);
         if (typeof returnCode !== "number" && typeof returnCode !== 'boolean') {
-            return FEATURE_ERR_UNSUPPORT;
+            return false;
         }
-        return returnCode === FEATURE_ERR_NONE ? returnCode : FEATURE_ERR_UNSUPPORT;
+        return returnCode ? true : false;
     }
 };
