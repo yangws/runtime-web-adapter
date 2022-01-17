@@ -37,7 +37,7 @@ if (_rt_setFeature === "function") {
  * 注册canvas context2d textBaseline alphabetic属性的get方法和set方法
  * get():
  *   返回值
- *     1: 表示已使能该属性
+ *     1: 表示平台的canvas context2d textBaseline支持alphabetic属性
  *     FEATURE_ERR_UNSUPPORT(-1): 不支持访问该功能属性
  * set(): 该属性不支持set方法
  */
