@@ -17,10 +17,12 @@ qg._vivoInnerWidth = window.innerWidth;
 
 const _getSystemInfo = qg.getSystemInfo;
 ral.getSystemInfo = function (object) {
-    let _callbacks = object;
-    if (_callbacks && typeof _callbacks.success === "function") {
-        let _success = _callbacks.success;
-        _callbacks.success = function (res) {
+    if (!object || (object && typeof object.success !== "function")) {
+        return _getSystemInfo(object);
+    } else {
+        let _object = {};
+        let _success = object.success.bind(object);
+        _object.success = function (res) {
             if (res) {
                 res.platform = "android";
                 res.windowHeight = qg._vivoInnerHeight;
@@ -29,8 +31,17 @@ ral.getSystemInfo = function (object) {
             }
             _success(res);
         }
+        Object.keys(object).forEach(function (name) {
+            if (typeof object[name] === "function") {
+                if (name !== "success") {
+                    _object[name] = object[name].bind(object);
+                }
+            } else {
+                _object[name] = object[name];
+            }
+        });
+        return _getSystemInfo(_object);
     }
-    return _getSystemInfo(_callbacks);
 };
 
 ral.getSystemInfoSync = function () {
