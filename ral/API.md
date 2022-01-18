@@ -185,15 +185,11 @@ __res 的属性说明__
 
 
 
-
-
 ### 电量
 
 #### ral.getBatteryInfo(Object object)
 
 #### ral.getBatteryInfoSync()
-
-
 
 
 
@@ -217,54 +213,55 @@ __res 的属性说明__
 
 ## 其他
 
-#### string|undefined ral.getFeatureProperty(featureName, property)
+#### string|undefined ral.getFeatureProperty(featureName, propertyName)
 
-获取 RAL 指定 featureName 具有的 property 值
-
-- 同一个 featureName 在不同的小游戏平台，或同一平台的不同版本，对应 property 的返回值可能不相同
-- 在特定小游戏平台或同一平台的不同版本， 没有对应 property 的 featureName，将返回 **undefined** 
+以  <featureName, propertyName> 作为 key 值来获取当前 Runtime 运行环境中， 某个特性的属性值。
 
 
 
-下方列出所有在特定小游戏平台，具有 property 的 featureName 除 undefined 外可能的返回值。表格下方将说明返回值的含义
+##### 描述
 
-| featureName                | property | return                  | platform                                              |
-| :------------------------- | :------- | ----------------------- | ----------------------------------------------------- |
-| "ral.createCanvas"         | "spec"   | "unsupported"           | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
-|                            |          | "wrapper"               | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
-|                            |          |                         |                                                       |
-| "ral.createImage"          | "spec"   | "unsupported"           | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
-|                            |          | "wrapper"               | cocos-play， 华为快游戏， oppo 小游戏， cocos-runtime |
-|                            |          |                         |                                                       |
-| "CanvasRenderingContext2D" | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
-|                            |          |                         |                                                       |
-| "HTMLCanvasElement"        | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
-|                            |          |                         |                                                       |
-| "HTMLImageElement"         | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
-|                            |          |                         |                                                       |
-| "Image"                    | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
-|                            |          |                         |                                                       |
-| "ral.createImage"          | "spec"   | "vivo_platform_support" | vivo 小游戏                                           |
-|                            |          |                         |                                                       |
+不同的 runtime 运行环境对 RAL 中的一些特性的支持情况可能不同， 故设计此功能来解决一些需要在运行时才能处理的兼容性问题。
 
-##### 返回值：
-
-| 属性                    | 说明                                                         |
-| :---------------------- | :----------------------------------------------------------- |
-| undefined               | 小游戏平台已同名实现了 RAL 层约定的 API                      |
-| "wrapper"               | 小游戏平台未实现 RAL 层约定的 API，由 ral 基于平台提供的其他 API 封装实现 |
-| "unsupported"           | 在该平台，RAL 不支持该 API                                   |
-| "vivo_platform_support" | vivo 平台提供了对该 API 的支持                               |
+- 在不同的 Runtime 运行环境中，相同 <featureName, propertyName> 组合的返回值可能不相同
+- 除了在特定的 Runtime 运行环境以指定的 <featureName, propertyName> 组合作为输入，其余情形该函数都将返回 **undefined**。
 
 
 
-##### 示例代码：
+##### 参数
+
+下方列出 RAL 层所有指定的 <featureName, propertyName> 组合， 以及对应的可能的返回值。表格下方将说明返回值的含义
+
+| featureName                | propertyName | return                                                       |
+| :------------------------- | :----------- | ------------------------------------------------------------ |
+| "ral.createCanvas"         | "spec"       | undefined \|\| "unsupported" \|\|"wrapper"                   |
+| "ral.createImage"          | "spec"       | undefined \|\| "unsupported" \|\| "wrapper" \|\| "vivo_platform_support" |
+| "CanvasRenderingContext2D" | "spec"       | undefined \|\| "vivo_platform_support"                       |
+| "HTMLCanvasElement"        | "spec"       | undefined \|\| "vivo_platform_support"                       |
+| "HTMLImageElement"         | "spec"       | undefined \|\| "vivo_platform_support"                       |
+| "Image"                    | "spec"       | undefined \|\| "vivo_platform_support"                       |
+
+
+
+##### 返回值
+
+| 属性                    | 说明                                      |
+| :---------------------- | :---------------------------------------- |
+| undefined               | 当前 Runtime 运行环境中已标准实现该功能   |
+| "wrapper"               | 由 RAL 层封装实现该功能                   |
+| "unsupported"           | 当前 Runtime 运行环境中，RAL 不支持该功能 |
+| "vivo_platform_support" | vivo 平台提供了对该功能的支持             |
+
+
+
+##### 示例代码
 
 ```js
 if(ral.getFeatureProperty("ral.createCanvas", "spec") === undefined){
-    // 该方法为小游戏平台直接实现
+    // 该方法由小游戏平台标准实现
+    let canvas = ral.createCanvas();
 } else if(ral.getFeatureProperty("ral.createCanvas", "spec") === "wrapper"){
-    // 该方法为 RAL 层封装实现
+    // 该方法由 RAL 封装实现
 }
 ```
 
