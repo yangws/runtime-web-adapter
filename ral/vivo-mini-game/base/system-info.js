@@ -17,19 +17,11 @@ qg._vivoInnerWidth = window.innerWidth;
 
 const _getSystemInfo = qg.getSystemInfo;
 ral.getSystemInfo = function (object) {
-    let _object = {};
-
-    if (object && typeof object.success === "function") {
+    if (!object || (object && typeof object.success !== "function")) {
+        return _getSystemInfo(object);
+    } else {
+        let _object = {};
         let _success = object.success.bind(object);
-        // 将 object 中的回调函数深拷贝到 _object 中
-        Object.keys(object).forEach(function (name) {
-            if (typeof object[name] === "function") {
-                _object[name] = object[name].bind();
-            } else {
-                _object[name] = object[name];
-            }
-        });
-
         _object.success = function (res) {
             if (res) {
                 res.platform = "android";
@@ -39,8 +31,17 @@ ral.getSystemInfo = function (object) {
             }
             _success(res);
         }
+        Object.keys(object).forEach(function (name) {
+            if (typeof object[name] === "function") {
+                if (name !== "success") {
+                    _object[name] = object[name].bind(object);
+                }
+            } else {
+                _object[name] = object[name];
+            }
+        });
+        return _getSystemInfo(_object);
     }
-    return _getSystemInfo(_object);
 };
 
 ral.getSystemInfoSync = function () {
