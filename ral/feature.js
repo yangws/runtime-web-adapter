@@ -6,16 +6,6 @@ const _FEATURE_UNSUPPORT = -1;
 
 export default {
     FEATURE_UNSUPPORT: _FEATURE_UNSUPPORT,
-    CANVAS_CONTEXT2D: {
-        name: "canvas.context2d",
-        enable: 1,
-        disable: 0
-    },
-    CANVAS_CONTEXT2D_PREMULTIPLY: {
-        name: "canvas.context2d.premultiply_image_data",
-        enable: 1,
-        disable: 0
-    },
     CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC: {
         name: "canvas.context2d.textbaseline.alphabetic",
         enable: 1,
@@ -25,65 +15,6 @@ export default {
         name: "canvas.context2d.textbaseline.default",
         alphabetic: 1,
         bottom: 0
-    },
-    CANVAS_WEBGL: {
-        name: "canvas.webgl",
-        enable: 1,
-        disable: 0
-    },
-    CANVAS_WEBGL_VAO: {
-        name: "canvas.webgl.extensions.oes_vertex_array_object.revision",
-        revsion: 10
-    },
-    DEBUG_VCONSOLE: {
-        name: "debug.vconsole",
-        enable: 1,
-        disable: 0
-    },
-    DEBUG_JS_DEBUGGER: {
-        name: "debug.js_debugger",
-        enable: 1,
-        disable: 0
-    },
-    FONT_FAMILY_FROM_FONT: {
-        name: "canvas.family_from_font",
-        enable: 1,
-        disable: 0
-    },
-    IMAGE_LOAD_FROM_URL: {
-        name: "image.load_from_url",
-        enable: 1,
-        disable: 0
-    },
-    IMAGE_WEBP: {
-        name: "image.webp",
-        enable: 1,
-        disable: 0
-    },
-    IMAGE_TIFF: {
-        name: "image.tiff",
-        enable: 1,
-        disable: 0
-    },
-    NETWORK_DOWNLOAD: {
-        name: "network.download",
-        enable: 1,
-        disable: 0
-    },
-    NETWORK_UPLOAD: {
-        name: "network.upload",
-        enable: 1,
-        disable: 0
-    },
-    NETWORK_XML_HTTP_REQUEST: {
-        name: "network.xml_http_request",
-        enable: 1,
-        disable: 0
-    },
-    VM_WEB_ASSEMBLY: {
-        name: "vm.web_assembly",
-        enable: 1,
-        disable: 0
     },
 
     /* Note: the API is only used in RAL. */
