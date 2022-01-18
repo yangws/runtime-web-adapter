@@ -32,8 +32,15 @@ require("./rendering/font");
 require("./rendering/frame");
 require("./rendering/image");
 // other
-_UTIL.exportTo("getFeatureProperty", _FEATURE, ral);
-_UTIL.exportTo("getFeaturePropertyInt", _FEATURE, ral);
-_UTIL.exportTo("setFeaturePropertyInt", _FEATURE, ral);
-_UTIL.exportTo("FEATURE_KEY", _FEATURE, ral);
-_UTIL.exportTo("FEATURE_VALUE", _FEATURE, ral);
+for (let key in _FEATURE) {
+    // not export to ral
+    if (key === "setFeature" || key === "registerFeatureProperty"
+        || key === "unregisterFeatureProperty") {
+        continue;
+    }
+
+    // export to ral
+    if (_FEATURE.hasOwnProperty(key)) {
+        _UTIL.exportTo(key, _FEATURE, ral);
+    }
+}

@@ -33,7 +33,7 @@ require("./rendering/frame");
 require("./rendering/image");
 // other
 for (let key in _FEATURE) {
-     // not export to ral
+    // not export to ral
     if (key === "setFeature" || key === "registerFeatureProperty"
         || key === "unregisterFeatureProperty") {
         continue;
