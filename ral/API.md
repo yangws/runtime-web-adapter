@@ -215,7 +215,7 @@ __res 的属性说明__
 
 #### string|undefined ral.getFeatureProperty(featureName, propertyName)
 
-以  <featureName, propertyName> 作为 key 值来获取当前 Runtime 运行环境中， 某个特性的属性值。
+以 <featureName, propertyName> 作为 key 值来获取当前 Runtime 运行环境中，某个特性的属性值。
 
 
 
@@ -223,12 +223,11 @@ __res 的属性说明__
 
 不同的 runtime 运行环境对 RAL 中的一些特性的支持情况可能不同， 故设计此功能来解决一些需要在运行时才能处理的兼容性问题。
 
-- 在不同的 Runtime 运行环境中，相同 <featureName, propertyName> 组合的返回值可能不相同
+- 在不同的 Runtime 运行环境中，以同一组 <featureName, propertyName> 作为输入的返回值可能不相同
+
 - 除了在特定的 Runtime 运行环境以指定的 <featureName, propertyName> 组合作为输入，其余情形该函数都将返回 **undefined**。
 
-
-
-##### 参数
+  
 
 下方列出 RAL 层所有指定的 <featureName, propertyName> 组合， 以及对应的可能的返回值。表格下方将说明返回值的含义
 
