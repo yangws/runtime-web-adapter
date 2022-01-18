@@ -103,6 +103,18 @@ ral.onWindowResize && ral.onWindowResize(function (width, height) {
     window.dispatchEvent(event);
 });
 
+ral.onDeviceOrientationChange && ral.onDeviceOrientationChange(function (res) {
+    if (res.value === "portrait") {
+        window.orientation = 0;
+    } else if (res.value === "landscape") {
+        window.orientation = 90;
+    } else if (res.value === "landscapeReverse") {
+        window.orientation = -90;
+    } else if (res.value === "portraitReverse") {
+        window.orientation = 180;
+    }
+});
+
 window.stop = function () {
     console.warn("window.stop() not implemented");
 };
