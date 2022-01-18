@@ -264,3 +264,83 @@ if(ral.getFeatureProperty("ral.createCanvas", "spec") === undefined){
 }
 ```
 
+
+
+#### 
+
+#### int ral.getFeaturePropertyInt(featureName)
+
+
+
+##### 描述
+
+不同的 runtime 运行环境对 RAL 中的一些特性的支持情况可能不同， 故设计此功能来解决一些需要在运行时才能处理的兼容性问题。
+
+本接口根据不同的功能特性名称进行获取runtime当前具有的功能特性能力。
+
+
+
+##### 返回值
+
+- 当featureName为**ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name**，用于获取平台的canvas context2d textBaseline是否支持alphabetic属性。
+  - 如果alphabetic属性是平台所支持并且可用的，返回  ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.enable
+  - 如果alphabetic属性是平台所支持但不可用的，返回  ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.disable
+  - 如果不支持alphabetic属性，返回 ral.FEATURE_UNSUPPORT
+- 当featureName为**ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.name**，用于获取平台对于canvas context2d textBaseline 默认支持哪一种属性。
+  - 如果alphabetic属性是平台默认支持的属性，返回  ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.alphabetic
+  - 如果bottom属性是平台默认支持的属性，返回  ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.bottom
+  - 如果都不支持，返回 ral.FEATURE_UNSUPPORT
+
+
+
+##### 示例代码
+
+```javascript
+let keyTblAlphabetic = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name;
+let alphabeticEnable = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.enable;
+
+if (ral.getFeaturePropertyInt(keyTblAlphabetic) === alphabeticEnable) {
+    console.log("Your implements for canvas context2d textBaseline is alphabetic");
+}
+```
+
+
+
+
+
+#### boolean ral.setFeaturePropertyInt(featureName, featureValue)
+
+
+
+##### 描述
+
+不同的 runtime 运行环境对 RAL 中的一些特性的支持情况可能不同， 故设计此功能来解决一些需要在运行时才能处理的兼容性问题。
+
+本接口根据不同的功能特性名称进行设置或调整runtime的功能特性能力。
+
+- 当featureName为**ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name**时，不支持调整平台的canvas context2d textBaseline的alphabetic属性。即无法设置该功能属性。
+- 当featureName为**ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.name**时，用于调整平台对于canvas context2d textBaseline 默认支持哪一种属性。即平台支持调整canvas context2d textBaseline默认使用平台所支持的textBaseline属性。
+  - 如果alphabetic属性是平台默认支持的属性，返回  ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.alphabetic
+  - 如果bottom属性是平台默认支持的属性，返回  ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.bottom，这种属性主要用于兼容Runtime旧版本的默认支持canvas context2d textBaseline是bottom属性的文字效果。
+  - 如果都不支持，返回 ral.FEATURE_UNSUPPORT
+
+
+
+##### 示例代码
+
+```javascript
+let keyTblAlphabetic = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name;
+let alphabeticEnable = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.enable
+
+if (ral.getFeaturePropertyInt(keyTblAlphabetic) === alphabeticEnable) {
+    let keyTblDefault = ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.name
+    let defaultAlphabetic = ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.alphabetic;
+    
+    if (ral.setFeaturePropertyInt(keyTblDefault, defaultAlphabetic) === true) {
+        if (ral.getFeaturePropertyInt(keyTblDefault) === defaultAlphabetic) {
+            console.log("Your implements for canvas context2d textBaseline default is alphabetic");
+        }
+    }
+}
+```
+
