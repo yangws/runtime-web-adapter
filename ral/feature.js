@@ -2,50 +2,91 @@ let _features = {};
 let _getCallbacks = {};
 let _setCallbacks = {};
 
-const _FEATURE_KEY = {
-    CANVAS_CONTEXT2D: "canvas.context2d",
-    CANVAS_CONTEXT2D_PREMULTIPLY: "canvas.context2d.premultiply_image_data",
-    CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC: "canvas.context2d.textbaseline.alphabetic",
-    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT: "canvas.context2d.textbaseline.default",
-    CANVAS_WEBGL: "canvas.webgl",
-    CANVAS_WEBGL_VAO: "canvas.webgl.extensions.oes_vertex_array_object.revision",
-    DEBUG_VCONSOLE: "debug.vconsole",
-    DEBUG_JS_DEBUGGER: "debug.js_debugger",
-    FONT_FAMILY_FROM_FONT: "canvas.family_from_font",
-    IMAGE_LOAD_FROM_URL: "image.load_from_url",
-    IMAGE_WEBP: "image.webp",
-    IMAGE_TIFF: "image.tiff",
-    NETWORK_DOWNLOAD: "network.download",
-    NETWORK_UPLOAD: "network.upload",
-    NETWORK_XML_HTTP_REQUEST: "network.xml_http_request",
-    VM_WEB_ASSEMBLY: "vm.web_assembly",
-};
-
-const _FEATURE_VALUE = {
-    FEATURE_UNSUPPORT: -1,
-    FEATURE_DISABLE: 0,
-    CANVAS_CONTEXT2D: 1,
-    CANVAS_CONTEXT2D_PREMULTIPLY: 2,
-    CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC: 3,
-    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_BOTTOM: 4,
-    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT_ALPHABETIC: 5,
-    CANVAS_WEBGL: 6,
-    CANVAS_WEBGL_VAO: 7,
-    DEBUG_JS_DEBUGGER: 8,
-    DEBUG_VCONSOLE: 9,
-    FONT_FAMILY_FROM_FONT: 10,
-    IMAGE_LOAD_FROM_URL: 11,
-    IMAGE_WEBP: 12,
-    IMAGE_TIFF: 13,
-    NETWORK_DOWNLOAD: 14,
-    NETWORK_UPLOAD: 15,
-    NETWORK_XML_HTTP_REQUEST: 16,
-    VM_WEB_ASSEMBLY: 17,
-};
+const _FEATURE_UNSUPPORT = -1;
 
 export default {
-    FEATURE_KEY : _FEATURE_KEY,
-    FEATURE_VALUE : _FEATURE_VALUE,
+    FEATURE_UNSUPPORT: _FEATURE_UNSUPPORT,
+    CANVAS_CONTEXT2D: {
+        name: "canvas.context2d",
+        enable: 1,
+        disable: 0
+    },
+    CANVAS_CONTEXT2D_PREMULTIPLY: {
+        name: "canvas.context2d.premultiply_image_data",
+        enable: 1,
+        disable: 0
+    },
+    CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC: {
+        name: "canvas.context2d.textbaseline.alphabetic",
+        enable: 1,
+        disable: 0
+    },
+    CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT: {
+        name: "canvas.context2d.textbaseline.default",
+        alphabetic: 1,
+        bottom: 0
+    },
+    CANVAS_WEBGL: {
+        name: "canvas.webgl",
+        enable: 1,
+        disable: 0
+    },
+    CANVAS_WEBGL_VAO: {
+        name: "canvas.webgl.extensions.oes_vertex_array_object.revision",
+        revsion: 10
+    },
+    DEBUG_VCONSOLE: {
+        name: "debug.vconsole",
+        enable: 1,
+        disable: 0
+    },
+    DEBUG_JS_DEBUGGER: {
+        name: "debug.js_debugger",
+        enable: 1,
+        disable: 0
+    },
+    FONT_FAMILY_FROM_FONT: {
+        name: "canvas.family_from_font",
+        enable: 1,
+        disable: 0
+    },
+    IMAGE_LOAD_FROM_URL: {
+        name: "image.load_from_url",
+        enable: 1,
+        disable: 0
+    },
+    IMAGE_WEBP: {
+        name: "image.webp",
+        enable: 1,
+        disable: 0
+    },
+    IMAGE_TIFF: {
+        name: "image.tiff",
+        enable: 1,
+        disable: 0
+    },
+    NETWORK_DOWNLOAD: {
+        name: "network.download",
+        enable: 1,
+        disable: 0
+    },
+    NETWORK_UPLOAD: {
+        name: "network.upload",
+        enable: 1,
+        disable: 0
+    },
+    NETWORK_XML_HTTP_REQUEST: {
+        name: "network.xml_http_request",
+        enable: 1,
+        disable: 0
+    },
+    VM_WEB_ASSEMBLY: {
+        name: "vm.web_assembly",
+        enable: 1,
+        disable: 0
+    },
+
+    /* Note: the API is only used in RAL. */
     setFeature(featureName, property, value) {
         let feature = _features[featureName];
         if (!feature) {
@@ -70,6 +111,7 @@ export default {
 
     /**
      * Register the get or set method registered to the feature specified by key.
+     * Note: the API is only used in RAL.
      * @param {string} key
      * @param {function() : int} getFunction to get the feature ability
      * @param {function(intValue) : boolean} setFunction to set the feature ability
@@ -82,13 +124,13 @@ export default {
             return false;
         }
         if (typeof getFunction !== "function" && typeof setFunction !== "function") {
-            return false;  // get方法和set方法都不合法，不允许注册
+            return false;
         }
         if (typeof getFunction === "function" && typeof _getCallbacks[key] === "function") {
-            return false;  // 该功能属性的get方法已被注册
+            return false;  // Get method of the feature has already been registerred.
         }
         if (typeof setFunction === "function" && typeof _setCallbacks[key] === "function") {
-            return false;  // 该功能属性的set方法已被注册
+            return false;  // Set method for the feature has already been registerred.
         }
 
         if (typeof getFunction === "function") {
@@ -138,21 +180,21 @@ export default {
      */
     getFeaturePropertyInt(key) {
         if (typeof key !== "string") {
-            return _FEATURE_VALUE.FEATURE_UNSUPPORT;
+            return _FEATURE_UNSUPPORT;
         }
 
         let getFunction = _getCallbacks[key];
         if (getFunction === undefined) {
             // not register any get method for the feature specified by key
-            return _FEATURE_VALUE.FEATURE_UNSUPPORT;
+            return _FEATURE_UNSUPPORT;
         }
 
         let value = getFunction();
         if (typeof value !== "number") {
-            return _FEATURE_VALUE.FEATURE_UNSUPPORT;
+            return _FEATURE_UNSUPPORT;
         }
-        if (value < _FEATURE_VALUE.FEATURE_UNSUPPORT) {
-            value = _FEATURE_VALUE.FEATURE_UNSUPPORT;
+        if (value < _FEATURE_UNSUPPORT) {
+            value = _FEATURE_UNSUPPORT;
         }
         return value;
     },
