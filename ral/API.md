@@ -50,11 +50,11 @@
 
 **补充说明**
 
-1. pixelRatio 表示物理像素 / 逻辑像素。不同平台对该属性的支持程度不同，在 RAL 层约定 pixelRatio 与 screenWidth(screenHeight) 的乘积为设备实际的分辩率(单位：物理像素)。 
-2. screenWidth 表示屏幕水平方向的长度(单位:逻辑像素)， screenHeight 表示屏幕竖直方向的长度。当设备的方向发生旋转时，screenWidth 与 screenHeight 的返回值将发生变化。 
+1. pixelRatio 表示物理像素 / 逻辑像素。不同平台对该属性的支持程度不同，在 RAL 层约定 pixelRatio 与 screenWidth(screenHeight) 的乘积为设备实际的分辩率(单位：物理像素)。
+2. screenWidth 表示屏幕水平方向的长度(单位:逻辑像素)， screenHeight 表示屏幕竖直方向的长度。当设备的方向发生旋转时，screenWidth 与 screenHeight 的返回值将发生变化。
 3. windowWidth 表示游戏的可使用窗口水平方向的长度(单位:逻辑像素)，windowHeight 表示竖直方向的长度。当窗口的方向发生旋转时，windowWidth 与 windowHeight 的返回值将发生变化。当游戏设置 canvas 宽高超出该值时， 会导致 canvas 显示不全。
 
-windowWidth(windowHeight) 与 screenWidth(screenHeight) 返回值不一定相同，例如当游戏运行在刘海屏设备上，或者以悬浮窗方式（显示区域只占屏幕一部分）运行。 
+windowWidth(windowHeight) 与 screenWidth(screenHeight) 返回值不一定相同，例如当游戏运行在刘海屏设备上，或者以悬浮窗方式（显示区域只占屏幕一部分）运行。
 
 
 
@@ -213,21 +213,19 @@ __res 的属性说明__
 
 ## 其他
 
+### 功能特性
+
+不同的 runtime 运行环境对 RAL 中的一些功能特性的支持情况可能不同， 故设计此功能来解决一些需要在运行时才能处理的兼容性问题。
+
 #### string|undefined ral.getFeatureProperty(featureName, propertyName)
-
-以 <featureName, propertyName> 作为 key 值来获取当前 Runtime 运行环境中，某个特性的属性值。
-
-
 
 ##### 描述
 
-不同的 runtime 运行环境对 RAL 中的一些特性的支持情况可能不同， 故设计此功能来解决一些需要在运行时才能处理的兼容性问题。
+以 <featureName, propertyName> 作为 key 值来获取当前 Runtime 运行环境中，某个特性的属性值。
 
 - 在不同的 Runtime 运行环境中，以同一组 <featureName, propertyName> 作为输入的返回值可能不相同
 
 - 除了在特定的 Runtime 运行环境以指定的 <featureName, propertyName> 组合作为输入，其余情形该函数都将返回 **undefined**。
-
-  
 
 下方列出 RAL 层所有指定的 <featureName, propertyName> 组合， 以及对应的可能的返回值。表格下方将说明返回值的含义
 
@@ -240,8 +238,6 @@ __res 的属性说明__
 | "HTMLImageElement"         | "spec"       | undefined \|\| "vivo_platform_support"                       |
 | "Image"                    | "spec"       | undefined \|\| "vivo_platform_support"                       |
 
-
-
 ##### 返回值
 
 | 属性                    | 说明                                      |
@@ -251,8 +247,6 @@ __res 的属性说明__
 | "unsupported"           | 当前 Runtime 运行环境中，RAL 不支持该功能 |
 | "vivo_platform_support" | vivo 平台提供了对该功能的支持             |
 
-
-
 ##### 示例代码
 
 ```js
@@ -261,6 +255,90 @@ if(ral.getFeatureProperty("ral.createCanvas", "spec") === undefined){
     let canvas = ral.createCanvas();
 } else if(ral.getFeatureProperty("ral.createCanvas", "spec") === "wrapper"){
     // 该方法由 RAL 封装实现
+}
+```
+
+#### int ral.getFeaturePropertyInt(featureName)
+
+##### 描述
+
+本接口用于获取Runtime的功能特性。
+
+##### 参数
+
+- featureName: 代表功能的名称, 合法值详见 feature name 列表
+
+##### feature name 列表
+
+| name                                              | 含意                                                         |
+| :------------------------------------------------ | :----------------------------------------------------------- |
+| ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name | 代表 canvas context2d textBaseline 支持 `alphabetic` 属性的功能特性 |
+| ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.name    | 代表 canvas context2d textBaseline 设置为 `alphabetic` 时当成 bottom 来处理的功能特性 |
+
+##### 返回值
+
+- =-1[ral.FEATURE_UNSUPPORT]: 代表此功能不支持
+- => 0: 具体值详见 API: `boolean ral.setFeaturePropertyInt(featureName, featureValue)` 的 feature value 列表
+
+##### 示例代码
+
+```javascript
+let keyTblAlphabetic = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name;
+let alphabeticEnable = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.enable;
+if (ral.getFeaturePropertyInt(keyTblAlphabetic) === alphabeticEnable) {
+    console.log("canvas context2d textBaseline is alphabetic");
+}
+```
+
+#### boolean ral.setFeaturePropertyInt(featureName, featureValue)
+
+##### 描述
+
+本接口用于调整runtime的功能特性。
+
+
+##### 参数
+
+- featureName: 代表功能的名称, 合法值详见 feature name 列表
+- featureValue: 此参数的合法值根据 feature 的不同会有差异, 详见 feature value 列表
+
+
+##### feature value 列表
+
+- ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC
+
+  | value                                                | 含意       |
+  | :--------------------------------------------------- | :--------- |
+  | ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.disable | 功能未启用 |
+  | ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.enable  | 功能启用   |
+
+- ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT
+
+  | value                                                | 含意                                                         |
+  | :--------------------------------------------------- | :----------------------------------------------------------- |
+  | ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.bottom     | 当canvas context2d textBaseline 设置为 `alphabetic` 时当成 bottom 来处理的功能特性 |
+  | ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.alphabetic | 当canvas context2d textBaseline 设置为 `alphabetic` 时当成 alphabetic 来处理的功能特性。注：由于早期版本可能不支持alphabetic属性，因此要成功地调整为此功能特性前，需要确保alphabetic已启用。 |
+
+##### 返回值
+
+- false: 表示调整runtime的功能特性失败
+- true: 表示调整runtime的功能特性成功
+
+##### 示例代码
+
+```javascript
+let keyTblAlp = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.name;
+let alpEnable = ral.CANVAS_CONTEXT2D_TEXTBASELINE_ALPHABETIC.enable
+
+if (ral.getFeaturePropertyInt(keyTblAlp) === alpEnable) {
+    let keyTblDef = ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.name
+    let defBottom = ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.bottom;
+
+    if (ral.setFeaturePropertyInt(keyTblDef, defBottom) === true) {
+        if (ral.getFeaturePropertyInt(keyTblDef) === defBottom) {
+            console.log("textBaseline is also bottom if it set to alphabetic);
+        }
+    }
 }
 ```
 
