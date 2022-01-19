@@ -319,6 +319,11 @@ if (ral.getFeaturePropertyInt(keyTblAlphabetic) === alphabeticEnable) {
   | ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.bottom     | 当canvas context2d textBaseline 设置为 `alphabetic` 时当成 bottom 来处理的功能特性 |
   | ral.CANVAS_CONTEXT2D_TEXTBASELINE_DEFAULT.alphabetic | 当canvas context2d textBaseline 设置为 `alphabetic` 时当成 alphabetic 来处理的功能特性。注：由于早期版本可能不支持alphabetic属性，因此要成功地调整为此功能特性前，需要确保alphabetic已启用。 |
 
+##### 返回值
+
+- false: 表示调整runtime的功能特性失败
+- true: 表示调整runtime的功能特性成功
+
 ##### 示例代码
 
 ```javascript
