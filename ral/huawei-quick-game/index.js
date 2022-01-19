@@ -30,4 +30,16 @@ require("./rendering/webgl");
 require("./rendering/font");
 require("./rendering/frame");
 require("./rendering/image");
-_UTIL.exportTo("getFeatureProperty", _FEATURE, ral);
+// other
+for (let key in _FEATURE) {
+    // not export to ral
+    if (key === "setFeature" || key === "registerFeatureProperty"
+        || key === "unregisterFeatureProperty") {
+        continue;
+    }
+
+    // export to ral
+    if (_FEATURE.hasOwnProperty(key)) {
+        _UTIL.exportTo(key, _FEATURE, ral);
+    }
+}
