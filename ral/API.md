@@ -79,6 +79,14 @@ windowWidth(windowHeight) 与 screenWidth(screenHeight) 返回值不一定相同
 
 
 
+### 性能
+
+#### ral.triggerGC()
+
+#### Performance ral.getPerformance()
+
+
+
 ## 界面
 
 ### 窗口
