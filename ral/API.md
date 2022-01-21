@@ -85,7 +85,7 @@ windowWidth(windowHeight) 与 screenWidth(screenHeight) 返回值不一定相同
 
 #### Performance ral.getPerformance()
 
-
+#### number Performance.now()
 
 ## 界面
 
