@@ -5,7 +5,10 @@
  *
  * 基于在新版插件的适配逻辑，引擎初始化 cc.game.frame 时值为 null
  * 原因:在 jsb-compatible 的逻辑中，cc.game.frame 通过 DOM 中 node 的 parentNode 属性可以获取到 window.__canvas,
- * 新版 web 层基于 web 标准实现，未添加父节点的 parentNode 将返回 null
+ * 新版 web 层基于 web 标准实现，node 若未添加父节点的 parentNode 将返回 null
+ *
+ * 基于引擎中的需求, cc.game.frame 仅需模拟一个web 中的 frame，保证访问到该 object 的数据（clientWidth/ClientHeight）正确即可
+ * clientWidth/ClientHeight 与游戏窗口的宽高一致。
  */
 const _initRenderer = cc.game._initRenderer;
 cc.game._initRenderer = function () {
