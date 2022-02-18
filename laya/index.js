@@ -1,6 +1,3 @@
-require('../ral/cocos-runtime/index.js');
-require("../web/window.js");
-
 // 屏幕适配
 let _config;
 Object.defineProperty(window, "Config", {
