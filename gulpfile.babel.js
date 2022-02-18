@@ -159,7 +159,7 @@ gulp.task("cocos-runtime-laya.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-laya.js"))
+        .pipe(source("cocos-runtime-laya.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
@@ -174,7 +174,7 @@ gulp.task("cocos-runtime-laya.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-laya.min.js"))
+        .pipe(source("cocos-runtime-laya.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
@@ -246,7 +246,7 @@ gulp.task("cocos-runtime-pixiJS.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-pixiJS.js"))
+        .pipe(source("cocos-runtime-pixiJS.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
@@ -261,7 +261,7 @@ gulp.task("cocos-runtime-pixiJS.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-pixiJS.min.js"))
+        .pipe(source("cocos-runtime-pixiJS.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
@@ -304,7 +304,7 @@ gulp.task("cocos-runtime-phaser.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-phaser.js"))
+        .pipe(source("cocos-runtime-phaser.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
@@ -319,7 +319,7 @@ gulp.task("cocos-runtime-phaser.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-phaser.min.js"))
+        .pipe(source("cocos-runtime-phaser.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
@@ -332,7 +332,7 @@ gulp.task("cocos-runtime-construct3.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-construct3.js"))
+        .pipe(source("cocos-runtime-construct3.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
@@ -347,7 +347,7 @@ gulp.task("cocos-runtime-construct3.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-runtime-construct3.min.js"))
+        .pipe(source("cocos-runtime-construct3.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
@@ -361,7 +361,7 @@ gulp.task("cocos-creator-v2.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-creator-v2.js"))
+        .pipe(source("cocos-creator-v2.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
@@ -376,7 +376,7 @@ gulp.task("cocos-creator-v2.min.js", () => {
             comments: false
         })
         .bundle()
-        .pipe(source("adapter-cocos-creator-v2.min.js"))
+        .pipe(source("cocos-creator-v2.min.js"))
         .pipe(buffer())
         .pipe(uglify())
         .pipe(gulp.dest("./dist/"));
@@ -394,8 +394,8 @@ gulp.task("lib-huawei", gulp.series(["huawei-quick-game.js", "huawei-quick-game.
 gulp.task("lib-vivo", gulp.series(["vivo-mini-game.js", "vivo-mini-game.min.js"]));
 gulp.task("lib-ral", gulp.series(["lib-cocos-runtime", "lib-cocos-play", "lib-link-sure", "lib-qtt", "lib-oppo", "lib-huawei", "lib-vivo"]));
 gulp.task("default", gulp.series(["lib-web", "lib-ral"]));
-gulp.task("adapter-cocos-runtime-laya", gulp.series(["cocos-runtime-laya.js", "cocos-runtime-laya.min.js"]));
-gulp.task("adapter-cocos-runtime-pixiJS", gulp.series(["cocos-runtime-pixiJS.js", "cocos-runtime-pixiJS.min.js"]));
-gulp.task("adapter-cocos-runtime-phaser", gulp.series(["cocos-runtime-phaser.js", "cocos-runtime-phaser.min.js"]));
-gulp.task("adapter-cocos-runtime-construct3", gulp.series(["cocos-runtime-construct3.js", "cocos-runtime-construct3.min.js"]));
-gulp.task("adapter-cocos-creator-v2", gulp.series(["cocos-creator-v2.js", "cocos-creator-v2.min.js"]));
+gulp.task("lib-cocos-creator-v2", gulp.series(["cocos-creator-v2.js", "cocos-creator-v2.min.js"]));
+gulp.task("cocos-runtime-laya", gulp.series(["cocos-runtime-laya.js", "cocos-runtime-laya.min.js"]));
+gulp.task("cocos-runtime-pixiJS", gulp.series(["cocos-runtime-pixiJS.js", "cocos-runtime-pixiJS.min.js"]));
+gulp.task("cocos-runtime-phaser", gulp.series(["cocos-runtime-phaser.js", "cocos-runtime-phaser.min.js"]));
+gulp.task("cocos-runtime-construct3", gulp.series(["cocos-runtime-construct3.js", "cocos-runtime-construct3.min.js"]));
