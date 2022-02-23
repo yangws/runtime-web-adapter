@@ -11,6 +11,7 @@ require("./base/lifecycle");
 require("./base/subpackage");
 require("./base/system-info");
 require("./base/touch-event");
+require("./base/performance");
 // device
 require("./device/accelerometer");
 require("./device/battery");
