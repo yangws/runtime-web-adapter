@@ -1,7 +1,3 @@
-
-require("../ral/cocos-runtime/index.js");
-require("../web/window.js");
-
 window.HTMLCanvasElement = require("./HTMLCanvasElement.js");
 let oldCreateElement = document.createElement;
 document.createElement = function (name) {
