@@ -37,13 +37,13 @@ gulp.task("web.min.js", () => {
 
 gulp.task("web-huawei.zip.js", () => {
     const fs = require("fs");
-	const path = require("path");
+    const path = require("path");
 
     let inFilePaths = ["./dist/platforms/huawei-quick-game/ral.js",
     "./dist/platforms/huawei-quick-game/ral.min.js",
     "./dist/common/web-adapter.js",
     "./dist/common/web-adapter.min.js"];
-	let commitInfo = require("git-commit-info")();
+    let commitInfo = require("git-commit-info")();
     let packagePaths = [];
     for (let i = 0; i < inFilePaths.length; ++i) {
         let srcFilePath = inFilePaths[i];
