@@ -35,7 +35,7 @@ gulp.task("web.min.js", () => {
         .pipe(gulp.dest("./dist/common"));
 });
 
-gulp.task("web-huawei.zip.js", () => {
+gulp.task("web-huawei.zip", () => {
     const fs = require("fs");
     const path = require("path");
 
@@ -418,7 +418,7 @@ gulp.task("cocos-creator-v2.min.js", () => {
 
 
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
-gulp.task("lib-web-huawei", gulp.series(["huawei-quick-game.js", "huawei-quick-game.min.js", "web.js", "web.min.js", "web-huawei.zip.js"]));
+gulp.task("lib-web-huawei", gulp.series(["huawei-quick-game.js", "huawei-quick-game.min.js", "web.js", "web.min.js", "web-huawei.zip"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
 gulp.task("lib-link-sure", gulp.series(["link-sure.js", "link-sure.min.js"]));
