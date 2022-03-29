@@ -57,6 +57,7 @@ function downloadBundle(bundleName, options, onComplete) {
         if (_remoteBundles[bundleName]) {
             bundlePath = _server + bundleName;
             bundleConfig = `${bundlePath}/config.${bundleVersion ? bundleVersion + '.' : ''}json`;
+            bundleJS = `${"src/scripts/" + bundleName}/index.${bundleVersion ? bundleVersion + '.' : ''}js`;
         }
 
         // 加载 bundle 中的 json 文件
