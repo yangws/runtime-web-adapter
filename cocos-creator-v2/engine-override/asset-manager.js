@@ -3,12 +3,22 @@ let _remoteBundles = {};
 let _server;
 let _downloader = cc.assetManager.downloader;
 let _originInit = cc.assetManager.init;
+let _zipCache = {}; // 属性名: zip 包路径; 属性值: zip 包解压后根目录的本地路径
+let _fsm = ral.getFileSystemManager();
+const CACHED_FILE_PATH = ral.env.USER_DATA_PATH + "/cacheList.json";
 
 cc.assetManager.init = function (options) {
     options.subpackages && options.subpackages.forEach(x => _subpackages[x] = true);
     options.remoteBundles && options.remoteBundles.forEach(x => _remoteBundles[x] = true);
     _server = options.server + "/remote/";
     _originInit.apply(this, arguments);
+
+    if (options.remoteBundles) {
+        try {
+            let str = _fsm.readFileSync(CACHED_FILE_PATH, 'utf8');
+            _zipCache = JSON.parse(str);
+        } catch (e) { }
+    }
 };
 
 function downloadBundle(bundleName, options, onComplete) {
@@ -18,7 +28,6 @@ function downloadBundle(bundleName, options, onComplete) {
     let bundleJS = `${bundlePath}/index.${bundleVersion ? bundleVersion + '.' : ''}js`;
 
     // 根据bundleName 判断当前 bundle 为分包资源、远程包资源还是本地资源， 并分别做相应处理
-
     if (_subpackages[bundleName]) {
         // 加载分包
         let task = ral.loadSubpackage({
@@ -57,6 +66,7 @@ function downloadBundle(bundleName, options, onComplete) {
         if (_remoteBundles[bundleName]) {
             bundlePath = _server + bundleName;
             bundleConfig = `${bundlePath}/config.${bundleVersion ? bundleVersion + '.' : ''}json`;
+            bundleJS = `${"src/scripts/" + bundleName}/index.${bundleVersion ? bundleVersion + '.' : ''}js`;
         }
 
         // 加载 bundle 中的 json 文件
@@ -66,17 +76,31 @@ function downloadBundle(bundleName, options, onComplete) {
             }
             if (typeof response === 'string') {
                 try {
-                    response = JSON.parse(response);
-                    out = response;
-                    out && (out.base = bundlePath + '/');
+                    out = JSON.parse(response);
+                    if (out.isZip) {
+                        let zipVersion = out.zipVersion;
+                        let zipUrl = `${bundlePath}/res.${zipVersion ? zipVersion + '.' : ''}zip`;
+                        _handleZip(zipUrl, function (err, unzipPath) {
+                            if (err) {
+                                onComplete && onComplete(err);
+                                return;
+                            }
+                            out.base = unzipPath + '/res/';
+                            count++;
+                            if (count === 2) {
+                                onComplete(error, out);
+                            }
+                        });
+                    } else {
+                        out && (out.base = bundlePath + '/');
+                        count++;
+                        if (count === 2) {
+                            onComplete(error, out);
+                        }
+                    }
                 } catch (e) {
                     error = e;
                 }
-            }
-            // 当 json 文件与 js 文件都加载完成，才将 json 对象赋值给回调函数
-            count++;
-            if (count === 2) {
-                onComplete(error, out);
             }
         });
 
@@ -92,5 +116,53 @@ function downloadBundle(bundleName, options, onComplete) {
         });
     }
 }
+
+
+function _handleZip(zipUrl, onComplete) {
+    /**
+    * 判断是否需要解压(USER_DATA_PATH 路径下是否已经有 url 指向文件所解压的文件)
+    * 1.若不需要解压，则将根目录传给 onComplete 回调函数
+    * 2.若要解压，则解压到指定路径，并将根目录的传给 onComplete 回调函数
+    */
+    let isCachedUnzip = _zipCache[zipUrl];
+    if (isCachedUnzip) {
+        let cachedUnzipPath = _zipCache[zipUrl];
+        onComplete && onComplete(null, cachedUnzipPath);
+    } else {
+        let time = Date.now().toString();
+        let unZipTargetPath = `${ral.env.USER_DATA_PATH}/${time}`;
+
+        ral.downloadFile({
+            url: zipUrl,
+            filePath: unZipTargetPath + ".zip",
+            success: function (res) {
+                if (res.statusCode === 200) {
+                    _fsm.unzip({
+                        zipFilePath: res.filePath,
+                        targetPath: unZipTargetPath,
+                        success: function () {
+                            _zipCache[zipUrl] = unZipTargetPath;
+                            _fsm.writeFileSync(CACHED_FILE_PATH, JSON.stringify(_zipCache), 'utf8');
+                            onComplete && onComplete(null, unZipTargetPath);
+                        },
+                        fail: function (res) {
+                            console.warn(`Unzip file failed: path: ${zipUrl}`);
+                            onComplete && onComplete(new Error(res.errMsg), null);
+                        }
+                    });
+                } else {
+                    console.warn(`Download file failed: path: ${zipUrl} message: ${res.statusCode}`);
+                    onComplete && onComplete(new Error(res.statusCode), null);
+                }
+            },
+            fail: function (res) {
+                console.warn(`Download file failed: path: ${zipUrl} message: ${res.statusCode}`);
+                onComplete && onComplete(new Error(res.errMsg), null);
+            }
+        });
+    }
+
+}
+
 
 _downloader.register("bundle", downloadBundle);
