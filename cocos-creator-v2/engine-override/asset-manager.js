@@ -5,7 +5,7 @@ let _downloader = cc.assetManager.downloader;
 let _originInit = cc.assetManager.init;
 let _zipCache = {}; // 属性名: zip 包路径; 属性值: zip 包解压后根目录的本地路径
 let _fsm = ral.getFileSystemManager();
-const CACHED_FILE_PATH = ral.env.USER_DATA_PATH + "/cacheList.json";
+const CACHED_FILE_PATH = ral.env.USER_DATA_PATH + "/zipBundleCacheList.json";
 
 cc.assetManager.init = function (options) {
     options.subpackages && options.subpackages.forEach(x => _subpackages[x] = true);
@@ -79,8 +79,7 @@ function downloadBundle(bundleName, options, onComplete) {
                     out = JSON.parse(response);
                     if (out.isZip) {
                         let zipVersion = out.zipVersion;
-                        let zipUrl = `${bundlePath}/res.${zipVersion ? zipVersion + '.' : ''}zip`;
-                        _handleZip(zipUrl, function (err, unzipPath) {
+                        _handleZip(bundlePath, zipVersion, function (err, unzipPath) {
                             if (err) {
                                 onComplete && onComplete(err);
                                 return;
@@ -118,51 +117,74 @@ function downloadBundle(bundleName, options, onComplete) {
 }
 
 
-function _handleZip(zipUrl, onComplete) {
+function _handleZip(bundlePath, zipVersion, onComplete) {
     /**
-    * 判断是否需要解压(USER_DATA_PATH 路径下是否已经有 url 指向文件所解压的文件)
-    * 1.若不需要解压，则将根目录传给 onComplete 回调函数
-    * 2.若要解压，则解压到指定路径，并将根目录的传给 onComplete 回调函数
-    */
-    let isCachedUnzip = _zipCache[zipUrl];
-    if (isCachedUnzip) {
-        let cachedUnzipPath = _zipCache[zipUrl];
-        onComplete && onComplete(null, cachedUnzipPath);
-    } else {
-        let time = Date.now().toString();
-        let unZipTargetPath = `${ral.env.USER_DATA_PATH}/${time}`;
+     * 1.从 _zipCache 中本地已解压的 zip bundle 信息
+     * 2.使用downloadFile 下载zip 文件，header 参数带 If-Modified-Since 字段用于避免重复下载相同 zip 文件
+     *     (1) status Code == 200，更新 cacheList.json
+     *        若是已存在的bundle更新，则解压到新目录，删除原有目录，
+     *        若是未存在的bundle，不做其它操作
+     *     (2) status Code == 304, 将已缓存的本地路径传给 onComplete 回调
+     *     (3) status Code 等于其它或者downloadFile 返回 fail的回调，进行失败处理
+     */
+    let header = {};
+    let unZipTargetPath = `${ral.env.USER_DATA_PATH}/${Date.now().toString()}`;
+    let zipUrl = `${bundlePath}/res.${zipVersion ? zipVersion + '.' : ''}zip`;
 
-        ral.downloadFile({
-            url: zipUrl,
-            filePath: unZipTargetPath + ".zip",
-            success: function (res) {
-                if (res.statusCode === 200) {
-                    _fsm.unzip({
-                        zipFilePath: res.filePath,
-                        targetPath: unZipTargetPath,
-                        success: function () {
-                            _zipCache[zipUrl] = unZipTargetPath;
-                            _fsm.writeFileSync(CACHED_FILE_PATH, JSON.stringify(_zipCache), 'utf8');
-                            onComplete && onComplete(null, unZipTargetPath);
-                        },
-                        fail: function (res) {
-                            console.warn(`Unzip file failed: path: ${zipUrl}`);
-                            onComplete && onComplete(new Error(res.errMsg), null);
-                        }
-                    });
-                } else {
-                    console.warn(`Download file failed: path: ${zipUrl} message: ${res.statusCode}`);
-                    onComplete && onComplete(new Error(res.statusCode), null);
-                }
-            },
-            fail: function (res) {
-                console.warn(`Download file failed: path: ${zipUrl} message: ${res.statusCode}`);
-                onComplete && onComplete(new Error(res.errMsg), null);
-            }
-        });
+    if (_zipCache[bundlePath]) {
+        header["If-Modified-Since"] = _zipCache[bundlePath].lastModifiedTime;
+    } else {
+        // 本地未记录该 remote zipped bundle 的相关信息，表示第一次下载该 url, 必须要下载
+        header["If-Modified-Since"] = null;
     }
 
+    ral.downloadFile({
+        url: zipUrl,
+        header: header,
+        filePath: unZipTargetPath + ".zip",
+        success: function (res) {
+            if (res.statusCode === 200) {
+                _fsm.unzip({
+                    zipFilePath: res.filePath,
+                    targetPath: unZipTargetPath,
+                    success: function () {
+                        /**
+                         * 1.判断是否是对已有 bundle 的版本替换
+                         * (1) 若是，删除老版本 bundle 的解压目录
+                         * (2) 若不是，不用操作
+                         * 2.更新 json 文件
+                         */
+                        try {
+                            if (_zipCache[bundlePath]) {
+                                _fsm.rmdirSync(_zipCache[bundlePath].unZipTargetPath, true);
+                            }
+                            let lastModifiedTime = (new Date()).toUTCString();
+                            _zipCache[bundlePath] = {
+                                unzipPath: unZipTargetPath,
+                                lastModifiedTime: lastModifiedTime
+                            };
+                            _fsm.writeFileSync(CACHED_FILE_PATH, JSON.stringify(_zipCache), 'utf8');
+                        } catch (e) {
+                            console.warn(e);
+                        }
+                        onComplete && onComplete(null, unZipTargetPath);
+                    },
+                    fail: function (res) {
+                        console.warn(`Unzip file failed: path: ${zipUrl}`);
+                        onComplete && onComplete(new Error(res.errMsg), null);
+                    }
+                });
+            } else if (res.statusCode === 304) {
+                onComplete && onComplete(null, _zipCache[bundlePath].unzipPath);
+            } else {
+                console.warn(`Download file failed: path: ${zipUrl} message: ${res.statusCode}`);
+                onComplete && onComplete(new Error(res.statusCode), null);
+            }
+        },
+        fail: function (res) {
+            console.warn(`Download file failed: path: ${zipUrl} message: ${res.statusCode}`);
+            onComplete && onComplete(new Error(res.errMsg), null);
+        }
+    });
 }
-
-
 _downloader.register("bundle", downloadBundle);
