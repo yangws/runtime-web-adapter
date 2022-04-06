@@ -119,7 +119,7 @@ function downloadBundle(bundleName, options, onComplete) {
 
 function _handleZip(bundlePath, zipVersion, onComplete) {
     /**
-     * 1.从 _zipCache 中本地已解压的 zip bundle 信息
+     * 1.从 _zipCache 中获取本地已解压的 zip bundle 信息
      * 2.使用downloadFile 下载zip 文件，header 参数带 If-Modified-Since 字段用于避免重复下载相同 zip 文件
      *     (1) status Code == 200，更新 cacheList.json
      *        若是已存在的bundle更新，则解压到新目录，删除原有目录，
