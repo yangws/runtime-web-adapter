@@ -77,7 +77,7 @@ function downloadBundle(bundleName, options, onComplete) {
             if (typeof response === 'string') {
                 try {
                     out = JSON.parse(response);
-                    if (out.isZip) {
+                    if (out && out.isZip) {
                         let zipVersion = out.zipVersion;
                         _handleZip(bundlePath, zipVersion, function (err, unzipPath) {
                             if (err) {
