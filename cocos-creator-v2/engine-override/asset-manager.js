@@ -3,7 +3,7 @@ let _remoteBundles = {};
 let _server;
 let _downloader = cc.assetManager.downloader;
 let _originInit = cc.assetManager.init;
-let _zipCache = {}; // 属性名: zip 包路径; 属性值: zip 包解压后根目录的本地路径
+let _zipCache = {}; // 属性名: remote ZipBundle 的 url; 属性值: {zip 包解压后根目录的本地路径, bundle 最后更新时间}
 let _fsm = ral.getFileSystemManager();
 const CACHED_FILE_PATH = ral.env.USER_DATA_PATH + "/zipBundleCacheList.json";
 
