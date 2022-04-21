@@ -147,6 +147,83 @@ __res 的属性说明__
 
 #### InnerAudioContext ral.createInnerAudioContext()
 
+#### InnerAudioContext 
+
+##### 属性说明
+
+| 属性        | 键值类型 | 说明                                                         |
+| :---------- | :------- | :----------------------------------------------------------- |
+| src         | string   | 音频资源的地址，用于直接播放                                 |
+| startTime   | number   | 开始播放的位置（单位 s），默认为 0                           |
+| autoplay    | boolean  | 是否自动开始播放，默认为 false                               |
+| loop        | boolean  | 是否循环播放，默认为 false                                   |
+| volume      | number   | 音量。范围 0~1。默认为 1                                     |
+| duration    | number   | 当前音频的长度（单位 s），只读属性。只有在当前有合法的 src 时返回 |
+| currentTime | number   | 当前音频的播放位置（单位 s）,只读属性。只有在当前有合法的 src 时返回，时间保留小数点后 6 位 |
+| paused      | boolean  | 当前是是否暂停或停止状态，只读属性                           |
+| buffered    | number   | 音频缓冲的时间点，只读属性。仅保证当前播放时间点到此时间点内容已缓冲 |
+
+##### 方法
+
+##### InnerAudioContext.play()
+
+##### InnerAudioContext.pause()
+
+##### InnerAudioContext.stop()
+
+##### InnerAudioContext.seek(number position)
+
+##### InnerAudioContext.destroy()
+
+##### InnerAudioContext.onCanplay(function callback)
+
+##### InnerAudioContext.offCanplay(function callback)
+
+##### InnerAudioContext.onPlay(function callback)
+
+##### InnerAudioContext.offPlay(function callback)
+
+##### InnerAudioContext.onPause(function callback)
+
+##### InnerAudioContext.offPause(function callback)
+
+##### InnerAudioContext.onStop(function callback)
+
+##### InnerAudioContext.offStop(function callback)
+
+##### InnerAudioContext.onEnded(function callback)
+
+##### InnerAudioContext.offEnded(function callback)
+
+##### InnerAudioContext.onTimeUpdate(function callback)
+
+##### InnerAudioContext.offTimeUpdate(function callback)
+
+##### InnerAudioContext.onError(function callback)
+
+##### InnerAudioContext.offError(function callback)
+
+##### InnerAudioContext.onWaiting(function callback)
+
+##### InnerAudioContext.offWaiting(function callback)
+
+##### InnerAudioContext.onSeeking(function callback)
+
+##### InnerAudioContext.offSeeking(function callback)
+
+##### InnerAudioContext.onSeeked(function callback)
+
+##### InnerAudioContext.offSeeked(function callback)
+
+
+
+##### 关于 RAL 中 InnerAudioContext 的补充说明
+
+首先，这里定义 “Prepared 状态” 为 InnerAudioContext 在成功设置 src 之后，第一次调用 play 方法之前 、或者播放/暂停状态下调用 stop 方法之后、或者播放至音频时长而结束后进入的状态。
+
+1.  InnerAudioContext 支持 Prepared 状态下，通过 seek 方法 或 startTime 属性设置音频的开始播放位置。
+2.  在 Prepared 状态下，若用户使用了 seek 方法，音频会从 seek 设置的位置开始播放（即便 seek 之后又设置了 startTime 属性），否则音频会从 startTime 的位置开始播放。
+
 
 
 ## 设备
