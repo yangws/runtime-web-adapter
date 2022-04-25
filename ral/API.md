@@ -224,12 +224,10 @@ __res 的属性说明__
 首先，这里定义 “ InnerAudioContext  实例 的 Prepared 状态” 为 InnerAudioContext 在成功设置 src 之后，第一次调用 play 方法之前 、或者播放/暂停状态下调用 stop 方法之后、或者播放至音频时长而结束后进入的状态。
 
 1. InnerAudioContext 支持 Prepared 状态下，通过 seek 方法 或 startTime 属性设置音频的开始播放位置。
-
-2. 若 startTime 值大于当前 innerAudioContext 实例的 duration 值，Prepared 状态下使用 play 方法，音频将会从 0 的位置开始播放。
-
+2. 若设置的 startTime 值大于当前 innerAudioContext 实例的 duration 值，在 Prepared 状态下使用 play 方法，音频将会从 0 的位置开始播放。
 3. 在 Prepared 状态下，若用户使用了 seek 方法，音频会从 seek 设置的位置开始播放（即便 seek 之后又设置了 startTime 属性），否则音频会从 startTime 的位置开始播放。
 
-   
+
 
 ## 设备
 

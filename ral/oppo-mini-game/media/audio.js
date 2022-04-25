@@ -28,7 +28,7 @@ _UTIL.exportTo("createInnerAudioContext", qg, ral, function () {
     let oldPlay = prototype.play;
     prototype.seek = function (position) {
         if (this.paused) {
-            // playing 状态下 seek 会生效, 所以不用保存 seek 值
+            // playing 状态下不用再使用 play 方法 seek 就会生效, 所以仅 stopped 和 paused 状态时保存
             _weakMap.set(this, {
                 position: position
             });
