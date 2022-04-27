@@ -217,14 +217,27 @@ __res 的属性说明__
 
 
 
-##### 关于 RAL 中 InnerAudioContext 的补充说明
+##### RAL 中 InnerAudioContext 的补充说明
 
 **1. 关于 startTime 属性与 seek 方法**
 
-首先，这里定义 “ InnerAudioContext  实例 的 Prepared 状态” 为 InnerAudioContext 在成功设置 src 之后，调用 play 方法之前 、或者播放/暂停状态下调用 stop 方法之后、或者播放至音频时长而结束后进入的状态。
+首先，将 InnerAudioContext 实例成功设置 src 之后的以下状态，
 
-1. InnerAudioContext 支持 Prepared 状态下，通过 seek 方法 或 startTime 属性设置音频的开始播放位置。
-2. 在 Prepared 状态下，若用户使用了 seek 方法，音频会从 seek 设置的位置开始播放（即便 seek 之后又设置了 startTime 属性），否则音频会从 startTime 的位置开始播放。
+​    (1) 使用 play 方法之前;
+
+​    (2) 播放/暂停状态下调用 stop 方法之后;
+
+​    (3) 播放至音频时长而结束后;
+
+统一定义为 InnerAudioContext  实例 的 “预播放状态” 。
+
+在预播放状态下
+
+​     (1) 支持通过 seek 方法或 startTime 属性设置音频的开始播放位。
+
+​     (2) 若开发者使用了 seek 方法，无论 startime 属性值是否为 0, 音频会从 seek 设置的位置开始播放，否则音频会从 startTime 的位置开始播放。
+
+
 
 
 
