@@ -25,7 +25,7 @@ function downloadBundle(bundleName, options, onComplete) {
     let bundleVersion = options.version || _downloader.bundleVers[bundleName];
     let bundlePath = 'assets/' + bundleName;
     let bundleConfig = `${bundlePath}/config.${bundleVersion ? bundleVersion + '.' : ''}json`;
-    let bundleJS = `${bundlePath}/index.${bundleVersion ? bundleVersion + '.' : ''}js`;
+    let bundleJS = `${bundlePath}/index.js`;
 
     // 根据bundleName 判断当前 bundle 为分包资源、远程包资源还是本地资源， 并分别做相应处理
     if (_subpackages[bundleName]) {
@@ -66,7 +66,7 @@ function downloadBundle(bundleName, options, onComplete) {
         if (_remoteBundles[bundleName]) {
             bundlePath = _server + bundleName;
             bundleConfig = `${bundlePath}/config.${bundleVersion ? bundleVersion + '.' : ''}json`;
-            bundleJS = `${"src/scripts/" + bundleName}/index.${bundleVersion ? bundleVersion + '.' : ''}js`;
+            bundleJS = `${"src/scripts/" + bundleName}/index.js`;
         }
 
         // 加载 bundle 中的 json 文件
@@ -149,12 +149,14 @@ function _handleZip(bundlePath, zipVersion, onComplete) {
                     targetPath: unZipTargetPath,
                     success: function () {
                         /**
-                         * 1.判断是否是对已有 bundle 的版本替换
+                         * 1.解压成功，删除 zip 文件
+                         * 2.判断是否是对已有 bundle 的版本替换
                          * (1) 若是，删除老版本 bundle 的解压目录
                          * (2) 若不是，不用操作
-                         * 2.更新 json 文件
+                         * 3.更新 json 文件
                          */
                         try {
+                            _fsm.unlinkSync(res.filePath);
                             if (_zipCache[bundlePath]) {
                                 _fsm.rmdirSync(_zipCache[bundlePath].unZipTargetPath, true);
                             }
@@ -171,6 +173,7 @@ function _handleZip(bundlePath, zipVersion, onComplete) {
                     },
                     fail: function (res) {
                         console.warn(`Unzip file failed: path: ${zipUrl}`);
+                        _fsm.unlinkSync(res.filePath);
                         onComplete && onComplete(new Error(res.errMsg), null);
                     }
                 });
