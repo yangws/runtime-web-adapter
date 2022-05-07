@@ -25,6 +25,10 @@ function downloadBundle(bundleName, options, onComplete) {
     let bundleVersion = options.version || _downloader.bundleVers[bundleName];
     let bundlePath = 'assets/' + bundleName;
     let bundleConfig = `${bundlePath}/config.${bundleVersion ? bundleVersion + '.' : ''}json`;
+    /**
+     * creator 2.4.x 上，当开启 md5 功能, runtime 小游戏平台上生成的 bundle 的 index.js， 后缀前不会加上 md5 值,
+     * 所以这里 bundleJS 的命名规则与 bundleConfig 不同
+     */
     let bundleJS = `${bundlePath}/index.js`;
 
     // 根据bundleName 判断当前 bundle 为分包资源、远程包资源还是本地资源， 并分别做相应处理
