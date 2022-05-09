@@ -17,3 +17,14 @@ cc.game._initRenderer = function () {
         cc.game.frame = window.__canvas;
     }
 }
+
+/**
+ * 处理 creator 游戏前后台切换事件监听
+ */
+ral.onHide(function () {
+    cc.game.emit(cc.game.EVENT_HIDE);
+});
+
+ral.onShow(function () {
+    cc.game.emit(cc.game.EVENT_SHOW);
+});

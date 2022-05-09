@@ -106,7 +106,8 @@ function InnerAudioContext() {
     _weakMap.set(this, {
         src: "",
         volume: 1,
-        loop: false
+        loop: false,
+        seekPosition: -1
     });
 
     /**
@@ -344,9 +345,13 @@ _prototype.play = function () {
         return;
     }
     privateThis.audioID = audioID;
-    if (typeof this.startTime === "number" && this.startTime > 0) {
-        // 设置当前的音频时间
-        _audioEngine.setCurrentTime(audioID, this.startTime);
+    if (privateThis.seekPosition >= 0) {
+        _audioEngine.setCurrentTime(audioID, privateThis.seekPosition);
+        privateThis.seekPosition = -1;
+    } else {
+        if (typeof this.startTime === "number" && this.startTime > 0) {
+            _audioEngine.setCurrentTime(audioID, this.startTime);
+        }
     }
     _dispatchCallback(this, _WAITING_CALLBACK);
 
@@ -403,6 +408,8 @@ _prototype.seek = function (position) {
             _audioEngine.setCurrentTime(audioID, position);
             _dispatchCallback(this, _SEEKING_CALLBACK);
             _dispatchCallback(this, _SEEKED_CALLBACK);
+        } else {
+            privateThis.seekPosition = position;
         }
     }
 };
