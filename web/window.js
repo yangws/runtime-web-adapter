@@ -61,8 +61,8 @@ window.close = function () {
     console.warn("window.close() is deprecated!");
 };
 window.print = window.console.log;
-window.addEventListener = EventTarget.prototype.addEventListener;
-window.removeEventListener = EventTarget.prototype.removeEventListener;
+window.addEventListener = EventTarget.prototype.addEventListener.bind(window);
+window.removeEventListener = EventTarget.prototype.removeEventListener.bind(window);
 let _dispatchEvent = EventTarget.prototype.dispatchEvent;
 window.dispatchEvent = function (event) {
     /*

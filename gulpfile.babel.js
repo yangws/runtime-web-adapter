@@ -35,6 +35,39 @@ gulp.task("web.min.js", () => {
         .pipe(gulp.dest("./dist/common"));
 });
 
+gulp.task("lib-web-huawei.zip", () => {
+    const fs = require("fs");
+    const path = require("path");
+
+    let inFilePaths = ["./dist/platforms/huawei-quick-game/ral.js",
+    "./dist/platforms/huawei-quick-game/ral.min.js",
+    "./dist/common/web-adapter.js",
+    "./dist/common/web-adapter.min.js"];
+    let commitInfo = require("git-commit-info")();
+    let packagePaths = [];
+    for (let i = 0; i < inFilePaths.length; ++i) {
+        let srcFilePath = inFilePaths[i];
+        let content = fs.readFileSync(srcFilePath);
+        let fileName = path.basename(srcFilePath);
+        let destFilePath = path.join("./dist", fileName);
+        if (fs.existsSync(destFilePath)) {
+            fs.unlinkSync(destFilePath);
+        }
+        fs.writeFileSync(destFilePath, `// ${commitInfo.hash}\n${content}`);
+        packagePaths.push(destFilePath);
+    }
+
+    return gulp.src(packagePaths)
+        .pipe(require('gulp-zip')(`lib-web-huawei-${commitInfo.shortHash}.zip`))
+        .pipe(gulp.dest("./dist/"))
+        .on("end", function() {
+            fs.copyFileSync(`./dist/lib-web-huawei-${commitInfo.shortHash}.zip`, "./dist/lib-web-huawei-latest-version.zip", fs.constants.COPYFILE_FICLONE);
+            for (let i = 0; i < packagePaths.length; ++i) {
+                fs.unlinkSync(packagePaths[i]);
+            }
+        });
+});
+
 gulp.task("cocos-runtime.js", () => {
     return browserify("./ral/cocos-runtime/index.js")
         .transform(babelify, {
@@ -385,6 +418,7 @@ gulp.task("cocos-creator-v2.min.js", () => {
 
 
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
+gulp.task("lib-web-huawei", gulp.series(["huawei-quick-game.js", "huawei-quick-game.min.js", "web.js", "web.min.js", "lib-web-huawei.zip"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
 gulp.task("lib-cocos-play", gulp.series(["cocos-play.js", "cocos-play.min.js"]));
 gulp.task("lib-link-sure", gulp.series(["link-sure.js", "link-sure.min.js"]));
