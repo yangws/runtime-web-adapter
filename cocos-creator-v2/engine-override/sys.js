@@ -52,12 +52,13 @@ sys.restartVM = function () {
  * 手机屏幕安全区域功能，引擎代码中, 仅仅支持安卓、iOS 原生平台和微信小游戏平台。 这里参考了 2.4.5 版本 runtime 插件的适配逻辑
  * sys.getSafeAreaRect 返回手机屏幕安全区域（设计分辨率为单位）
  */
-let originSafeAreaRect = sys.getSafeAreaRect;
+
 let safeArea = ral.getSystemInfoSync().safeArea;
 if (safeArea == null) {
+    let originSafeAreaRect = sys.getSafeAreaRect;
     sys.getSafeAreaRect = function () {
         console.warn("The cc.sys.getSafeAreaRect is not support on this platform!");
-        return originSafeAreaRect(arguments);
+        return originSafeAreaRect();
     }
 } else {
     sys.getSafeAreaRect = function () {
