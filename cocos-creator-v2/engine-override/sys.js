@@ -59,7 +59,7 @@ if (safeArea == null) {
     sys.getSafeAreaRect = function () {
         console.warn("The cc.sys.getSafeAreaRect is not support on this platform!");
         return originSafeAreaRect();
-    }
+    };
 } else {
     sys.getSafeAreaRect = function () {
         // 将 safeArea 的参数从设备的物理分辨率为单位的坐标系 转为 设计分辨率为单位的坐标系
@@ -85,5 +85,5 @@ if (safeArea == null) {
         view._convertPointWithScale(rightTop);
 
         return cc.rect(leftBottom.x, leftBottom.y, rightTop.x - leftBottom.x, rightTop.y - leftBottom.y);
-    }
+    };
 }
