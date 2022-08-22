@@ -15,6 +15,7 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     _responseXML;
     _status;
     _statusText;
+    _responseType;
 
     constructor() {
         super(new _XMLHttpRequest());
@@ -36,11 +37,9 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     }
 
     get response() {
-        if (this._isLocal) {
-            return this._response;
-        } else {
-            return this._xhr.response;
-        }
+        let response = this._isLocal ? this._response : this._xhr.response;
+        let result = this._responseType === "blob" ? new Blob([response]) : response;
+        return result;
     }
 
     get responseText() {
@@ -52,11 +51,15 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     }
 
     get responseType() {
-        return this._xhr.responseType;
+        return this._responseType;
     }
 
     set responseType(value) {
-        this._xhr.responseType = value;
+        this._responseType = this._xhr.responseType = value;
+        if (value === "blob") {
+            this._xhr.responseType = "arraybuffer";
+        }
+
     }
 
     get responseURL() {
