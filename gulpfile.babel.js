@@ -444,6 +444,35 @@ gulp.task("cocos-runtime-egret.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 
+gulp.task("cocos-runtime-threejs.js", () => {
+    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./threejs/index.js"] })
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("cocos-runtime-threejs.js"))
+        .pipe(buffer())
+        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("./dist/"));
+});
+
+gulp.task("cocos-runtime-threejs.min.js", () => {
+    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./threejs/index.js"] })
+        .transform(babelify, {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+            comments: false
+        })
+        .bundle()
+        .pipe(source("cocos-runtime-threejs.min.js"))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest("./dist/"));
+});
+
 gulp.task("lib-web", gulp.series(["web.js", "web.min.js"]));
 gulp.task("lib-web-huawei", gulp.series(["huawei-quick-game.js", "huawei-quick-game.min.js", "web.js", "web.min.js", "lib-web-huawei.zip"]));
 gulp.task("lib-cocos-runtime", gulp.series(["cocos-runtime.js", "cocos-runtime.min.js"]));
@@ -461,3 +490,4 @@ gulp.task("cocos-runtime-pixiJS", gulp.series(["cocos-runtime-pixiJS.js", "cocos
 gulp.task("cocos-runtime-phaser", gulp.series(["cocos-runtime-phaser.js", "cocos-runtime-phaser.min.js"]));
 gulp.task("cocos-runtime-construct3", gulp.series(["cocos-runtime-construct3.js", "cocos-runtime-construct3.min.js"]));
 gulp.task("cocos-runtime-egret", gulp.series(["cocos-runtime-egret.js", "cocos-runtime-egret.min.js"]));
+gulp.task("cocos-runtime-threejs", gulp.series(["cocos-runtime-threejs.js", "cocos-runtime-threejs.min.js"]));
