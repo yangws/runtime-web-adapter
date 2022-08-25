@@ -153,9 +153,9 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
 
                 success(res) {
                     self._status = 200;
-                    if (this._readyState != 4) {
-                        this._readyState = 4;
-                        this.dispatchEvent(new Event("readystatechange"));
+                    if (self._readyState != 4) {
+                        self._readyState = 4;
+                        self.dispatchEvent(new Event("readystatechange"));
                     }
                     self._response = self._responseText = res.data;
                     if (isBinary) {
@@ -177,9 +177,9 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                 fail: function (res) {
                     if (res.errCode === 1) {
                         self._status = 404;
-                        if (this._readyState != 4) {
-                            this._readyState = 4;
-                            this.dispatchEvent(new Event("readystatechange"));
+                        if (self._readyState != 4) {
+                            self._readyState = 4;
+                            self.dispatchEvent(new Event("readystatechange"));
                         }
                         self.dispatchEvent(new Event("loadstart"));
                         self.dispatchEvent(new Event("load"));
