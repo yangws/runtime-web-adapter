@@ -36,6 +36,17 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
         }
     }
 
+    set readyState(value) {
+        if (this._isLocal) {
+            if (this._readyState != value) {
+                this._readyState = value;
+                this.dispatchEvent(new Event("readystatechange"));
+            }
+        } else {
+            this._xhr.readyState = value;
+        }
+    }
+
     get response() {
         let response = this._isLocal ? this._response : this._xhr.response;
         let result = this._responseType === "blob" ? new Blob([response]) : response;
@@ -153,7 +164,7 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
 
                 success(res) {
                     self._status = 200;
-                    self._readyState = 4;
+                    self.readyState = 4;
                     self._response = self._responseText = res.data;
                     if (isBinary) {
                         FILE_CACHE.setCache(self._url, res.data);
@@ -174,7 +185,7 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                 fail: function (res) {
                     if (res.errCode === 1) {
                         self._status = 404;
-                        self._readyState = 4;
+                        self.readyState = 4;
                         self.dispatchEvent(new Event("loadstart"));
                         self.dispatchEvent(new Event("load"));
                     } else {
