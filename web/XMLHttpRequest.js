@@ -8,13 +8,14 @@ window.ral = window.ral || {};
 
 export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     _isLocal = false;
-    _readyState;
+    _readyState = 0;
     _response;
     _responseText;
     _responseURL;
     _responseXML;
     _status;
     _statusText;
+    _responseType;
 
     constructor() {
         super(new _XMLHttpRequest());
@@ -36,11 +37,9 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     }
 
     get response() {
-        if (this._isLocal) {
-            return this._response;
-        } else {
-            return this._xhr.response;
-        }
+        let response = this._isLocal ? this._response : this._xhr.response;
+        let result = this._responseType === "blob" ? new Blob([response]) : response;
+        return result;
     }
 
     get responseText() {
@@ -52,11 +51,15 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     }
 
     get responseType() {
-        return this._xhr.responseType;
+        return this._responseType;
     }
 
     set responseType(value) {
-        this._xhr.responseType = value;
+        this._responseType = this._xhr.responseType = value;
+        if (value === "blob") {
+            this._xhr.responseType = "arraybuffer";
+        }
+
     }
 
     get responseURL() {
@@ -134,6 +137,10 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
         this._isLocal = true;
         // from local
         this._url = url;
+        if (this._readyState != 1) {
+            this._readyState = 1;
+            this.dispatchEvent(new Event("readystatechange"));
+        }
     }
 
     overrideMimeType() {
@@ -141,16 +148,19 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
     }
 
     send() {
+        if (this.readyState !== 1) {
+            throw "Uncaught DOMException: Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED.";
+        }
         if (this._isLocal) {
             let self = this;
             let isBinary = this._xhr.responseType === "arraybuffer";
+            this._readyState = 2;
+            this.dispatchEvent(new Event("readystatechange"));
             fsm.readFile({
                 filePath: this._url,
                 encoding: isBinary ? "binary" : "utf8",
-
                 success(res) {
                     self._status = 200;
-                    self._readyState = 4;
                     self._response = self._responseText = res.data;
                     if (isBinary) {
                         FILE_CACHE.setCache(self._url, res.data);
@@ -171,7 +181,6 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                 fail: function (res) {
                     if (res.errCode === 1) {
                         self._status = 404;
-                        self._readyState = 4;
                         self.dispatchEvent(new Event("loadstart"));
                         self.dispatchEvent(new Event("load"));
                     } else {
@@ -179,6 +188,8 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget {
                     }
                 }.bind(this),
                 complete: function () {
+                    this._readyState = 4;
+                    this.dispatchEvent(new Event("readystatechange"));
                     this.dispatchEvent(new Event("loadend"));
                 }.bind(this)
             });
