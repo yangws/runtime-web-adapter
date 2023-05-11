@@ -1,6 +1,6 @@
 import Node from './Node'
 import NodeList from './NodeList'
-import DomTokenList from "./DOMToken​List"
+import DomTokenList from "./DOMTokenList"
 
 export default class Element extends Node {
     className = '';
