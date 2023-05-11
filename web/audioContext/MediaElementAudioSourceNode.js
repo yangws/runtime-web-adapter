@@ -17,7 +17,11 @@ class MediaElementAudioSourceNode extends AudioNode {
     constructor(context, options) {
         super(context);
 
+        this._options = options;
+    }
 
+    get mediaElement() {
+        return this._options ? this._options.mediaElement : null;
     }
 
 }
