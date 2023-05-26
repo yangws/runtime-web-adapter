@@ -127,12 +127,62 @@ Object.assign(MiniGameEditBoxImpl.prototype, {
         let multiline = (delegate.inputMode === _EDIBOX.InputMode.ANY);
         let maxLength = (delegate.maxLength < 0 ? _MAX_VALUE : delegate.maxLength);
 
+        let inputType;
+        switch (delegate.inputMode) {
+            case 1: /* EMAIL_ADDR */ {
+                inputType = "email";
+                break;
+            }
+            case 2: /* NUMERIC */
+            case 5: /* DECIMAL */ {
+                inputType = "number";
+                break;
+            }
+            case 3: /* PHONE_NUMBER */ {
+                inputType = "phone";
+                break;
+            }
+            case 4: /* URL */ {
+                inputType = "url";
+                break;
+            }
+            case 0: /* ANY */
+            case 6: /* SINGLE_LINE */
+            default: {
+                inputType = "text";
+            }
+        }
+        switch (delegate.inputFlag) {
+            case 0: /* PASSWORD */ {
+                inputType = "password";
+                break;
+            }
+            case 1: /* SENSITIVE */ {
+                break;
+            }
+            case 2: /* INITIAL_CAPS_WORD */ {
+                break;
+            }
+            case 3: /* INITIAL_CAPS_SENTENCE */ {
+                break;
+            }
+            case 4: /* INITIAL_CAPS_ALL_CHARACTERS */ {
+                break;
+            }
+            case 5: /* DEFAULT */ {
+                break;
+            }
+            default: {
+            }
+        }
+
         ral.showKeyboard({
             defaultValue: delegate._string,
             maxLength: maxLength,
             multiple: multiline,
             confirmHold: false,
             confirmType: _getKeyboardReturnType(delegate.returnType),
+            inputType: inputType,
             success(res) {
 
             },

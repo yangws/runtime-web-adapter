@@ -39,10 +39,12 @@ gulp.task("lib-web-huawei.zip", () => {
     const fs = require("fs");
     const path = require("path");
 
-    let inFilePaths = ["./dist/platforms/huawei-quick-game/ral.js",
-    "./dist/platforms/huawei-quick-game/ral.min.js",
-    "./dist/common/web-adapter.js",
-    "./dist/common/web-adapter.min.js"];
+    let inFilePaths = [
+        "./dist/platforms/huawei-quick-game/ral.js",
+        "./dist/platforms/huawei-quick-game/ral.min.js",
+        "./dist/common/web-adapter.js",
+        "./dist/common/web-adapter.min.js"
+    ];
     let commitInfo = require("git-commit-info")();
     let packagePaths = [];
     for (let i = 0; i < inFilePaths.length; ++i) {
@@ -60,7 +62,7 @@ gulp.task("lib-web-huawei.zip", () => {
     return gulp.src(packagePaths)
         .pipe(require('gulp-zip')(`lib-web-huawei-${commitInfo.shortHash}.zip`))
         .pipe(gulp.dest("./dist/"))
-        .on("end", function() {
+        .on("end", function () {
             fs.copyFileSync(`./dist/lib-web-huawei-${commitInfo.shortHash}.zip`, "./dist/lib-web-huawei-latest-version.zip", fs.constants.COPYFILE_FICLONE);
             for (let i = 0; i < packagePaths.length; ++i) {
                 fs.unlinkSync(packagePaths[i]);
@@ -185,7 +187,7 @@ gulp.task("qtt.min.js", () => {
 });
 
 gulp.task("cocos-runtime-laya.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./laya/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./laya/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -200,7 +202,7 @@ gulp.task("cocos-runtime-laya.js", () => {
 });
 
 gulp.task("cocos-runtime-laya.min.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./laya/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./laya/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -272,7 +274,7 @@ gulp.task("huawei-quick-game.min.js", () => {
 });
 
 gulp.task("cocos-runtime-pixiJS.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./pixiJS/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./pixiJS/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -287,7 +289,7 @@ gulp.task("cocos-runtime-pixiJS.js", () => {
 });
 
 gulp.task("cocos-runtime-pixiJS.min.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./pixiJS/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./pixiJS/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -330,7 +332,7 @@ gulp.task("vivo-mini-game.min.js", () => {
 });
 
 gulp.task("cocos-runtime-phaser.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./phaser/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./phaser/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -345,7 +347,7 @@ gulp.task("cocos-runtime-phaser.js", () => {
 });
 
 gulp.task("cocos-runtime-phaser.min.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./phaser/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./phaser/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -358,7 +360,7 @@ gulp.task("cocos-runtime-phaser.min.js", () => {
         .pipe(gulp.dest("./dist/"));
 });
 gulp.task("cocos-runtime-construct3.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./construct3/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./construct3/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -373,7 +375,7 @@ gulp.task("cocos-runtime-construct3.js", () => {
 });
 
 gulp.task("cocos-runtime-construct3.min.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./construct3/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./construct3/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -398,7 +400,7 @@ gulp.task("cocos-creator-v2.js", () => {
         .pipe(buffer())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest("./dist/"));
+        .pipe(gulp.dest("./dist/"))
 });
 
 gulp.task("cocos-creator-v2.min.js", () => {
@@ -412,11 +414,11 @@ gulp.task("cocos-creator-v2.min.js", () => {
         .pipe(source("cocos-creator-v2.min.js"))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(gulp.dest("./dist/"));
+        .pipe(gulp.dest("./dist/"))
 });
 
 gulp.task("cocos-runtime-egret.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./egret/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./egret/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -431,7 +433,7 @@ gulp.task("cocos-runtime-egret.js", () => {
 });
 
 gulp.task("cocos-runtime-egret.min.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./egret/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./egret/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -445,7 +447,7 @@ gulp.task("cocos-runtime-egret.min.js", () => {
 });
 
 gulp.task("cocos-runtime-threejs.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./threejs/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./threejs/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
@@ -460,7 +462,7 @@ gulp.task("cocos-runtime-threejs.js", () => {
 });
 
 gulp.task("cocos-runtime-threejs.min.js", () => {
-    return browserify({ entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./threejs/index.js"] })
+    return browserify({entries: ["./ral/cocos-runtime/index.js", "./web/window.js", "./threejs/index.js"]})
         .transform(babelify, {
             presets: ["@babel/preset-env"],
             plugins: ["@babel/plugin-proposal-class-properties"],
