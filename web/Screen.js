@@ -1,4 +1,6 @@
-window.ral = window.ral || {};
+
+import ScreenOrientation from './ScreenOrientation'
+
 export default class Screen {
     availTop = 0;
     availLeft = 0;
@@ -10,9 +12,7 @@ export default class Screen {
     top = 0;
     width = window.innerWidth;
     height = window.innerHeight;
-    orientation = { //FIXME:cjh
-        type: 'portrait-primary' // portrait-primary, portrait-secondary, landscape-primary, landscape-secondary
-    };
+    orientation = new ScreenOrientation();
 
     onorientationchange() {
     }
